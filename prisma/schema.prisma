@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id           String    @id @default(cuid())
+  name         String
+  description  String
+  imageUrl     String
+  affiliateUrl String
+  source       Source    @default(AMAZON)
+  asin         String?
+  category     String
+  featured     Boolean   @default(false)
+  dietTags     DietTag[] @relation("ProductDietTags")
+  createdAt    DateTime  @default(now())
+}
+
+model DietTag {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  products Product[] @relation("ProductDietTags")
+}
+
+model Recipe {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  imageUrl    String
+  prepTime    Int
+  servings    Int      @default(2)
+  difficulty  String   @default("Easy")
+  excerpt     String
+  ingredients Json
+  steps       Json
+  category    String
+  dietTags    String[]
+  publishedAt DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  coverImage  String
+  category    String
+  publishedAt DateTime @default(now())
+}
+
+model DigitalProduct {
+  id            String  @id @default(cuid())
+  name          String
+  description   String
+  price         Int
+  imageUrl      String
+  fileKey       String
+  stripePriceId String
+  orders        Order[]
+}
+
+model Order {
+  id              String         @id @default(cuid())
+  email           String
+  stripeSessionId String         @unique
+  productId       String
+  product         DigitalProduct @relation(fields: [productId], references: [id])
+  downloadSentAt  DateTime?
+  createdAt       DateTime       @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+enum Source {
+  AMAZON
+  THRIVE
+}
