@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { sanityClient, urlFor } from "@/lib/sanity";
 import { Calendar, Tag } from "lucide-react";
