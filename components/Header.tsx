@@ -3,9 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
+import { useSession } from "next-auth/react";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +20,7 @@ const navLinks = [
 
 export default function Header() {
   const { count } = useCart();
+  const { data: session } = useSession();
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -75,6 +77,14 @@ export default function Header() {
                 )}
               </button>
 
+              <Link
+                href={session ? "/account" : "/login"}
+                className="p-2 text-forest/70 hover:text-forest hover:bg-sage-pale rounded-md transition-colors"
+                aria-label="Account"
+              >
+                <User className="w-5 h-5" />
+              </Link>
+
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -103,6 +113,13 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <Link
+                href={session ? "/account" : "/login"}
+                onClick={() => setMobileOpen(false)}
+                className="block px-3 py-2.5 text-sm text-forest/80 hover:text-forest hover:bg-sage-pale rounded-md transition-colors font-medium"
+              >
+                {session ? "My Account" : "Sign In"}
+              </Link>
             </div>
           )}
         </div>

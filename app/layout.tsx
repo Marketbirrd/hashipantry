@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { CartProvider } from "@/contexts/CartContext";
+import SessionWrapper from "@/components/SessionWrapper";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -36,11 +37,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased" suppressHydrationWarning>
-        <CartProvider>
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </CartProvider>
+        <SessionWrapper>
+          <CartProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </CartProvider>
+        </SessionWrapper>
       </body>
     </html>
   );

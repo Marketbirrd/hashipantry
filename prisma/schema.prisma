@@ -81,6 +81,77 @@ model NewsletterSubscriber {
   createdAt DateTime @default(now())
 }
 
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  name          String?
+  password      String?
+  image         String?
+  dietPrefs     String[]
+  createdAt     DateTime        @default(now())
+  accounts      Account[]
+  sessions      Session[]
+  symptoms      SymptomEntry[]
+  favorites     UserFavorite[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  @@unique([identifier, token])
+}
+
+model SymptomEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime @default(now())
+  energy    Int
+  mood      Int
+  brainFog  Int
+  joint     Int
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+model UserFavorite {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId   String
+  productName String
+  affiliateUrl String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  @@unique([userId, productId])
+}
+
 enum Source {
   AMAZON
   THRIVE
