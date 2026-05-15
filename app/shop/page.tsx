@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import type { Product } from "@/lib/products-data";
+import { useSession } from "next-auth/react";
 
 const DIET_FILTERS = [
   "Gluten Free", "Dairy Free", "Soy Free", "Egg Free", "Nut Free",
@@ -20,6 +21,7 @@ const SOURCES = ["All", "Amazon", "Thrive Market"];
 type ApiResponse = { items: Product[]; total: number; page: number; pages: number };
 
 export default function ShopPage() {
+  const { data: session } = useSession();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [activeDiet, setActiveDiet] = useState<string[]>([]);
@@ -29,6 +31,15 @@ export default function ShopPage() {
   const [page, setPage] = useState(1);
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Auto-load saved diet prefs when logged in
+  useEffect(() => {
+    if (session) {
+      fetch("/api/account/prefs")
+        .then((r) => r.json())
+        .then((d) => { if (d.dietPrefs?.length) setActiveDiet(d.dietPrefs); });
+    }
+  }, [session]);
 
   // Debounce search input
   useEffect(() => {
@@ -229,7 +240,10 @@ export default function ShopPage() {
 
           {/* Active diet tag pills */}
           {activeDiet.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4 items-center">
+              {session && (
+                <span className="text-xs text-forest/40 italic mr-1">Your saved preferences:</span>
+              )}
               {activeDiet.map((tag) => (
                 <button
                   key={tag}
