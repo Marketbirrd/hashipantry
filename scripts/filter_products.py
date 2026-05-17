@@ -5,7 +5,7 @@ import glob
 import os
 from urllib.parse import unquote, urlparse, parse_qs, quote_plus
 
-AMAZON_ASSOCIATE_TAG = "hashipantry-20"  # replace with your actual Associates tag
+AMAZON_ASSOCIATE_TAG = "hashipantry07-20"
 
 AMAZON_IMAGE_DOMAINS = {"m.media-amazon.com", "images-na.ssl-images-amazon.com", "images-fe.ssl-images-amazon.com"}
 THRIVE_IMAGE_DOMAINS = {"d2d8wwwkmhfcva.cloudfront.net", "img.thrivemarket.com", "d2lnr5mha7bycj.cloudfront.net"}
