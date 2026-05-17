@@ -33,7 +33,7 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-forest/10 mb-4">
             <Leaf className="w-7 h-7 text-forest" />
           </div>
-          <h1 className="font-serif text-3xl font-bold text-forest">Welcome back</h1>
+          <h1 className="font-serif text-3xl font-bold text-forest">My Pantry</h1>
           <p className="text-forest/60 text-sm mt-1">Sign in to your HashiPantry account</p>
         </div>
 
