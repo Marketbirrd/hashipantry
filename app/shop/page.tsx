@@ -16,7 +16,7 @@ const CATEGORIES = [
   "Pantry Staples", "Beverages", "Supplements",
 ];
 
-const SOURCES = ["All", "Amazon", "Thrive Market"];
+const SOURCES = ["All", "Amazon"];
 
 type ApiResponse = { items: Product[]; total: number; page: number; pages: number };
 

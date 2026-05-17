@@ -8,7 +8,7 @@ export type CartItem = {
   imageUrl: string;
   affiliateUrl: string;
   asin?: string | null;
-  source: "AMAZON" | "THRIVE";
+  source: "AMAZON";
 };
 
 type CartContextType = {

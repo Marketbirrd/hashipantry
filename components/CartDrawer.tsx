@@ -11,30 +11,9 @@ export default function CartDrawer({ open, onClose }: Props) {
   const { items, removeItem, clearCart } = useCart();
   const [loading, setLoading] = useState(false);
 
-  const handleAmazonCheckout = async () => {
-    const amazonItems = items.filter((i) => i.source === "AMAZON" && i.asin);
-    if (amazonItems.length === 0) return;
-
-    setLoading(true);
-    try {
-      const res = await fetch("/api/amazon-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ asins: amazonItems.map((i) => i.asin) }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.open(data.url, "_blank");
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
+  const handleAmazonCheckout = () => {
+    items.forEach((item) => window.open(item.affiliateUrl, "_blank"));
   };
-
-  const amazonItems = items.filter((i) => i.source === "AMAZON");
-  const thriveItems = items.filter((i) => i.source === "THRIVE");
 
   if (!open) return null;
 
@@ -90,14 +69,8 @@ export default function CartDrawer({ open, onClose }: Props) {
                   <p className="text-sm font-medium text-forest line-clamp-2 leading-snug">
                     {item.name}
                   </p>
-                  <span
-                    className={`inline-block mt-1 text-xs px-1.5 py-0.5 rounded-full font-medium ${
-                      item.source === "AMAZON"
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-green-100 text-green-800"
-                    }`}
-                  >
-                    {item.source === "AMAZON" ? "Amazon" : "Thrive Market"}
+                  <span className="inline-block mt-1 text-xs px-1.5 py-0.5 rounded-full font-medium bg-amber-100 text-amber-800">
+                    Amazon
                   </span>
                 </div>
                 <button
@@ -114,34 +87,13 @@ export default function CartDrawer({ open, onClose }: Props) {
         {/* Footer actions */}
         {items.length > 0 && (
           <div className="p-4 border-t border-sage-light/30 space-y-2">
-            {amazonItems.length > 0 && (
-              <button
-                onClick={handleAmazonCheckout}
-                disabled={loading}
-                className="w-full bg-forest text-white py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {loading
-                  ? "Building cart…"
-                  : `Checkout ${amazonItems.length} Amazon item${amazonItems.length > 1 ? "s" : ""}`}
-              </button>
-            )}
-            {thriveItems.length > 0 && (
-              <div className="space-y-1">
-                {thriveItems.map((item) => (
-                  <a
-                    key={item.id}
-                    href={item.affiliateUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full border border-green-600 text-green-700 py-2.5 rounded-xl font-medium text-sm hover:bg-green-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    View on Thrive Market
-                  </a>
-                ))}
-              </div>
-            )}
+            <button
+              onClick={handleAmazonCheckout}
+              className="w-full bg-forest text-white py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors flex items-center justify-center gap-2"
+            >
+              <ExternalLink className="w-4 h-4" />
+              Shop these on Amazon
+            </button>
             <button
               onClick={clearCart}
               className="w-full text-forest/50 text-xs py-1.5 hover:text-forest/80 transition-colors"
