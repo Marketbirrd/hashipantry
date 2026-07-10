@@ -35,7 +35,7 @@ export default function CartDrawer({ open, onClose }: Props) {
   return (
     <>
       <div className="fixed inset-0 bg-black/40 z-50" onClick={onClose} />
-      <div className="fixed top-0 right-0 h-screen w-full max-w-sm bg-white z-50 shadow-2xl flex flex-col">
+      <div className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-white z-50 shadow-2xl flex flex-col" style={{ height: '100dvh' }}>
 
         {/* Header — fixed at top */}
         <div className="shrink-0 flex items-center justify-between p-4 border-b border-sage-light/30">

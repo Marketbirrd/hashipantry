@@ -37,8 +37,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const stored = localStorage.getItem("hashi-cart");
     if (stored) {
       try {
-        setItems(JSON.parse(stored));
-      } catch {}
+        const parsed = JSON.parse(stored);
+        // Migrate old items that don't have quantity
+        const migrated = parsed.map((i: CartItem) => ({ ...i, quantity: i.quantity ?? 1 }));
+        // Deduplicate by id
+        const seen = new Set<string>();
+        setItems(migrated.filter((i: CartItem) => { if (seen.has(i.id)) return false; seen.add(i.id); return true; }));
+      } catch {
+        localStorage.removeItem("hashi-cart");
+      }
     }
   }, []);
 
