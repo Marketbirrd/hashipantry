@@ -5,14 +5,24 @@ const API_KEY = process.env.SPOONACULAR_API_KEY!;
 const BASE = "https://api.spoonacular.com";
 
 const SEARCHES = [
+  // Existing searches
   { query: "hashimotos thyroid gluten free", tags: ["Gluten Free"] },
   { query: "AIP autoimmune paleo", tags: ["AIP", "Gluten Free", "Dairy Free"] },
-  { query: "gluten free dairy free dinner", tags: ["Gluten Free", "Dairy Free"] },
   { query: "paleo breakfast", tags: ["Paleo", "Gluten Free", "Dairy Free"] },
   { query: "anti inflammatory soup", tags: ["Gluten Free", "Dairy Free"] },
   { query: "grain free snack", tags: ["Grain Free", "Gluten Free"] },
   { query: "dairy free smoothie thyroid", tags: ["Dairy Free", "Gluten Free"] },
-  { query: "vegan gluten free dinner", tags: ["Vegan", "Gluten Free", "Dairy Free"] },
+  // Dinner-specific: protein + cooking method to avoid soup/salad/breakfast matching
+  { query: "gluten free chicken thighs baked", tags: ["Gluten Free", "Dairy Free"] },
+  { query: "paleo salmon fillet dinner", tags: ["Paleo", "Gluten Free", "Dairy Free"] },
+  { query: "AIP ground beef bowl", tags: ["AIP", "Gluten Free", "Dairy Free"] },
+  { query: "gluten free turkey meatballs", tags: ["Gluten Free", "Dairy Free"] },
+  { query: "paleo pork chops roasted", tags: ["Paleo", "Gluten Free", "Dairy Free"] },
+  { query: "grain free shrimp stir fry", tags: ["Grain Free", "Gluten Free", "Dairy Free"] },
+  { query: "AIP chicken casserole", tags: ["AIP", "Gluten Free", "Dairy Free"] },
+  { query: "gluten free beef roast", tags: ["Gluten Free", "Dairy Free"] },
+  { query: "vegan gluten free lentil dinner", tags: ["Vegan", "Gluten Free", "Dairy Free"] },
+  { query: "paleo lamb chops", tags: ["Paleo", "Gluten Free", "Dairy Free"] },
 ];
 
 function slugify(title: string) {
@@ -21,12 +31,14 @@ function slugify(title: string) {
 
 function getCategory(title: string, dishTypes: string[]): string {
   const t = (title + " " + dishTypes.join(" ")).toLowerCase();
-  if (t.includes("breakfast") || t.includes("pancake") || t.includes("waffle") || t.includes("egg")) return "Breakfast";
-  if (t.includes("smoothie") || t.includes("drink") || t.includes("juice") || t.includes("shake")) return "Smoothies & Drinks";
-  if (t.includes("soup") || t.includes("stew") || t.includes("broth") || t.includes("chili")) return "Soups & Stews";
-  if (t.includes("salad") || t.includes("lunch") || t.includes("wrap") || t.includes("sandwich")) return "Lunch";
-  if (t.includes("sauce") || t.includes("dressing") || t.includes("dip") || t.includes("condiment")) return "Sauces & Condiments";
-  if (t.includes("snack") || t.includes("cookie") || t.includes("bar") || t.includes("bite") || t.includes("muffin")) return "Snacks";
+  if (t.includes("breakfast") || t.includes("pancake") || t.includes("waffle") || t.includes("oatmeal") || t.includes("granola")) return "Breakfast";
+  if (t.includes("smoothie") || t.includes("drink") || t.includes("juice") || t.includes("shake") || t.includes("latte")) return "Smoothies & Drinks";
+  if (t.includes("soup") || t.includes("stew") || t.includes("broth") || t.includes("chili") || t.includes("chowder")) return "Soups & Stews";
+  if (t.includes("sauce") || t.includes("dressing") || t.includes("dip") || t.includes("condiment") || t.includes("aioli") || t.includes("marinade")) return "Sauces & Condiments";
+  if (t.includes("snack") || t.includes("cookie") || t.includes("bar") || t.includes("bite") || t.includes("muffin") || t.includes("cracker")) return "Snacks";
+  if (t.includes("salad") || t.includes("wrap") || t.includes("sandwich")) return "Lunch";
+  // Spoonacular labels main meals as "main course" or "main dish"
+  if (dishTypes.some(d => ["main course","main dish","dinner","lunch"].includes(d.toLowerCase()))) return "Dinner";
   return "Dinner";
 }
 
