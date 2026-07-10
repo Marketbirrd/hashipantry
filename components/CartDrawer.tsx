@@ -27,6 +27,13 @@ export default function CartDrawer({ open, onClose }: Props) {
 
   const handleAmazonCheckout = async () => {
     setLoading(true);
+
+    // Open popup immediately on click — browsers block popups opened after await
+    const w = 480, h = 700;
+    const left = Math.round((screen.width - w) / 2);
+    const top = Math.round((screen.height - h) / 2);
+    const popup = window.open("about:blank", "amazon-cart", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
+
     try {
       const res = await fetch("/api/amazon-cart", {
         method: "POST",
@@ -34,16 +41,10 @@ export default function CartDrawer({ open, onClose }: Props) {
         body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
       });
       const data = await res.json();
-
       const url = data.cartUrl ?? data.fallbackUrls?.[0];
-      if (url) {
-        const w = 480, h = 700;
-        const left = Math.round((screen.width - w) / 2);
-        const top = Math.round((screen.height - h) / 2);
-        window.open(url, "amazon-cart", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
-      }
+      if (url && popup) popup.location.href = url;
     } catch {
-      if (items[0]) window.open(items[0].affiliateUrl, "_blank");
+      if (popup && items[0]) popup.location.href = items[0].affiliateUrl;
     } finally {
       setLoading(false);
     }
