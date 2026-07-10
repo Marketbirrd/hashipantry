@@ -35,13 +35,15 @@ export default function CartDrawer({ open, onClose }: Props) {
       });
       const data = await res.json();
 
-      if (data.cartUrl) {
-        window.location.href = data.cartUrl;
-      } else if (data.fallbackUrls?.length > 0) {
-        window.location.href = data.fallbackUrls[0];
+      const url = data.cartUrl ?? data.fallbackUrls?.[0];
+      if (url) {
+        const w = 480, h = 700;
+        const left = Math.round((screen.width - w) / 2);
+        const top = Math.round((screen.height - h) / 2);
+        window.open(url, "amazon-cart", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
       }
     } catch {
-      if (items[0]) window.location.href = items[0].affiliateUrl;
+      if (items[0]) window.open(items[0].affiliateUrl, "_blank");
     } finally {
       setLoading(false);
     }
