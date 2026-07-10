@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Search, Clock, Users, ChefHat, Filter } from "lucide-react";
+import { Search, Clock, Users, ChefHat, Filter, Heart } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 type Recipe = {
   id: string;
@@ -21,6 +22,7 @@ const CATEGORIES = ["All", "Breakfast", "Lunch", "Dinner", "Snacks", "Soups & St
 const DIET_TAGS = ["Gluten Free", "Dairy Free", "AIP", "Paleo", "Vegan", "Grain Free", "Anti-Inflammatory"];
 
 export default function RecipesPage() {
+  const { data: session } = useSession();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -30,6 +32,7 @@ export default function RecipesPage() {
   const [category, setCategory] = useState("All");
   const [activeDiet, setActiveDiet] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [favoritedSlugs, setFavoritedSlugs] = useState<Set<string>>(new Set());
 
   const fetchRecipes = useCallback(async () => {
     setLoading(true);
@@ -54,6 +57,30 @@ export default function RecipesPage() {
   useEffect(() => {
     fetchRecipes();
   }, [fetchRecipes]);
+
+  useEffect(() => {
+    if (!session?.user) return;
+    fetch("/api/account/favorites/recipes")
+      .then((r) => r.json())
+      .then((d) => setFavoritedSlugs(new Set(d.favorites?.map((f: { recipeSlug: string }) => f.recipeSlug) ?? [])))
+      .catch(() => {});
+  }, [session]);
+
+  const toggleRecipeFavorite = async (recipe: Recipe, e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!session?.user) return;
+    if (favoritedSlugs.has(recipe.slug)) {
+      setFavoritedSlugs((prev) => { const s = new Set(prev); s.delete(recipe.slug); return s; });
+      await fetch(`/api/account/favorites/recipes?recipeSlug=${recipe.slug}`, { method: "DELETE" });
+    } else {
+      setFavoritedSlugs((prev) => new Set(prev).add(recipe.slug));
+      await fetch("/api/account/favorites/recipes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ recipeSlug: recipe.slug, recipeTitle: recipe.title, imageUrl: recipe.imageUrl }),
+      });
+    }
+  };
 
   const toggleDiet = (tag: string) => {
     setActiveDiet((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]);
@@ -167,6 +194,14 @@ export default function RecipesPage() {
                 <span className="absolute top-2 left-2 text-[10px] bg-white/90 text-forest/70 px-2 py-0.5 rounded-full font-medium">
                   {recipe.difficulty}
                 </span>
+                {session?.user && (
+                  <button
+                    onClick={(e) => toggleRecipeFavorite(recipe, e)}
+                    className={`absolute top-2 right-2 p-1.5 rounded-full shadow-sm transition-colors ${favoritedSlugs.has(recipe.slug) ? "bg-red-50 text-red-500" : "bg-white/80 text-forest/30 hover:text-red-400"}`}
+                  >
+                    <Heart className={`w-3.5 h-3.5 ${favoritedSlugs.has(recipe.slug) ? "fill-red-500" : ""}`} />
+                  </button>
+                )}
               </div>
 
               <div className="p-3 flex flex-col flex-1">
