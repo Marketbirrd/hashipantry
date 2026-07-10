@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "@/contexts/CartContext";
-import { X, ShoppingBag, ExternalLink, Plus, Minus } from "lucide-react";
+import { X, ShoppingBag, ExternalLink, Plus, Minus, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 type Props = { open: boolean; onClose: () => void };
@@ -23,9 +23,29 @@ function CartImage({ src, alt }: { src: string; alt: string }) {
 
 export default function CartDrawer({ open, onClose }: Props) {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
+  const [loading, setLoading] = useState(false);
 
-  const handleAmazonCheckout = () => {
-    items.forEach((item) => window.open(item.affiliateUrl, "_blank"));
+  const handleAmazonCheckout = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/amazon-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
+      });
+      const data = await res.json();
+
+      if (data.cartUrl) {
+        window.open(data.cartUrl, "_blank");
+      }
+      // Open fallback search URLs for products without ASINs yet
+      data.fallbackUrls?.forEach((url: string) => window.open(url, "_blank"));
+    } catch {
+      // Fallback: open each affiliate link individually
+      items.forEach((item) => window.open(item.affiliateUrl, "_blank"));
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!open) return null;
@@ -97,11 +117,11 @@ export default function CartDrawer({ open, onClose }: Props) {
         <div className="shrink-0 p-4 border-t border-sage-light/30 space-y-2 bg-white">
           <button
             onClick={handleAmazonCheckout}
-            disabled={items.length === 0}
+            disabled={items.length === 0 || loading}
             className="w-full bg-forest text-white py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors flex items-center justify-center gap-2 disabled:opacity-40"
           >
-            <ExternalLink className="w-4 h-4" />
-            Shop these on Amazon
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
+            {loading ? "Building your Amazon cart…" : "Checkout on Amazon"}
           </button>
           {items.length > 0 && (
             <button
