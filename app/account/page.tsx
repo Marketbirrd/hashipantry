@@ -5,27 +5,27 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import {
-  Heart, TrendingUp, LogOut, ShoppingBag,
-  RotateCcw, Package, Users, Camera, Lock, CheckCircle,
-  AlertCircle, ChefHat, Edit3, Home, Settings, ChevronRight, Menu, X
+  Heart, TrendingUp, LogOut, ShoppingBag, RotateCcw,
+  Package, Users, Camera, Lock, CheckCircle, AlertCircle,
+  ChefHat, Menu, X, ChevronRight
 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import SymptomChart from "@/components/SymptomChart";
 
 const DIET_TAGS = [
-  "Gluten Free", "Dairy Free", "Soy Free", "Egg Free", "Nut Free",
-  "AIP", "Paleo", "Vegan", "Grain Free", "No Seed Oils", "Low Histamine",
+  "Gluten Free","Dairy Free","Soy Free","Egg Free","Nut Free",
+  "AIP","Paleo","Vegan","Grain Free","No Seed Oils","Low Histamine",
 ];
 
-type Tab = "overview" | "orders" | "favorites" | "diet" | "symptoms" | "profile";
+type Section = "dashboard" | "orders" | "favorites" | "diet" | "symptoms" | "profile";
 
-const NAV_ITEMS: { id: Tab; label: string; icon: React.ElementType }[] = [
-  { id: "overview",  label: "Dashboard",        icon: Home },
-  { id: "orders",    label: "Order History",     icon: Package },
-  { id: "favorites", label: "Favorites",         icon: Heart },
-  { id: "diet",      label: "Diet Preferences",  icon: Settings },
-  { id: "symptoms",  label: "Symptom Tracker",   icon: TrendingUp },
-  { id: "profile",   label: "Edit Profile",      icon: Edit3 },
+const NAV: { id: Section; label: string }[] = [
+  { id: "dashboard", label: "Dashboard" },
+  { id: "orders",    label: "Purchase History" },
+  { id: "favorites", label: "Favorites" },
+  { id: "profile",   label: "Profile Info" },
+  { id: "diet",      label: "Diet Preferences" },
+  { id: "symptoms",  label: "Symptom Tracker" },
 ];
 
 type SymptomEntry = { id: string; date: string; energy: number; mood: number; brainFog: number; joint: number; notes?: string };
@@ -34,7 +34,7 @@ type Purchase      = { id: string; createdAt: string; items: PurchaseItem[] };
 type ProductFav    = { id: string; productId: string; productName: string; affiliateUrl: string; imageUrl?: string };
 type RecipeFav     = { id: string; recipeSlug: string; recipeTitle: string; imageUrl?: string };
 
-function ReorderButton({ item }: { item: PurchaseItem }) {
+function ReorderBtn({ item }: { item: PurchaseItem }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
   return (
@@ -45,7 +45,7 @@ function ReorderButton({ item }: { item: PurchaseItem }) {
         setAdded(true);
         setTimeout(() => setAdded(false), 2000);
       }}
-      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${added ? "bg-green-100 text-green-700" : "bg-forest text-white hover:bg-forest-light"}`}
+      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold border transition-colors ${added ? "bg-green-50 text-green-700 border-green-200" : "border-forest/20 text-forest hover:bg-forest hover:text-white"}`}
     >
       <RotateCcw className="w-3 h-3" />{added ? "Added!" : "Reorder"}
     </button>
@@ -55,9 +55,9 @@ function ReorderButton({ item }: { item: PurchaseItem }) {
 export default function AccountPage() {
   const { data: session, status, update: updateSession } = useSession();
   const router = useRouter();
-  const [tab, setTab] = useState<Tab>("overview");
-  const [favTab, setFavTab] = useState<"products" | "recipes">("products");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [section, setSection] = useState<Section>("dashboard");
+  const [favTab, setFavTab] = useState<"products"|"recipes">("products");
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [dietPrefs,   setDietPrefs]   = useState<string[]>([]);
   const [symptoms,    setSymptoms]    = useState<SymptomEntry[]>([]);
@@ -65,24 +65,19 @@ export default function AccountPage() {
   const [productFavs, setProductFavs] = useState<ProductFav[]>([]);
   const [recipeFavs,  setRecipeFavs]  = useState<RecipeFav[]>([]);
 
-  // Profile edit
-  const [profileName,  setProfileName]  = useState("");
-  const [profileImage, setProfileImage] = useState("");
-  const [profileSaving, setProfileSaving] = useState(false);
-  const [profileMsg,   setProfileMsg]   = useState<{ type: "ok"|"err"; text: string }|null>(null);
+  const [profileName,     setProfileName]     = useState("");
+  const [profileImage,    setProfileImage]    = useState("");
+  const [profileSaving,   setProfileSaving]   = useState(false);
+  const [profileMsg,      setProfileMsg]      = useState<{type:"ok"|"err";text:string}|null>(null);
   const [imageProcessing, setImageProcessing] = useState(false);
 
-  // Password
   const [pwCurrent, setPwCurrent] = useState("");
   const [pwNew,     setPwNew]     = useState("");
   const [pwConfirm, setPwConfirm] = useState("");
   const [pwSaving,  setPwSaving]  = useState(false);
-  const [pwMsg,     setPwMsg]     = useState<{ type: "ok"|"err"; text: string }|null>(null);
+  const [pwMsg,     setPwMsg]     = useState<{type:"ok"|"err";text:string}|null>(null);
 
-  // Symptom form
-  const [newSymptom, setNewSymptom] = useState({ energy: 5, mood: 5, brainFog: 5, joint: 5, notes: "" });
-
-  // Diet
+  const [newSymptom, setNewSymptom] = useState({ energy:5, mood:5, brainFog:5, joint:5, notes:"" });
   const [dietSaving, setDietSaving] = useState(false);
   const [dietSaved,  setDietSaved]  = useState(false);
 
@@ -118,12 +113,12 @@ export default function AccountPage() {
     setProfileName(session.user?.name ?? "");
     setProfileImage(session.user?.image ?? "");
     Promise.all([
-      fetch("/api/account/prefs").then(r => r.json()),
-      fetch("/api/account/symptoms").then(r => r.json()),
-      fetch("/api/account/purchases").then(r => r.json()),
-      fetch("/api/account/favorites/products").then(r => r.json()),
-      fetch("/api/account/favorites/recipes").then(r => r.json()),
-    ]).then(([prefs, sym, purch, pfavs, rfavs]) => {
+      fetch("/api/account/prefs").then(r=>r.json()),
+      fetch("/api/account/symptoms").then(r=>r.json()),
+      fetch("/api/account/purchases").then(r=>r.json()),
+      fetch("/api/account/favorites/products").then(r=>r.json()),
+      fetch("/api/account/favorites/recipes").then(r=>r.json()),
+    ]).then(([prefs,sym,purch,pfavs,rfavs]) => {
       setDietPrefs(prefs.dietPrefs ?? []);
       setSymptoms(sym.symptoms ?? []);
       setPurchases(purch.purchases ?? []);
@@ -136,465 +131,534 @@ export default function AccountPage() {
     setProfileSaving(true); setProfileMsg(null);
     try {
       const res = await fetch("/api/account/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: profileName, image: profileImage }),
+        method:"PATCH", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ name:profileName, image:profileImage }),
       });
       if (!res.ok) throw new Error();
-      await updateSession({ name: profileName, image: profileImage });
-      setProfileMsg({ type: "ok", text: "Profile updated!" });
-    } catch {
-      setProfileMsg({ type: "err", text: "Failed to save. Please try again." });
-    } finally { setProfileSaving(false); }
+      await updateSession({ name:profileName, image:profileImage });
+      setProfileMsg({ type:"ok", text:"Profile updated!" });
+    } catch { setProfileMsg({ type:"err", text:"Failed to save." }); }
+    finally  { setProfileSaving(false); }
   };
 
   const changePassword = async () => {
-    if (pwNew !== pwConfirm) { setPwMsg({ type: "err", text: "New passwords don't match." }); return; }
+    if (pwNew !== pwConfirm) { setPwMsg({type:"err",text:"Passwords don't match."}); return; }
     setPwSaving(true); setPwMsg(null);
     try {
       const res = await fetch("/api/account/password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ currentPassword: pwCurrent, newPassword: pwNew }),
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ currentPassword:pwCurrent, newPassword:pwNew }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      setPwMsg({ type: "ok", text: "Password changed!" });
+      setPwMsg({type:"ok",text:"Password changed!"});
       setPwCurrent(""); setPwNew(""); setPwConfirm("");
-    } catch (e) {
-      setPwMsg({ type: "err", text: (e as Error).message || "Failed to change password." });
-    } finally { setPwSaving(false); }
+    } catch(e) { setPwMsg({type:"err",text:(e as Error).message||"Failed."}); }
+    finally { setPwSaving(false); }
   };
 
   const saveDietPrefs = async () => {
     setDietSaving(true);
-    await fetch("/api/account/prefs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ dietPrefs }) });
+    await fetch("/api/account/prefs",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({dietPrefs})});
     setDietSaving(false); setDietSaved(true);
-    setTimeout(() => setDietSaved(false), 2000);
+    setTimeout(()=>setDietSaved(false),2000);
   };
 
   const logSymptom = async () => {
-    const res = await fetch("/api/account/symptoms", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(newSymptom) });
+    const res = await fetch("/api/account/symptoms",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(newSymptom)});
     const data = await res.json();
-    setSymptoms(prev => [data, ...prev]);
-    setNewSymptom({ energy: 5, mood: 5, brainFog: 5, joint: 5, notes: "" });
+    setSymptoms(prev=>[data,...prev]);
+    setNewSymptom({energy:5,mood:5,brainFog:5,joint:5,notes:""});
   };
 
-  const removeProductFav = async (productId: string) => {
-    setProductFavs(prev => prev.filter(f => f.productId !== productId));
-    await fetch(`/api/account/favorites/products?productId=${productId}`, { method: "DELETE" });
+  const removeProductFav = async (productId:string) => {
+    setProductFavs(prev=>prev.filter(f=>f.productId!==productId));
+    await fetch(`/api/account/favorites/products?productId=${productId}`,{method:"DELETE"});
   };
-  const removeRecipeFav = async (recipeSlug: string) => {
-    setRecipeFavs(prev => prev.filter(f => f.recipeSlug !== recipeSlug));
-    await fetch(`/api/account/favorites/recipes?recipeSlug=${recipeSlug}`, { method: "DELETE" });
+  const removeRecipeFav = async (recipeSlug:string) => {
+    setRecipeFavs(prev=>prev.filter(f=>f.recipeSlug!==recipeSlug));
+    await fetch(`/api/account/favorites/recipes?recipeSlug=${recipeSlug}`,{method:"DELETE"});
   };
 
-  const navigate = (t: Tab) => { setTab(t); setSidebarOpen(false); };
+  const go = (s:Section) => { setSection(s); setDrawerOpen(false); window.scrollTo(0,0); };
 
-  if (status === "loading") return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-forest border-t-transparent rounded-full animate-spin" /></div>;
+  if (status==="loading") return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-forest border-t-transparent rounded-full animate-spin"/></div>;
   if (!session) return null;
 
-  const initials   = session.user?.name?.split(" ").map(n => n[0]).join("").toUpperCase() ?? "U";
-  const avatarSrc  = profileImage || session.user?.image;
   const firstName  = session.user?.name?.split(" ")[0] ?? "there";
-  const activeLabel = NAV_ITEMS.find(n => n.id === tab)?.label ?? "";
+  const initials   = session.user?.name?.split(" ").map(n=>n[0]).join("").toUpperCase() ?? "U";
+  const avatarSrc  = profileImage || session.user?.image;
+  const memberSince = new Date().toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});
+
+  /* ── Sidebar ── */
+  const Sidebar = () => (
+    <div className="w-52 shrink-0">
+      <p className="text-2xl font-bold text-forest mb-5">Hi, {firstName}</p>
+      <nav>
+        {NAV.map(({id,label}) => (
+          <button key={id} onClick={()=>go(id)}
+            className={`w-full text-left flex items-center justify-between px-3 py-2.5 text-sm rounded transition-colors mb-0.5 ${section===id ? "bg-gray-100 font-bold text-forest" : "text-forest/60 hover:text-forest hover:bg-gray-50 font-medium"}`}
+          >
+            {label}
+            {section===id && <ChevronRight className="w-3.5 h-3.5 text-forest/40"/>}
+          </button>
+        ))}
+        <div className="my-3 border-t border-gray-200"/>
+        <Link href="/community" className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-forest/60 hover:text-forest hover:bg-gray-50 rounded transition-colors mb-0.5">
+          <Users className="w-4 h-4"/> Community
+        </Link>
+        <button onClick={()=>signOut({callbackUrl:"/"})} className="w-full flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-forest/60 hover:text-forest hover:bg-gray-50 rounded transition-colors text-left">
+          <LogOut className="w-4 h-4"/> Sign Out
+        </button>
+      </nav>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
-      {/* Mobile sidebar backdrop */}
-      {sidebarOpen && (
-        <div className="fixed inset-0 z-40 bg-black/40" onClick={() => setSidebarOpen(false)} />
-      )}
+    <div className="min-h-screen bg-white">
+      {/* Mobile drawer backdrop */}
+      {drawerOpen && <div className="fixed inset-0 z-40 bg-black/40 md:hidden" onClick={()=>setDrawerOpen(false)}/>}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Mobile header bar */}
+      {/* Mobile drawer */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl p-6 transform transition-transform duration-200 md:hidden ${drawerOpen?"translate-x-0":"-translate-x-full"}`}>
+        <button onClick={()=>setDrawerOpen(false)} className="absolute top-4 right-4 text-forest/30 hover:text-forest"><X className="w-5 h-5"/></button>
+        <Sidebar/>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb */}
+        <p className="text-xs text-forest/40 mb-6 hidden md:block">
+          <Link href="/" className="hover:underline">Home</Link> &gt; Account
+        </p>
+
+        {/* Mobile top bar */}
         <div className="flex items-center gap-3 mb-6 md:hidden">
-          <button onClick={() => setSidebarOpen(true)} className="p-2 rounded-lg bg-white border border-gray-200 text-forest">
-            <Menu className="w-5 h-5" />
-          </button>
-          <span className="font-semibold text-forest">{activeLabel}</span>
+          <button onClick={()=>setDrawerOpen(true)} className="p-2 border border-gray-200 rounded text-forest"><Menu className="w-4 h-4"/></button>
+          <span className="font-bold text-forest text-sm">{NAV.find(n=>n.id===section)?.label}</span>
         </div>
 
-        <div className="flex gap-6 items-start">
+        <div className="flex gap-10 items-start">
+          {/* Desktop sidebar */}
+          <div className="hidden md:block sticky top-6"><Sidebar/></div>
 
-          {/* ── SIDEBAR ── */}
-          <aside className={`
-            fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl transform transition-transform duration-200
-            md:relative md:inset-auto md:z-auto md:w-64 md:shadow-none md:transform-none md:shrink-0
-            ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-          `}>
-            {/* Mobile close */}
-            <button onClick={() => setSidebarOpen(false)} className="absolute top-4 right-4 text-forest/40 hover:text-forest md:hidden">
-              <X className="w-5 h-5" />
-            </button>
+          {/* Content */}
+          <div className="flex-1 min-w-0">
 
-            {/* User card */}
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-14 h-14 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-lg text-forest/50 shrink-0">
-                  {avatarSrc
-                    ? <img src={avatarSrc} alt={firstName} className="w-full h-full object-cover" />
-                    : initials}
-                </div>
-                <div className="min-w-0">
-                  <p className="font-bold text-forest text-sm leading-tight truncate">
-                    {session.user?.name ?? "My Account"}
-                  </p>
-                  <p className="text-xs text-forest/50 truncate">{session.user?.email}</p>
-                </div>
-              </div>
-              {dietPrefs.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {dietPrefs.slice(0, 3).map(tag => (
-                    <span key={tag} className="text-[9px] bg-sage-pale text-forest/60 px-1.5 py-0.5 rounded-full font-medium">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </div>
+            {/* ══ DASHBOARD ══ */}
+            {section==="dashboard" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Account Dashboard</h1>
 
-            {/* Nav links */}
-            <nav className="py-2">
-              {NAV_ITEMS.map(({ id, label, icon: Icon }) => (
-                <button
-                  key={id}
-                  onClick={() => navigate(id)}
-                  className={`w-full flex items-center justify-between px-6 py-3 text-sm font-medium transition-colors group ${
-                    tab === id
-                      ? "bg-forest/5 text-forest border-r-2 border-forest"
-                      : "text-forest/60 hover:text-forest hover:bg-gray-50"
-                  }`}
-                >
-                  <span className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${tab === id ? "text-forest" : "text-forest/40 group-hover:text-forest/60"}`} />
-                    {label}
-                  </span>
-                  {tab === id && <ChevronRight className="w-4 h-4 text-forest/30" />}
-                </button>
-              ))}
-
-              <div className="mx-6 my-2 border-t border-gray-100" />
-
-              <Link
-                href="/community"
-                className="w-full flex items-center gap-3 px-6 py-3 text-sm font-medium text-forest/60 hover:text-forest hover:bg-gray-50 transition-colors"
-              >
-                <Users className="w-4 h-4 text-forest/40" />
-                Community
-              </Link>
-
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="w-full flex items-center gap-3 px-6 py-3 text-sm font-medium text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
-            </nav>
-          </aside>
-
-          {/* ── MAIN CONTENT ── */}
-          <main className="flex-1 min-w-0 space-y-5">
-
-            {/* ── DASHBOARD ── */}
-            {tab === "overview" && (
-              <>
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h1 className="font-serif text-2xl font-bold text-forest mb-0.5">
-                    Welcome back, {firstName}!
-                  </h1>
-                  <p className="text-sm text-forest/50">Here&apos;s a summary of your HashiPantry account.</p>
-                </div>
-
-                {/* Stat cards */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  <button onClick={() => setTab("orders")} className="bg-white rounded-xl border border-gray-200 p-5 text-left hover:border-forest/30 hover:shadow-sm transition-all group">
-                    <Package className="w-5 h-5 text-forest/30 mb-3 group-hover:text-forest/50 transition-colors" />
-                    <p className="text-2xl font-bold text-forest">{purchases.length}</p>
-                    <p className="text-xs text-forest/50 mt-0.5">Orders</p>
-                  </button>
-                  <button onClick={() => setTab("favorites")} className="bg-white rounded-xl border border-gray-200 p-5 text-left hover:border-forest/30 hover:shadow-sm transition-all group">
-                    <Heart className="w-5 h-5 text-red-300 mb-3 group-hover:text-red-400 transition-colors" />
-                    <p className="text-2xl font-bold text-forest">{productFavs.length + recipeFavs.length}</p>
-                    <p className="text-xs text-forest/50 mt-0.5">Saved Items</p>
-                  </button>
-                  <button onClick={() => setTab("symptoms")} className="bg-white rounded-xl border border-gray-200 p-5 text-left hover:border-forest/30 hover:shadow-sm transition-all group col-span-2 sm:col-span-1">
-                    <TrendingUp className="w-5 h-5 text-green/60 mb-3 group-hover:text-green transition-colors" />
-                    <p className="text-2xl font-bold text-forest">{symptoms.length}</p>
-                    <p className="text-xs text-forest/50 mt-0.5">Symptom Logs</p>
-                  </button>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {/* Recent order */}
-                  <div className="bg-white rounded-xl border border-gray-200">
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                      <h2 className="font-semibold text-sm text-forest">Recent Order</h2>
-                      <button onClick={() => setTab("orders")} className="text-xs text-forest/40 hover:text-forest transition-colors">View all</button>
+                {/* Member card */}
+                <div className="border border-gray-200 rounded mb-6 overflow-hidden">
+                  <div className="flex flex-col sm:flex-row">
+                    {/* Left: member card */}
+                    <div className="flex-1 p-6 flex flex-col items-center justify-center border-b sm:border-b-0 sm:border-r border-gray-200">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-2xl text-forest/50 mb-4">
+                        {avatarSrc ? <img src={avatarSrc} alt={firstName} className="w-full h-full object-cover"/> : initials}
+                      </div>
+                      <p className="font-serif font-bold text-forest text-lg">HashiPantry Member</p>
+                      <p className="text-xs text-forest/40 mt-1">Member since {memberSince}</p>
+                      <div className="flex gap-6 mt-4 text-center">
+                        <div>
+                          <p className="text-2xl font-bold text-forest">{purchases.length}</p>
+                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Orders</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-forest">{productFavs.length+recipeFavs.length}</p>
+                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Saved</p>
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-forest">{symptoms.length}</p>
+                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Logs</p>
+                        </div>
+                      </div>
+                      <button onClick={()=>go("orders")} className="mt-5 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors tracking-wide uppercase">
+                        View My Orders
+                      </button>
                     </div>
-                    {purchases.length === 0 ? (
-                      <div className="px-5 py-8 text-center">
-                        <ShoppingBag className="w-8 h-8 text-forest/10 mx-auto mb-2" />
-                        <p className="text-xs text-forest/40">No orders yet</p>
-                        <Link href="/shop" className="text-xs text-forest/60 hover:text-forest underline mt-1 inline-block">Start shopping →</Link>
+
+                    {/* Right: perks */}
+                    <div className="flex-1 p-6">
+                      <p className="text-xs font-bold text-forest uppercase tracking-widest mb-4">My Member Benefits</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        {[
+                          { icon: ShoppingBag, title:"Curated Shop",   desc:"Every product vetted for Hashimoto's compatibility." },
+                          { icon: ChefHat,     title:"Healing Recipes", desc:"Full recipes with ingredient shop links." },
+                          { icon: TrendingUp,  title:"Symptom Tracker", desc:"Log and chart your health trends over time." },
+                          { icon: Heart,       title:"Save Favorites",  desc:"Save products & recipes for quick reordering." },
+                        ].map(({icon:Icon,title,desc})=>(
+                          <div key={title} className="text-center p-3 border border-gray-100 rounded">
+                            <Icon className="w-6 h-6 text-forest/30 mx-auto mb-2"/>
+                            <p className="text-xs font-bold text-forest">{title}</p>
+                            <p className="text-[10px] text-forest/50 mt-1 leading-snug">{desc}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Purchase history section */}
+                <div className="border border-gray-200 rounded mb-6">
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Purchase History</p>
+                    <button onClick={()=>go("orders")} className="text-xs font-bold text-forest uppercase tracking-wide flex items-center gap-1 hover:underline">
+                      Purchase History <ChevronRight className="w-3.5 h-3.5"/>
+                    </button>
+                  </div>
+                  <div className="p-5">
+                    {purchases.length===0 ? (
+                      <div>
+                        <p className="font-semibold text-forest/70 mb-1">No recent orders.</p>
+                        <p className="text-sm text-forest/40">When you confirm checkout through HashiPantry, your orders appear here.</p>
                       </div>
                     ) : (
-                      <div className="px-5 py-3 space-y-3">
-                        <p className="text-[10px] text-forest/40 font-medium uppercase tracking-wide">
-                          {new Date(purchases[0].createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                        </p>
-                        {purchases[0].items.slice(0, 2).map(item => (
+                      <div className="space-y-3">
+                        {purchases[0].items.slice(0,3).map(item=>(
                           <div key={item.id} className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-lg bg-sage-pale overflow-hidden shrink-0">
-                              {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" /> : <ShoppingBag className="w-4 h-4 text-forest/20 m-auto mt-2.5" />}
+                            <div className="w-10 h-10 rounded bg-gray-50 overflow-hidden shrink-0">
+                              {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover"/> : <ShoppingBag className="w-4 h-4 text-forest/20 m-auto mt-3"/>}
                             </div>
-                            <p className="text-xs text-forest line-clamp-1 flex-1">{item.name}</p>
-                            <ReorderButton item={item} />
+                            <p className="text-sm text-forest flex-1 line-clamp-1">{item.name}</p>
+                            <ReorderBtn item={item}/>
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
+                </div>
 
-                  {/* Diet profile */}
-                  <div className="bg-white rounded-xl border border-gray-200">
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                      <h2 className="font-semibold text-sm text-forest">Diet Profile</h2>
-                      <button onClick={() => setTab("diet")} className="text-xs text-forest/40 hover:text-forest transition-colors">Edit</button>
+                {/* Info cards grid — 2x2, no payments */}
+                <div className="grid sm:grid-cols-2 gap-4 mb-6">
+                  {/* Profile card */}
+                  <div className="border border-gray-200 rounded p-5 flex flex-col">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest mb-3">Profile</p>
+                    <p className="text-xs text-forest/40 mb-1">Your Info</p>
+                    <p className="text-sm font-medium text-forest">{session.user?.name}</p>
+                    <div className="mt-3 space-y-1">
+                      <p className="text-xs text-forest/40">Login</p>
+                      <p className="text-sm text-forest">{session.user?.email}</p>
+                      <p className="text-sm text-forest tracking-widest">••••••••••••</p>
+                      <button onClick={()=>go("profile")} className="text-xs text-forest/50 hover:text-forest underline">Edit Password</button>
                     </div>
-                    <div className="px-5 py-4">
-                      {dietPrefs.length === 0 ? (
-                        <div className="text-center py-4">
-                          <p className="text-xs text-forest/40 mb-2">No preferences set yet.</p>
-                          <button onClick={() => setTab("diet")} className="text-xs text-forest font-medium underline">Set diet preferences →</button>
-                        </div>
-                      ) : (
-                        <div className="flex flex-wrap gap-2">
-                          {dietPrefs.map(tag => (
-                            <span key={tag} className="text-xs bg-sage-pale text-forest/70 px-2.5 py-1 rounded-full">{tag}</span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    <button onClick={()=>go("profile")} className="mt-auto pt-5 text-xs font-bold text-forest uppercase tracking-widest hover:underline text-left">
+                      Edit Profile
+                    </button>
                   </div>
-                </div>
 
-                {/* Quick links */}
-                <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
-                  {[
-                    { label: "Browse the Shop",        href: "/shop",    icon: ShoppingBag },
-                    { label: "Explore Recipes",         href: "/recipes", icon: ChefHat },
-                    { label: "Join the Community",      href: "/community", icon: Users },
-                  ].map(({ label, href, icon: Icon }) => (
-                    <Link key={label} href={href} className="flex items-center justify-between px-5 py-3.5 hover:bg-gray-50 transition-colors group">
-                      <span className="flex items-center gap-3 text-sm text-forest/70 group-hover:text-forest">
-                        <Icon className="w-4 h-4 text-forest/30" />
-                        {label}
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-forest/20 group-hover:text-forest/40" />
-                    </Link>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* ── ORDER HISTORY ── */}
-            {tab === "orders" && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-xl border border-gray-200 px-6 py-5">
-                  <h1 className="font-serif text-xl font-bold text-forest">Order History</h1>
-                  <p className="text-sm text-forest/50 mt-0.5">Items you&apos;ve sent to Amazon through HashiPantry.</p>
-                </div>
-                {purchases.length === 0 ? (
-                  <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                    <Package className="w-12 h-12 text-forest/10 mx-auto mb-3" />
-                    <p className="font-medium text-forest/50 mb-1">No orders yet</p>
-                    <p className="text-sm text-forest/40 mb-5 max-w-xs mx-auto">When you confirm checkout through HashiPantry, your orders appear here for easy reordering.</p>
-                    <Link href="/shop" className="inline-flex items-center gap-2 bg-forest text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-forest-light transition-colors">
-                      <ShoppingBag className="w-4 h-4" /> Browse Shop
-                    </Link>
-                  </div>
-                ) : (
-                  purchases.map((purchase, i) => (
-                    <div key={purchase.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-                      <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50 border-b border-gray-100">
-                        <div>
-                          <p className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Order #{purchases.length - i}</p>
-                          <p className="text-sm font-semibold text-forest mt-0.5">
-                            {new Date(purchase.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
-                          </p>
-                        </div>
-                        <span className="text-xs bg-forest/10 text-forest px-2.5 py-1 rounded-full font-semibold">
-                          {purchase.items.reduce((s, x) => s + x.quantity, 0)} item{purchase.items.reduce((s, x) => s + x.quantity, 0) !== 1 ? "s" : ""}
-                        </span>
+                  {/* Diet preferences card */}
+                  <div className="border border-gray-200 rounded p-5 flex flex-col">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest mb-3">Diet Preferences</p>
+                    {dietPrefs.length===0 ? (
+                      <p className="text-sm text-forest font-semibold">Set your diet preferences for a personalized shop experience.</p>
+                    ) : (
+                      <div className="flex flex-wrap gap-1.5">
+                        {dietPrefs.map(t=><span key={t} className="text-xs bg-sage-pale text-forest/70 px-2 py-0.5 rounded-full">{t}</span>)}
                       </div>
-                      <div className="px-5 py-3 space-y-3">
-                        {purchase.items.map(item => (
-                          <div key={item.id} className="flex items-center gap-3 py-1">
-                            <div className="w-10 h-10 rounded-lg bg-sage-pale overflow-hidden shrink-0">
-                              {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" /> : <ShoppingBag className="w-4 h-4 text-forest/20" />}
+                    )}
+                    <button onClick={()=>go("diet")} className="mt-auto pt-5 text-xs font-bold text-forest uppercase tracking-widest hover:underline text-left">
+                      {dietPrefs.length===0 ? "Set Preferences" : "Edit Preferences"}
+                    </button>
+                  </div>
+
+                  {/* Favorites card */}
+                  <div className="border border-gray-200 rounded p-5 flex flex-col">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest mb-3">Favorites</p>
+                    {productFavs.length+recipeFavs.length===0 ? (
+                      <p className="text-sm text-forest/50">No favorites saved yet.</p>
+                    ) : (
+                      <p className="text-sm text-forest/70">
+                        {productFavs.length} product{productFavs.length!==1?"s":""} · {recipeFavs.length} recipe{recipeFavs.length!==1?"s":""}
+                      </p>
+                    )}
+                    <button onClick={()=>go("favorites")} className="mt-auto pt-5 text-xs font-bold text-forest uppercase tracking-widest hover:underline text-left">
+                      View All
+                    </button>
+                  </div>
+
+                  {/* Symptom tracker card */}
+                  <div className="border border-gray-200 rounded p-5 flex flex-col">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest mb-3">Symptom Tracker</p>
+                    {symptoms.length===0 ? (
+                      <p className="text-sm text-forest/50">You haven&apos;t logged any symptoms yet.</p>
+                    ) : (
+                      <p className="text-sm text-forest/70">{symptoms.length} entr{symptoms.length===1?"y":"ies"} logged</p>
+                    )}
+                    <button onClick={()=>go("symptoms")} className="mt-auto pt-5 text-xs font-bold text-forest uppercase tracking-widest hover:underline text-left">
+                      {symptoms.length===0 ? "Log Symptoms" : "View Tracker"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Favorites preview */}
+                <div className="border border-gray-200 rounded">
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Favorites</p>
+                    <button onClick={()=>go("favorites")} className="text-xs font-bold text-forest uppercase tracking-wide flex items-center gap-1 hover:underline">
+                      View All <ChevronRight className="w-3.5 h-3.5"/>
+                    </button>
+                  </div>
+                  <div className="p-5">
+                    {productFavs.length+recipeFavs.length===0 ? (
+                      <p className="text-sm text-forest/50">No favorites saved.</p>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {[...productFavs.slice(0,2).map(f=>({key:f.id,img:f.imageUrl,name:f.productName,href:f.affiliateUrl,ext:true})),
+                          ...recipeFavs.slice(0,2).map(f=>({key:f.id,img:f.imageUrl,name:f.recipeTitle,href:`/recipes/${f.recipeSlug}`,ext:false}))
+                        ].slice(0,4).map(item=>(
+                          <a key={item.key} href={item.href} target={item.ext?"_blank":undefined} rel={item.ext?"noopener noreferrer":undefined} className="group">
+                            <div className="aspect-square bg-gray-50 rounded overflow-hidden mb-1">
+                              {item.img ? <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"/> : <div className="w-full h-full flex items-center justify-center"><Heart className="w-6 h-6 text-forest/10"/></div>}
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm text-forest font-medium line-clamp-1">{item.name}</p>
-                              <p className="text-xs text-forest/40">Qty: {item.quantity}</p>
-                            </div>
-                            <ReorderButton item={item} />
-                          </div>
+                            <p className="text-xs text-forest/70 line-clamp-2 leading-snug">{item.name}</p>
+                          </a>
                         ))}
                       </div>
-                    </div>
-                  ))
-                )}
+                    )}
+                  </div>
+                </div>
               </div>
             )}
 
-            {/* ── FAVORITES ── */}
-            {tab === "favorites" && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-xl border border-gray-200 px-6 py-5">
-                  <h1 className="font-serif text-xl font-bold text-forest">Favorites</h1>
-                  <p className="text-sm text-forest/50 mt-0.5">Products and recipes you&apos;ve saved.</p>
-                </div>
+            {/* ══ PURCHASE HISTORY ══ */}
+            {section==="orders" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Purchase History</h1>
+                {purchases.length===0 ? (
+                  <div className="border border-gray-200 rounded p-10 text-center">
+                    <Package className="w-10 h-10 text-forest/10 mx-auto mb-3"/>
+                    <p className="font-semibold text-forest/60 mb-1">No recent orders.</p>
+                    <p className="text-sm text-forest/40 mb-5">When you confirm checkout through HashiPantry, your orders appear here for easy reordering.</p>
+                    <Link href="/shop" className="inline-flex items-center gap-2 bg-forest text-white text-sm font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors uppercase tracking-wide">
+                      <ShoppingBag className="w-4 h-4"/> Browse Shop
+                    </Link>
+                  </div>
+                ) : purchases.map((p,i)=>(
+                  <div key={p.id} className="border border-gray-200 rounded mb-4 overflow-hidden">
+                    <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50 border-b border-gray-100">
+                      <div>
+                        <p className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Order #{purchases.length-i}</p>
+                        <p className="text-sm font-semibold text-forest mt-0.5">
+                          {new Date(p.createdAt).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+                        </p>
+                      </div>
+                      <span className="text-xs bg-forest/10 text-forest px-2.5 py-1 rounded font-semibold">
+                        {p.items.reduce((s,x)=>s+x.quantity,0)} item{p.items.reduce((s,x)=>s+x.quantity,0)!==1?"s":""}
+                      </span>
+                    </div>
+                    <div className="px-5 py-4 space-y-3">
+                      {p.items.map(item=>(
+                        <div key={item.id} className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded bg-gray-50 overflow-hidden shrink-0">
+                            {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover"/> : <ShoppingBag className="w-4 h-4 text-forest/20 m-auto mt-3"/>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-forest font-medium line-clamp-1">{item.name}</p>
+                            <p className="text-xs text-forest/40">Qty: {item.quantity}</p>
+                          </div>
+                          <ReorderBtn item={item}/>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
-                <div className="flex gap-1 bg-white rounded-xl border border-gray-200 p-1">
-                  {(["products", "recipes"] as const).map(t => (
-                    <button key={t} onClick={() => setFavTab(t)} className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${favTab === t ? "bg-forest text-white shadow-sm" : "text-forest/50 hover:text-forest"}`}>
-                      {t} {t === "products" ? productFavs.length > 0 && `(${productFavs.length})` : recipeFavs.length > 0 && `(${recipeFavs.length})`}
+            {/* ══ FAVORITES ══ */}
+            {section==="favorites" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Favorites</h1>
+                <div className="flex gap-1 mb-6 border-b border-gray-200">
+                  {(["products","recipes"] as const).map(t=>(
+                    <button key={t} onClick={()=>setFavTab(t)}
+                      className={`px-5 py-2.5 text-sm font-semibold capitalize border-b-2 -mb-px transition-colors ${favTab===t?"border-forest text-forest":"border-transparent text-forest/40 hover:text-forest"}`}>
+                      {t}
                     </button>
                   ))}
                 </div>
 
-                {favTab === "products" && (
-                  productFavs.length === 0 ? (
-                    <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                      <Heart className="w-10 h-10 text-red-100 mx-auto mb-3" />
-                      <p className="font-medium text-forest/50 mb-1">No saved products</p>
-                      <p className="text-sm text-forest/40 mb-4">Tap ♡ on any product card to save it.</p>
-                      <Link href="/shop" className="inline-flex gap-2 items-center bg-forest text-white text-sm px-5 py-2.5 rounded-lg font-semibold hover:bg-forest-light transition-colors">
-                        <ShoppingBag className="w-4 h-4" /> Browse Shop
-                      </Link>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {productFavs.map(fav => (
-                        <div key={fav.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group">
-                          <div className="relative aspect-square bg-gray-50">
-                            {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.productName} className="w-full h-full object-cover" /> : <ShoppingBag className="w-8 h-8 text-forest/10 absolute inset-0 m-auto" />}
-                            <button onClick={() => removeProductFav(fav.productId)} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100">
-                              <Heart className="w-3.5 h-3.5 fill-red-400" />
-                            </button>
-                          </div>
-                          <div className="p-3">
-                            <p className="text-xs font-semibold text-forest line-clamp-2 mb-2">{fav.productName}</p>
-                            <a href={fav.affiliateUrl} target="_blank" rel="noopener noreferrer" className="block text-center bg-forest text-white text-xs font-semibold py-1.5 rounded-lg hover:bg-forest-light transition-colors">
-                              View on Amazon
-                            </a>
-                          </div>
+                {favTab==="products" && (productFavs.length===0 ? (
+                  <div className="border border-gray-200 rounded p-10 text-center">
+                    <Heart className="w-8 h-8 text-gray-200 mx-auto mb-3"/>
+                    <p className="font-semibold text-forest/50 mb-1">No saved products</p>
+                    <p className="text-sm text-forest/40 mb-4">Tap ♡ on any product to save it.</p>
+                    <Link href="/shop" className="inline-flex gap-2 items-center bg-forest text-white text-sm font-bold px-5 py-2.5 rounded uppercase tracking-wide hover:bg-forest-light transition-colors">Browse Shop</Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {productFavs.map(fav=>(
+                      <div key={fav.id} className="border border-gray-200 rounded overflow-hidden group">
+                        <div className="relative aspect-square bg-gray-50">
+                          {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.productName} className="w-full h-full object-cover"/> : <ShoppingBag className="w-6 h-6 text-forest/10 absolute inset-0 m-auto"/>}
+                          <button onClick={()=>removeProductFav(fav.productId)} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Heart className="w-3 h-3 fill-red-400"/>
+                          </button>
                         </div>
-                      ))}
-                    </div>
-                  )
-                )}
+                        <div className="p-3">
+                          <p className="text-xs font-semibold text-forest line-clamp-2 mb-2">{fav.productName}</p>
+                          <a href={fav.affiliateUrl} target="_blank" rel="noopener noreferrer" className="block text-center border border-forest text-forest text-xs font-bold py-1.5 rounded hover:bg-forest hover:text-white transition-colors uppercase tracking-wide">
+                            View on Amazon
+                          </a>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
 
-                {favTab === "recipes" && (
-                  recipeFavs.length === 0 ? (
-                    <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-                      <ChefHat className="w-10 h-10 text-forest/10 mx-auto mb-3" />
-                      <p className="font-medium text-forest/50 mb-1">No saved recipes</p>
-                      <p className="text-sm text-forest/40 mb-4">Tap ♡ on any recipe card to save it.</p>
-                      <Link href="/recipes" className="inline-flex gap-2 items-center bg-forest text-white text-sm px-5 py-2.5 rounded-lg font-semibold hover:bg-forest-light transition-colors">
-                        <ChefHat className="w-4 h-4" /> Browse Recipes
+                {favTab==="recipes" && (recipeFavs.length===0 ? (
+                  <div className="border border-gray-200 rounded p-10 text-center">
+                    <ChefHat className="w-8 h-8 text-gray-200 mx-auto mb-3"/>
+                    <p className="font-semibold text-forest/50 mb-1">No saved recipes</p>
+                    <p className="text-sm text-forest/40 mb-4">Tap ♡ on any recipe card to save it.</p>
+                    <Link href="/recipes" className="inline-flex gap-2 items-center bg-forest text-white text-sm font-bold px-5 py-2.5 rounded uppercase tracking-wide hover:bg-forest-light transition-colors">Browse Recipes</Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {recipeFavs.map(fav=>(
+                      <Link key={fav.id} href={`/recipes/${fav.recipeSlug}`} className="border border-gray-200 rounded overflow-hidden hover:shadow-md transition-shadow group">
+                        <div className="relative aspect-[4/3] bg-gray-50">
+                          {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.recipeTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/> : <ChefHat className="w-6 h-6 text-forest/10 absolute inset-0 m-auto"/>}
+                          <button onClick={(e)=>{e.preventDefault();removeRecipeFav(fav.recipeSlug);}} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Heart className="w-3 h-3 fill-red-400"/>
+                          </button>
+                        </div>
+                        <div className="p-3"><p className="text-xs font-semibold text-forest line-clamp-2">{fav.recipeTitle}</p></div>
                       </Link>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {recipeFavs.map(fav => (
-                        <Link key={fav.id} href={`/recipes/${fav.recipeSlug}`} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
-                          <div className="relative aspect-[4/3] bg-gray-50">
-                            {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.recipeTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" /> : <ChefHat className="w-8 h-8 text-forest/10 absolute inset-0 m-auto" />}
-                            <button onClick={(e) => { e.preventDefault(); removeRecipeFav(fav.recipeSlug); }} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 hover:text-red-600 transition-colors opacity-0 group-hover:opacity-100">
-                              <Heart className="w-3.5 h-3.5 fill-red-400" />
-                            </button>
-                          </div>
-                          <div className="p-3">
-                            <p className="text-xs font-semibold text-forest line-clamp-2">{fav.recipeTitle}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )
-                )}
+                    ))}
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* ── DIET PREFERENCES ── */}
-            {tab === "diet" && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-xl border border-gray-200 px-6 py-5">
-                  <h1 className="font-serif text-xl font-bold text-forest">Diet Preferences</h1>
-                  <p className="text-sm text-forest/50 mt-0.5">The shop will auto-filter to show only what fits your diet.</p>
+            {/* ══ PROFILE INFO ══ */}
+            {section==="profile" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Profile Info</h1>
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div className="border border-gray-200 rounded p-6 space-y-5">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Your Info</p>
+                    <div className="flex items-center gap-4">
+                      <button type="button" onClick={()=>fileRef.current?.click()} className="relative w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-xl text-forest/40 shrink-0 group">
+                        {profileImage ? <img src={profileImage} alt="preview" className="w-full h-full object-cover"/> : imageProcessing ? <div className="w-4 h-4 border-2 border-forest border-t-transparent rounded-full animate-spin"/> : initials}
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><Camera className="w-4 h-4 text-white"/></div>
+                      </button>
+                      <div>
+                        <button type="button" onClick={()=>fileRef.current?.click()} className="text-xs font-bold text-forest uppercase tracking-wide hover:underline">{profileImage?"Change Photo":"Upload Photo"}</button>
+                        {profileImage && <button type="button" onClick={()=>setProfileImage("")} className="block text-xs text-red-400 hover:text-red-600 mt-0.5">Remove</button>}
+                      </div>
+                    </div>
+                    <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
+
+                    <div>
+                      <label className="text-xs text-forest/50 block mb-1">Display Name</label>
+                      <input type="text" value={profileName} onChange={e=>setProfileName(e.target.value)} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                    </div>
+                    <div>
+                      <label className="text-xs text-forest/40 block mb-1">Email (cannot change)</label>
+                      <input type="email" value={session.user?.email??""} disabled className="w-full border border-gray-100 rounded px-3 py-2 text-sm text-forest/40 bg-gray-50 cursor-not-allowed"/>
+                    </div>
+                    {profileMsg && (
+                      <div className={`flex items-center gap-2 text-xs p-2.5 rounded ${profileMsg.type==="ok"?"bg-green-50 text-green-700":"bg-red-50 text-red-600"}`}>
+                        {profileMsg.type==="ok"?<CheckCircle className="w-3.5 h-3.5 shrink-0"/>:<AlertCircle className="w-3.5 h-3.5 shrink-0"/>}
+                        {profileMsg.text}
+                      </div>
+                    )}
+                    <button onClick={saveProfile} disabled={profileSaving} className="bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors disabled:opacity-50 uppercase tracking-wide">
+                      {profileSaving?"Saving…":"Save Changes"}
+                    </button>
+                  </div>
+
+                  <div className="border border-gray-200 rounded p-6 space-y-4">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Change Password</p>
+                    {[
+                      {label:"Current Password",val:pwCurrent,set:setPwCurrent,ph:"••••••••"},
+                      {label:"New Password",val:pwNew,set:setPwNew,ph:"Min. 8 characters"},
+                      {label:"Confirm New Password",val:pwConfirm,set:setPwConfirm,ph:"••••••••"},
+                    ].map(({label,val,set,ph})=>(
+                      <div key={label}>
+                        <label className="text-xs text-forest/50 block mb-1">{label}</label>
+                        <input type="password" value={val} onChange={e=>set(e.target.value)} placeholder={ph} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                      </div>
+                    ))}
+                    {pwMsg && (
+                      <div className={`flex items-center gap-2 text-xs p-2.5 rounded ${pwMsg.type==="ok"?"bg-green-50 text-green-700":"bg-red-50 text-red-600"}`}>
+                        {pwMsg.type==="ok"?<CheckCircle className="w-3.5 h-3.5 shrink-0"/>:<AlertCircle className="w-3.5 h-3.5 shrink-0"/>}
+                        {pwMsg.text}
+                      </div>
+                    )}
+                    <button onClick={changePassword} disabled={pwSaving||!pwNew} className="flex items-center gap-2 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors disabled:opacity-50 uppercase tracking-wide">
+                      <Lock className="w-3.5 h-3.5"/>{pwSaving?"Changing…":"Update Password"}
+                    </button>
+                  </div>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3">
-                    {DIET_TAGS.map(tag => (
+              </div>
+            )}
+
+            {/* ══ DIET PREFERENCES ══ */}
+            {section==="diet" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Diet Preferences</h1>
+                <div className="border border-gray-200 rounded p-6">
+                  <p className="text-sm text-forest/60 mb-5">The shop auto-filters to show only products that match your diet.</p>
+                  <div className="grid sm:grid-cols-2 gap-x-10 gap-y-3 mb-6">
+                    {DIET_TAGS.map(tag=>(
                       <label key={tag} className="flex items-center gap-3 cursor-pointer group py-1">
-                        <input type="checkbox" checked={dietPrefs.includes(tag)} onChange={() => setDietPrefs(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])} className="w-4 h-4 accent-forest rounded" />
+                        <input type="checkbox" checked={dietPrefs.includes(tag)} onChange={()=>setDietPrefs(prev=>prev.includes(tag)?prev.filter(t=>t!==tag):[...prev,tag])} className="w-4 h-4 accent-forest"/>
                         <span className="text-sm text-forest/70 group-hover:text-forest">{tag}</span>
                       </label>
                     ))}
                   </div>
-                  <button onClick={saveDietPrefs} disabled={dietSaving} className="mt-6 bg-forest text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-forest-light transition-colors disabled:opacity-50 text-sm">
-                    {dietSaved ? "Saved!" : dietSaving ? "Saving…" : "Save Preferences"}
+                  <button onClick={saveDietPrefs} disabled={dietSaving} className="bg-forest text-white text-xs font-bold px-6 py-2.5 rounded hover:bg-forest-light transition-colors disabled:opacity-50 uppercase tracking-wide">
+                    {dietSaved?"Saved!":dietSaving?"Saving…":"Save Preferences"}
                   </button>
                 </div>
               </div>
             )}
 
-            {/* ── SYMPTOM TRACKER ── */}
-            {tab === "symptoms" && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-xl border border-gray-200 px-6 py-5">
-                  <h1 className="font-serif text-xl font-bold text-forest">Symptom Tracker</h1>
-                  <p className="text-sm text-forest/50 mt-0.5">Rate 1 (bad) to 10 (great) — track your trends over time.</p>
-                </div>
-
-                <div className="bg-white rounded-xl border border-gray-200 p-6">
-                  <h2 className="font-semibold text-forest mb-4 text-sm">Log Today</h2>
+            {/* ══ SYMPTOM TRACKER ══ */}
+            {section==="symptoms" && (
+              <div>
+                <h1 className="text-3xl font-bold text-forest mb-6">Symptom Tracker</h1>
+                <div className="border border-gray-200 rounded p-6 mb-5">
+                  <p className="text-xs font-bold text-forest uppercase tracking-widest mb-4">Log Today</p>
+                  <p className="text-xs text-forest/50 mb-4">Rate 1 (bad) to 10 (great)</p>
                   <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                    {(["energy", "mood", "brainFog", "joint"] as const).map(field => (
+                    {(["energy","mood","brainFog","joint"] as const).map(field=>(
                       <div key={field}>
                         <div className="flex justify-between mb-1">
-                          <label className="text-xs font-medium text-forest/70">{field === "brainFog" ? "Brain Fog" : field === "joint" ? "Joint Pain" : field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                          <label className="text-xs font-medium text-forest/70">{field==="brainFog"?"Brain Fog":field==="joint"?"Joint Pain":field.charAt(0).toUpperCase()+field.slice(1)}</label>
                           <span className="text-xs font-bold text-forest">{newSymptom[field]}/10</span>
                         </div>
-                        <input type="range" min={1} max={10} value={newSymptom[field]} onChange={e => setNewSymptom(prev => ({ ...prev, [field]: parseInt(e.target.value) }))} className="w-full accent-forest" />
+                        <input type="range" min={1} max={10} value={newSymptom[field]} onChange={e=>setNewSymptom(prev=>({...prev,[field]:parseInt(e.target.value)}))} className="w-full accent-forest"/>
                       </div>
                     ))}
                   </div>
-                  <textarea value={newSymptom.notes} onChange={e => setNewSymptom(prev => ({ ...prev, notes: e.target.value }))} rows={2} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-green/30 mb-3" placeholder="Notes (optional)" />
-                  <button onClick={logSymptom} className="bg-forest text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-forest-light transition-colors text-sm">Log Entry</button>
+                  <textarea value={newSymptom.notes} onChange={e=>setNewSymptom(prev=>({...prev,notes:e.target.value}))} rows={2} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20 mb-3" placeholder="Notes (optional)"/>
+                  <button onClick={logSymptom} className="bg-forest text-white text-xs font-bold px-6 py-2.5 rounded hover:bg-forest-light transition-colors uppercase tracking-wide">Log Entry</button>
                 </div>
-
-                {symptoms.length >= 2 && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold text-forest mb-4 text-sm">Your Trends ({symptoms.length} entries)</h2>
-                    <SymptomChart entries={[...symptoms].slice(0, 30).reverse()} />
+                {symptoms.length>=2 && (
+                  <div className="border border-gray-200 rounded p-6 mb-5">
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest mb-4">Your Trends ({symptoms.length} entries)</p>
+                    <SymptomChart entries={[...symptoms].slice(0,30).reverse()}/>
                   </div>
                 )}
-
-                {symptoms.length > 0 && (
-                  <div className="bg-white rounded-xl border border-gray-200 p-6">
-                    <h2 className="font-semibold text-forest mb-4 text-sm">Recent Entries</h2>
-                    <div className="space-y-0">
-                      {symptoms.slice(0, 10).map(s => (
-                        <div key={s.id} className="flex items-center gap-6 py-3 border-b border-gray-50 last:border-0 text-xs">
-                          <span className="text-forest/40 shrink-0 w-16">{new Date(s.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                {symptoms.length>0 && (
+                  <div className="border border-gray-200 rounded overflow-hidden">
+                    <div className="px-5 py-3.5 bg-gray-50 border-b border-gray-100">
+                      <p className="text-xs font-bold text-forest uppercase tracking-widest">Recent Entries</p>
+                    </div>
+                    <div className="divide-y divide-gray-50">
+                      {symptoms.slice(0,10).map(s=>(
+                        <div key={s.id} className="flex items-center gap-6 px-5 py-3 text-xs">
+                          <span className="text-forest/40 shrink-0 w-14">{new Date(s.date).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span>
                           <div className="flex gap-4 flex-wrap">
-                            <span className="text-forest/60">Energy <strong className="text-forest">{s.energy}</strong></span>
-                            <span className="text-forest/60">Mood <strong className="text-forest">{s.mood}</strong></span>
-                            <span className="text-forest/60">Brain Fog <strong className="text-forest">{s.brainFog}</strong></span>
-                            <span className="text-forest/60">Joints <strong className="text-forest">{s.joint}</strong></span>
+                            {[["Energy",s.energy],["Mood",s.mood],["Brain Fog",s.brainFog],["Joints",s.joint]].map(([l,v])=>(
+                              <span key={l as string} className="text-forest/50">{l} <strong className="text-forest">{v}</strong></span>
+                            ))}
                           </div>
-                          {s.notes && <span className="text-forest/30 italic hidden sm:block ml-auto">{s.notes}</span>}
+                          {s.notes && <span className="text-forest/30 italic ml-auto hidden sm:block">{s.notes}</span>}
                         </div>
                       ))}
                     </div>
@@ -603,95 +667,7 @@ export default function AccountPage() {
               </div>
             )}
 
-            {/* ── EDIT PROFILE ── */}
-            {tab === "profile" && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-xl border border-gray-200 px-6 py-5">
-                  <h1 className="font-serif text-xl font-bold text-forest">Edit Profile</h1>
-                  <p className="text-sm text-forest/50 mt-0.5">Update your name, photo, and password.</p>
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {/* Profile info card */}
-                  <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
-                    <h2 className="font-semibold text-sm text-forest">Profile Info</h2>
-
-                    {/* Avatar */}
-                    <div className="flex items-center gap-4">
-                      <button type="button" onClick={() => fileRef.current?.click()} className="relative w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-xl text-forest/40 shrink-0 group">
-                        {profileImage
-                          ? <img src={profileImage} alt="preview" className="w-full h-full object-cover" />
-                          : imageProcessing
-                            ? <div className="w-4 h-4 border-2 border-forest border-t-transparent rounded-full animate-spin" />
-                            : initials}
-                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Camera className="w-4 h-4 text-white" />
-                        </div>
-                      </button>
-                      <div>
-                        <button type="button" onClick={() => fileRef.current?.click()} className="text-sm font-medium text-forest/70 hover:text-forest underline">
-                          {profileImage ? "Change photo" : "Upload photo"}
-                        </button>
-                        {profileImage && (
-                          <button type="button" onClick={() => setProfileImage("")} className="block text-xs text-red-400 hover:text-red-600 mt-0.5">Remove</button>
-                        )}
-                      </div>
-                    </div>
-                    <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-
-                    <div>
-                      <label className="text-xs font-medium text-forest/60 block mb-1">Display Name</label>
-                      <input type="text" value={profileName} onChange={e => setProfileName(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-green/30" />
-                    </div>
-
-                    <div>
-                      <label className="text-xs font-medium text-forest/40 block mb-1">Email (cannot change)</label>
-                      <input type="email" value={session.user?.email ?? ""} disabled className="w-full border border-gray-100 rounded-lg px-3 py-2 text-sm text-forest/40 bg-gray-50 cursor-not-allowed" />
-                    </div>
-
-                    {profileMsg && (
-                      <div className={`flex items-center gap-2 text-xs p-2.5 rounded-lg ${profileMsg.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
-                        {profileMsg.type === "ok" ? <CheckCircle className="w-3.5 h-3.5 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 shrink-0" />}
-                        {profileMsg.text}
-                      </div>
-                    )}
-
-                    <button onClick={saveProfile} disabled={profileSaving} className="bg-forest text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-forest-light transition-colors disabled:opacity-50 text-sm">
-                      {profileSaving ? "Saving…" : "Save Changes"}
-                    </button>
-                  </div>
-
-                  {/* Password card */}
-                  <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-                    <h2 className="font-semibold text-sm text-forest">Change Password</h2>
-                    <div>
-                      <label className="text-xs font-medium text-forest/60 block mb-1">Current Password</label>
-                      <input type="password" value={pwCurrent} onChange={e => setPwCurrent(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-green/30" placeholder="••••••••" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-forest/60 block mb-1">New Password</label>
-                      <input type="password" value={pwNew} onChange={e => setPwNew(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-green/30" placeholder="Min. 8 characters" />
-                    </div>
-                    <div>
-                      <label className="text-xs font-medium text-forest/60 block mb-1">Confirm New Password</label>
-                      <input type="password" value={pwConfirm} onChange={e => setPwConfirm(e.target.value)} className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-green/30" placeholder="••••••••" />
-                    </div>
-                    {pwMsg && (
-                      <div className={`flex items-center gap-2 text-xs p-2.5 rounded-lg ${pwMsg.type === "ok" ? "bg-green-50 text-green-700" : "bg-red-50 text-red-600"}`}>
-                        {pwMsg.type === "ok" ? <CheckCircle className="w-3.5 h-3.5 shrink-0" /> : <AlertCircle className="w-3.5 h-3.5 shrink-0" />}
-                        {pwMsg.text}
-                      </div>
-                    )}
-                    <button onClick={changePassword} disabled={pwSaving || !pwNew} className="flex items-center gap-2 bg-forest text-white font-semibold px-6 py-2.5 rounded-lg hover:bg-forest-light transition-colors disabled:opacity-50 text-sm">
-                      <Lock className="w-3.5 h-3.5" />
-                      {pwSaving ? "Changing…" : "Change Password"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </main>
+          </div>
         </div>
       </div>
     </div>
