@@ -67,6 +67,7 @@ export default function AccountPage() {
   const [profileImage, setProfileImage] = useState("");
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileMsg, setProfileMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+  const [imageProcessing, setImageProcessing] = useState(false);
 
   // Password state
   const [pwCurrent, setPwCurrent] = useState("");
@@ -83,6 +84,29 @@ export default function AccountPage() {
   const [dietSaved, setDietSaved] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setImageProcessing(true);
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 300;
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d")!.drawImage(img, 0, 0, canvas.width, canvas.height);
+        setProfileImage(canvas.toDataURL("image/jpeg", 0.75));
+        setImageProcessing(false);
+      };
+      img.src = ev.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
 
   useEffect(() => { if (status === "unauthenticated") router.push("/login"); }, [status, router]);
 
@@ -290,24 +314,40 @@ export default function AccountPage() {
             <div className="bg-white rounded-2xl border border-sage-pale p-6 space-y-5">
               <h2 className="font-serif text-xl font-bold text-forest">Profile Info</h2>
 
-              {/* Avatar preview */}
-              <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-xl text-forest/40 shrink-0">
-                  {profileImage ? <img src={profileImage} alt="preview" className="w-full h-full object-cover" /> : initials}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-forest mb-1">Photo URL</p>
-                  <input
-                    type="url"
-                    value={profileImage}
-                    onChange={e => setProfileImage(e.target.value)}
-                    placeholder="https://…"
-                    className="w-full border border-sage-pale rounded-lg px-3 py-2 text-xs text-forest focus:outline-none focus:ring-2 focus:ring-green/30"
-                  />
-                  <p className="text-[10px] text-forest/40 mt-1">Paste a link to your photo</p>
+              {/* Avatar upload */}
+              <div className="flex items-center gap-5">
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="relative w-20 h-20 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-2xl text-forest/40 shrink-0 group"
+                >
+                  {profileImage
+                    ? <img src={profileImage} alt="preview" className="w-full h-full object-cover" />
+                    : imageProcessing
+                      ? <div className="w-5 h-5 border-2 border-forest border-t-transparent rounded-full animate-spin" />
+                      : initials}
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+                    <Camera className="w-5 h-5 text-white" />
+                  </div>
+                </button>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="flex items-center gap-2 bg-sage-pale text-forest/70 hover:text-forest hover:bg-sage font-medium text-sm px-4 py-2 rounded-lg transition-colors"
+                  >
+                    <Camera className="w-4 h-4" />
+                    {profileImage ? "Change Photo" : "Upload Photo"}
+                  </button>
+                  {profileImage && (
+                    <button type="button" onClick={() => setProfileImage("")} className="mt-1.5 text-xs text-red-400 hover:text-red-600 hover:underline">
+                      Remove photo
+                    </button>
+                  )}
+                  <p className="text-[10px] text-forest/40 mt-1.5">JPG, PNG, or GIF · Max 10 MB</p>
                 </div>
               </div>
-              <input ref={fileRef} type="file" accept="image/*" className="hidden" />
+              <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
 
               <div>
                 <label className="text-xs font-medium text-forest block mb-1">Display Name</label>
