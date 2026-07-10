@@ -250,53 +250,31 @@ export default function AccountPage() {
                 <h1 className="text-3xl font-bold text-forest mb-6">Account Dashboard</h1>
 
                 {/* Member card */}
-                <div className="border border-gray-200 rounded mb-6 overflow-hidden">
-                  <div className="flex flex-col sm:flex-row">
-                    {/* Left: member card */}
-                    <div className="flex-1 p-6 flex flex-col items-center justify-center border-b sm:border-b-0 sm:border-r border-gray-200">
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-2xl text-forest/50 mb-4">
-                        {avatarSrc ? <img src={avatarSrc} alt={firstName} className="w-full h-full object-cover"/> : initials}
+                <div className="border border-gray-200 rounded mb-6 p-6 flex items-center gap-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden bg-sage-pale flex items-center justify-center font-bold text-2xl text-forest/50 shrink-0">
+                    {avatarSrc ? <img src={avatarSrc} alt={firstName} className="w-full h-full object-cover"/> : initials}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-serif font-bold text-forest text-lg">HashiPantry Member</p>
+                    <p className="text-xs text-forest/40 mt-0.5">Member since {memberSince}</p>
+                    <div className="flex gap-6 mt-3">
+                      <div>
+                        <p className="text-xl font-bold text-forest">{purchases.length}</p>
+                        <p className="text-[10px] text-forest/50 uppercase tracking-wide">Orders</p>
                       </div>
-                      <p className="font-serif font-bold text-forest text-lg">HashiPantry Member</p>
-                      <p className="text-xs text-forest/40 mt-1">Member since {memberSince}</p>
-                      <div className="flex gap-6 mt-4 text-center">
-                        <div>
-                          <p className="text-2xl font-bold text-forest">{purchases.length}</p>
-                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Orders</p>
-                        </div>
-                        <div>
-                          <p className="text-2xl font-bold text-forest">{productFavs.length+recipeFavs.length}</p>
-                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Saved</p>
-                        </div>
-                        <div>
-                          <p className="text-2xl font-bold text-forest">{symptoms.length}</p>
-                          <p className="text-[10px] text-forest/50 uppercase tracking-wide">Logs</p>
-                        </div>
+                      <div>
+                        <p className="text-xl font-bold text-forest">{productFavs.length+recipeFavs.length}</p>
+                        <p className="text-[10px] text-forest/50 uppercase tracking-wide">Saved</p>
                       </div>
-                      <button onClick={()=>go("orders")} className="mt-5 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors tracking-wide uppercase">
-                        View My Orders
-                      </button>
-                    </div>
-
-                    {/* Right: perks */}
-                    <div className="flex-1 p-6">
-                      <p className="text-xs font-bold text-forest uppercase tracking-widest mb-4">My Member Benefits</p>
-                      <div className="grid grid-cols-2 gap-4">
-                        {[
-                          { icon: ShoppingBag, title:"Curated Shop",   desc:"Every product vetted for Hashimoto's compatibility." },
-                          { icon: ChefHat,     title:"Healing Recipes", desc:"Full recipes with ingredient shop links." },
-                          { icon: TrendingUp,  title:"Symptom Tracker", desc:"Log and chart your health trends over time." },
-                          { icon: Heart,       title:"Save Favorites",  desc:"Save products & recipes for quick reordering." },
-                        ].map(({icon:Icon,title,desc})=>(
-                          <div key={title} className="text-center p-3 border border-gray-100 rounded">
-                            <Icon className="w-6 h-6 text-forest/30 mx-auto mb-2"/>
-                            <p className="text-xs font-bold text-forest">{title}</p>
-                            <p className="text-[10px] text-forest/50 mt-1 leading-snug">{desc}</p>
-                          </div>
-                        ))}
+                      <div>
+                        <p className="text-xl font-bold text-forest">{symptoms.length}</p>
+                        <p className="text-[10px] text-forest/50 uppercase tracking-wide">Logs</p>
                       </div>
                     </div>
                   </div>
+                  <button onClick={()=>go("orders")} className="shrink-0 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors tracking-wide uppercase">
+                    View Orders
+                  </button>
                 </div>
 
                 {/* Purchase history section */}
@@ -391,33 +369,6 @@ export default function AccountPage() {
                   </div>
                 </div>
 
-                {/* Favorites preview */}
-                <div className="border border-gray-200 rounded">
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Favorites</p>
-                    <button onClick={()=>go("favorites")} className="text-xs font-bold text-forest uppercase tracking-wide flex items-center gap-1 hover:underline">
-                      View All <ChevronRight className="w-3.5 h-3.5"/>
-                    </button>
-                  </div>
-                  <div className="p-5">
-                    {productFavs.length+recipeFavs.length===0 ? (
-                      <p className="text-sm text-forest/50">No favorites saved.</p>
-                    ) : (
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {[...productFavs.slice(0,2).map(f=>({key:f.id,img:f.imageUrl,name:f.productName,href:f.affiliateUrl,ext:true})),
-                          ...recipeFavs.slice(0,2).map(f=>({key:f.id,img:f.imageUrl,name:f.recipeTitle,href:`/recipes/${f.recipeSlug}`,ext:false}))
-                        ].slice(0,4).map(item=>(
-                          <a key={item.key} href={item.href} target={item.ext?"_blank":undefined} rel={item.ext?"noopener noreferrer":undefined} className="group">
-                            <div className="aspect-square bg-gray-50 rounded overflow-hidden mb-1">
-                              {item.img ? <img src={item.img} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"/> : <div className="w-full h-full flex items-center justify-center"><Heart className="w-6 h-6 text-forest/10"/></div>}
-                            </div>
-                            <p className="text-xs text-forest/70 line-clamp-2 leading-snug">{item.name}</p>
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
               </div>
             )}
 
