@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ShoppingBag, Search, Menu, X, User } from "lucide-react";
+import { ShoppingBag, Search, Menu, X, User, LayoutGrid, Newspaper } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import SignInModal from "@/components/SignInModal";
@@ -110,6 +110,25 @@ export default function Header() {
                 )}
               </button>
             </div>
+          </div>
+
+          {/* Secondary nav bar — SHOP | BLOG */}
+          <div className="hidden md:flex items-center border-t border-sage-light/30 py-2 gap-0">
+            <Link
+              href="/shop"
+              className="flex items-center gap-2 px-4 py-1.5 text-sm font-bold text-forest/70 hover:text-forest transition-colors uppercase tracking-wide"
+            >
+              <LayoutGrid className="w-4 h-4" />
+              Shop
+            </Link>
+            <div className="w-px h-5 bg-forest/20 mx-1" />
+            <Link
+              href="/blog"
+              className="flex items-center gap-2 px-4 py-1.5 text-sm font-bold text-forest/70 hover:text-forest transition-colors uppercase tracking-wide"
+            >
+              <Newspaper className="w-4 h-4" />
+              Blog
+            </Link>
           </div>
 
           {/* Mobile nav */}
