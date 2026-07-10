@@ -4,14 +4,15 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { User, Heart, TrendingUp, Settings, LogOut, ShoppingBag, Home } from "lucide-react";
+import { User, Heart, TrendingUp, Settings, LogOut, ShoppingBag, Home, RotateCcw, Package } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const DIET_TAGS = [
   "Gluten Free", "Dairy Free", "Soy Free", "Egg Free", "Nut Free",
   "AIP", "Paleo", "Vegan", "Grain Free", "No Seed Oils", "Low Histamine",
 ];
 
-const TABS = ["Overview", "Diet Preferences", "Symptom Tracker", "Favorites"];
+const TABS = ["Overview", "Order History", "Diet Preferences", "Symptom Tracker", "Favorites"];
 
 type SymptomEntry = {
   id: string;
@@ -23,12 +24,68 @@ type SymptomEntry = {
   notes?: string;
 };
 
+type PurchaseItem = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  affiliateUrl: string;
+  quantity: number;
+};
+
+type Purchase = {
+  id: string;
+  createdAt: string;
+  items: PurchaseItem[];
+};
+
+function PurchaseItemCard({ item }: { item: PurchaseItem }) {
+  const { addItem } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const handleReorder = () => {
+    for (let i = 0; i < item.quantity; i++) {
+      addItem({ id: item.id, name: item.name, imageUrl: item.imageUrl, affiliateUrl: item.affiliateUrl, source: "AMAZON" });
+    }
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="flex items-center gap-3 py-2.5 border-b border-sage-pale/50 last:border-0">
+      <div className="w-10 h-10 rounded-lg overflow-hidden bg-sage-pale shrink-0">
+        {item.imageUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <ShoppingBag className="w-4 h-4 text-forest/20" />
+          </div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm text-forest font-medium line-clamp-1">{item.name}</p>
+        <p className="text-xs text-forest/40">Qty: {item.quantity}</p>
+      </div>
+      <button
+        onClick={handleReorder}
+        className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+          added ? "bg-green-100 text-green-700" : "bg-forest text-white hover:bg-forest-light"
+        }`}
+      >
+        <RotateCcw className="w-3 h-3" />
+        {added ? "Added!" : "Reorder"}
+      </button>
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("Overview");
   const [dietPrefs, setDietPrefs] = useState<string[]>([]);
   const [symptoms, setSymptoms] = useState<SymptomEntry[]>([]);
+  const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [newSymptom, setNewSymptom] = useState({ energy: 5, mood: 5, brainFog: 5, joint: 5, notes: "" });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -41,6 +98,7 @@ export default function AccountPage() {
     if (session) {
       fetch("/api/account/prefs").then((r) => r.json()).then((d) => setDietPrefs(d.dietPrefs ?? []));
       fetch("/api/account/symptoms").then((r) => r.json()).then((d) => setSymptoms(d.symptoms ?? []));
+      fetch("/api/account/purchases").then((r) => r.json()).then((d) => setPurchases(d.purchases ?? []));
     }
   }, [session]);
 
@@ -66,6 +124,9 @@ export default function AccountPage() {
     setSymptoms((prev) => [data, ...prev]);
     setNewSymptom({ energy: 5, mood: 5, brainFog: 5, joint: 5, notes: "" });
   };
+
+  // Total unique products ordered across all purchases
+  const totalOrders = purchases.length;
 
   if (status === "loading") {
     return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-forest border-t-transparent rounded-full animate-spin" /></div>;
@@ -126,11 +187,11 @@ export default function AccountPage() {
         {activeTab === "Overview" && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div className="bg-white rounded-2xl p-5 border border-sage-pale">
-                <ShoppingBag className="w-6 h-6 text-forest/30 mb-2" />
-                <p className="text-2xl font-bold text-forest">0</p>
-                <p className="text-sm text-forest/50">Total Orders</p>
-              </div>
+              <button onClick={() => setActiveTab("Order History")} className="bg-white rounded-2xl p-5 border border-sage-pale text-left hover:border-forest/20 transition-colors">
+                <Package className="w-6 h-6 text-forest/30 mb-2" />
+                <p className="text-2xl font-bold text-forest">{totalOrders}</p>
+                <p className="text-sm text-forest/50">Amazon Orders</p>
+              </button>
               <div className="bg-white rounded-2xl p-5 border border-sage-pale">
                 <Heart className="w-6 h-6 text-red-300 mb-2" />
                 <p className="text-2xl font-bold text-forest">0</p>
@@ -150,6 +211,9 @@ export default function AccountPage() {
                   <Link href="/shop" className="flex items-center gap-2 text-sm text-forest/70 hover:text-forest py-2 border-b border-sage-pale/50">
                     <ShoppingBag className="w-4 h-4" /> Browse the Shop
                   </Link>
+                  <button onClick={() => setActiveTab("Order History")} className="flex items-center gap-2 text-sm text-forest/70 hover:text-forest py-2 border-b border-sage-pale/50 w-full text-left">
+                    <RotateCcw className="w-4 h-4" /> Reorder Recent Items
+                  </button>
                   <button onClick={() => setActiveTab("Diet Preferences")} className="flex items-center gap-2 text-sm text-forest/70 hover:text-forest py-2 border-b border-sage-pale/50 w-full text-left">
                     <Settings className="w-4 h-4" /> Update Diet Preferences
                   </button>
@@ -172,6 +236,63 @@ export default function AccountPage() {
                 )}
               </div>
             </div>
+
+            {/* Recent orders preview */}
+            {purchases.length > 0 && (
+              <div className="bg-white rounded-2xl border border-sage-pale p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-semibold text-forest">Recent Orders</h3>
+                  <button onClick={() => setActiveTab("Order History")} className="text-xs text-green hover:underline">View all →</button>
+                </div>
+                <div className="space-y-0">
+                  {purchases[0].items.slice(0, 3).map((item) => (
+                    <PurchaseItemCard key={item.id} item={item} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ORDER HISTORY */}
+        {activeTab === "Order History" && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-2xl font-bold text-forest">Order History</h2>
+              <Link href="/shop" className="text-sm text-green hover:underline">Browse shop →</Link>
+            </div>
+
+            {purchases.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-sage-pale p-10 text-center">
+                <Package className="w-12 h-12 text-forest/20 mx-auto mb-3" />
+                <p className="text-forest/50 text-base font-medium mb-1">No orders yet</p>
+                <p className="text-forest/40 text-sm mb-4">When you check out on Amazon through HashiPantry, your orders will appear here for easy reordering.</p>
+                <Link href="/shop" className="inline-flex items-center gap-2 bg-forest text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-forest-light transition-colors">
+                  <ShoppingBag className="w-4 h-4" /> Start Shopping
+                </Link>
+              </div>
+            ) : (
+              purchases.map((purchase, i) => (
+                <div key={purchase.id} className="bg-white rounded-2xl border border-sage-pale overflow-hidden">
+                  <div className="flex items-center justify-between px-5 py-3 bg-sage-pale/40 border-b border-sage-pale">
+                    <div>
+                      <p className="text-xs font-semibold text-forest/50 uppercase tracking-wide">Order #{purchases.length - i}</p>
+                      <p className="text-sm font-medium text-forest">
+                        {new Date(purchase.createdAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                      </p>
+                    </div>
+                    <span className="text-xs bg-green/10 text-green-700 px-2.5 py-1 rounded-full font-semibold">
+                      {purchase.items.reduce((s, i) => s + i.quantity, 0)} item{purchase.items.reduce((s, i) => s + i.quantity, 0) !== 1 ? "s" : ""}
+                    </span>
+                  </div>
+                  <div className="px-5 py-1">
+                    {purchase.items.map((item) => (
+                      <PurchaseItemCard key={item.id} item={item} />
+                    ))}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
 
@@ -213,13 +334,13 @@ export default function AccountPage() {
                 {(["energy", "mood", "brainFog", "joint"] as const).map((field) => (
                   <div key={field}>
                     <div className="flex justify-between mb-1">
-                      <label className="text-sm font-medium text-forest capitalize">{field === "brainFog" ? "Brain Fog" : field === "joint" ? "Joint Pain" : field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                      <label className="text-sm font-medium text-forest capitalize">
+                        {field === "brainFog" ? "Brain Fog" : field === "joint" ? "Joint Pain" : field.charAt(0).toUpperCase() + field.slice(1)}
+                      </label>
                       <span className="text-sm font-bold text-forest">{newSymptom[field]}/10</span>
                     </div>
                     <input
-                      type="range"
-                      min={1}
-                      max={10}
+                      type="range" min={1} max={10}
                       value={newSymptom[field]}
                       onChange={(e) => setNewSymptom((prev) => ({ ...prev, [field]: parseInt(e.target.value) }))}
                       className="w-full accent-forest"

@@ -93,6 +93,15 @@ model User {
   sessions      Session[]
   symptoms      SymptomEntry[]
   favorites     UserFavorite[]
+  purchases     Purchase[]
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     Json
+  createdAt DateTime @default(now())
 }
 
 model Account {
