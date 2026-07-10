@@ -262,14 +262,14 @@ export default function ShopPage() {
 
           {/* Product grid */}
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {Array.from({ length: 12 }).map((_, i) => (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+              {Array.from({ length: 15 }).map((_, i) => (
                 <div key={i} className="bg-cream rounded-2xl overflow-hidden border border-sage-pale animate-pulse">
                   <div className="aspect-square bg-sage-pale" />
-                  <div className="p-4 space-y-2">
-                    <div className="h-4 bg-sage-pale rounded w-3/4" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-3 bg-sage-pale rounded w-3/4" />
                     <div className="h-3 bg-sage-pale rounded w-1/2" />
-                    <div className="mt-3 h-9 bg-forest/10 rounded-lg" />
+                    <div className="mt-3 h-8 bg-forest/10 rounded-lg" />
                   </div>
                 </div>
               ))}
@@ -283,7 +283,7 @@ export default function ShopPage() {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                 {data.items.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}
