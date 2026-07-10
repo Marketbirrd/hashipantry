@@ -68,6 +68,11 @@ function formatAmount(amount: number, unit: string): string {
   return [amtStr, unit].filter(Boolean).join(" ");
 }
 
+// Upgrade Spoonacular thumbnail URLs to the largest available size
+function heroImageUrl(url: string): string {
+  return url.replace(/-\d+x\d+(\.\w+)$/, "-636x393$1");
+}
+
 const TAG_COLORS: Record<string, string> = {
   "AIP": "bg-emerald-100 text-emerald-800",
   "Gluten Free": "bg-amber-100 text-amber-800",
@@ -91,6 +96,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
 
   const ingredients = (recipe.ingredients as unknown as Ingredient[]) ?? [];
   const steps = (recipe.steps as unknown as Step[]) ?? [];
+  const heroImg = recipe.imageUrl ? heroImageUrl(recipe.imageUrl) : "";
 
   // Match each ingredient to shop products server-side
   const ingredientMatches = ingredients.map((ing) => findMatchingProducts(ing.name, products));
@@ -105,9 +111,9 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
 
       {/* Hero image */}
       <div className="w-full rounded-3xl aspect-[2/1] overflow-hidden mb-8 bg-sage-pale relative">
-        {recipe.imageUrl ? (
+        {heroImg ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={recipe.imageUrl} alt={recipe.title} className="w-full h-full object-cover" />
+          <img src={heroImg} alt={recipe.title} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <ChefHat className="w-16 h-16 text-forest/20" />
