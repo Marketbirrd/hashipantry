@@ -28,7 +28,6 @@ export async function GET(req: NextRequest) {
     if (search && !p.name.toLowerCase().includes(search) && !p.description.toLowerCase().includes(search)) return false;
     if (category !== "All" && p.category !== category) return false;
     if (source === "Amazon" && p.source !== "AMAZON") return false;
-    if (source === "Thrive Market" && p.source !== "THRIVE") return false;
     if (diet.length > 0 && !diet.every((tag) => p.dietTags.includes(tag))) return false;
     return true;
   });
