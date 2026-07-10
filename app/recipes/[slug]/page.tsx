@@ -21,45 +21,94 @@ async function getProducts(): Promise<ProductData[]> {
   return cachedProducts!;
 }
 
-const SKIP_INGREDIENTS = new Set([
+// Single-word generics that should never open a shop popup
+const SKIP_SINGLE = new Set([
   "water", "salt", "pepper", "sugar", "butter", "oil", "flour", "milk",
   "egg", "eggs", "ice", "heat", "aside", "cool", "stir", "mix", "cook",
 ]);
 
-const FILLER_WORDS = new Set([
-  "with", "from", "into", "that", "this", "them", "they", "fresh", "dried",
-  "large", "small", "medium", "finely", "coarsely", "ground", "chopped",
-  "sliced", "diced", "minced", "whole", "pinch", "thinly", "about", "more",
-  "taste", "plus", "extra", "very", "well", "each", "your", "once",
+// Words that are allowed to precede the ingredient phrase in a product name
+// (organic coconut oil, pure avocado oil, 365 avocado oil, etc.)
+const QUALIFIERS = new Set([
+  "organic", "pure", "extra", "virgin", "cold", "pressed", "refined",
+  "unrefined", "raw", "natural", "premium", "certified", "fresh", "dried",
+  "unsalted", "salted", "roasted", "sprouted", "non", "gmo", "kosher",
+  "vegan", "paleo", "keto", "gluten", "free", "range", "wild", "grass",
+  "fed", "light", "dark", "smooth", "crunchy", "whole", "grain", "stone",
+  "ground", "market", "foods", "brand",
 ]);
+
+// Signal that the ingredient is a COMPONENT of the product, not the product itself
+const SECONDARY_PATTERN = /\b(with|using|made|contains|featuring|from)\b/;
+
+function cleanName(name: string): string {
+  return name.toLowerCase().replace(/\s*\([^)]*\)/g, "").trim();
+}
+
+function isQualifierOnly(text: string): boolean {
+  const trimmed = text.replace(/[,&]/g, " ").trim();
+  if (!trimmed) return true;
+  return trimmed.split(/\s+/).filter(Boolean).every(
+    (w) => QUALIFIERS.has(w) || /^\d+(%|g|oz|ml|lb|ct|fl|pk)?$/.test(w)
+  );
+}
 
 function findMatchingProducts(ingredientName: string, products: ProductData[]): MatchedProduct[] {
   const name = ingredientName.toLowerCase().trim();
-  if (name.length < 4 || SKIP_INGREDIENTS.has(name)) return [];
+  if (name.length < 4) return [];
 
-  const words = name
-    .split(/[\s,\-]+/)
-    .filter((w) => w.length >= 4 && !FILLER_WORDS.has(w));
+  const isCompound = name.split(/\s+/).length >= 2;
 
-  if (words.length === 0) return [];
+  // Skip generic single-word ingredients
+  if (!isCompound && SKIP_SINGLE.has(name)) return [];
 
-  return products
-    .map((p) => {
-      const pName = p.name.toLowerCase();
-      const fullMatch = pName.includes(name) ? 3 : 0;
-      const wordMatches = words.filter((w) => pName.includes(w)).length;
-      return { product: p, score: fullMatch + wordMatches };
-    })
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
-    .map((x) => ({
-      id: x.product.id,
-      name: x.product.name,
-      imageUrl: x.product.imageUrl,
-      affiliateUrl: x.product.affiliateUrl,
-      asin: x.product.asin ?? null,
-    }));
+  if (isCompound) {
+    // Compound ingredients: require exact phrase AND check context around it
+    return products
+      .map((p) => {
+        const pClean = cleanName(p.name);
+        const idx = pClean.indexOf(name);
+        if (idx === -1) return { product: p, score: 0 };
+
+        const before = pClean.slice(0, idx);
+        const after = pClean.slice(idx + name.length);
+
+        // "Vodka Sauce With Avocado Oil" → ingredient is secondary, skip
+        if (SECONDARY_PATTERN.test(before)) return { product: p, score: 0 };
+
+        const beforeOk = isQualifierOnly(before);  // qualifiers/brand before → ok
+        const afterOk = after.trim() === "" || isQualifierOnly(after); // nothing meaningful after
+
+        let score = 0;
+        if (beforeOk && afterOk) score = 10;    // "Pure Avocado Oil" — product IS the ingredient
+        else if (!beforeOk && afterOk) score = 8; // "Primal Kitchen Avocado Oil" — brand + ingredient
+        else score = 1;                           // "Avocado Oil Garlic Aioli" — ingredient is modifier
+
+        return { product: p, score };
+      })
+      .filter((x) => x.score >= 5)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((x) => ({
+        id: x.product.id,
+        name: x.product.name,
+        imageUrl: x.product.imageUrl,
+        affiliateUrl: x.product.affiliateUrl,
+        asin: x.product.asin ?? null,
+      }));
+  } else {
+    // Single word: simple contains match (e.g. "walnuts", "cauliflower")
+    return products
+      .filter((p) => p.name.toLowerCase().includes(name))
+      .slice(0, 3)
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        imageUrl: p.imageUrl,
+        affiliateUrl: p.affiliateUrl,
+        asin: p.asin ?? null,
+      }));
+  }
 }
 
 function formatAmount(amount: number, unit: string): string {
