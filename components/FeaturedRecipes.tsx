@@ -1,64 +1,59 @@
 import Link from "next/link";
-import Image from "next/image";
-import { Clock, Users } from "lucide-react";
+import { Clock, Users, ChefHat } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
-const FEATURED = [
-  {
-    slug: "sweet-potato-breakfast-hash",
-    title: "Sweet Potato Breakfast Hash",
-    prepTime: 30,
-    servings: 2,
-    imageUrl: "/images/recipes/sweet-potato-hash.jpg",
-    tags: ["AIP", "GF", "DF"],
-  },
-  {
-    slug: "coconut-cassava-pancakes",
-    title: "Coconut Cassava Pancakes",
-    prepTime: 20,
-    servings: 2,
-    imageUrl: "/images/recipes/cassava-pancakes.jpg",
-    tags: ["AIP", "GF", "DF", "NF"],
-  },
-  {
-    slug: "blueberry-tigernut-muffins",
-    title: "Blueberry Tigernut Muffins",
-    prepTime: 25,
-    servings: 6,
-    imageUrl: "/images/recipes/tigernut-muffins.jpg",
-    tags: ["AIP", "GF", "DF"],
-  },
-];
+function heroImg(url: string): string {
+  return url.replace(/-\d+x\d+(\.\w+)$/, "-480x360$1");
+}
 
-export default function FeaturedRecipes() {
+export default async function FeaturedRecipes() {
+  const recipes = await prisma.recipe.findMany({
+    orderBy: { publishedAt: "desc" },
+    take: 3,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      imageUrl: true,
+      prepTime: true,
+      servings: true,
+      dietTags: true,
+    },
+  });
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      {FEATURED.map((recipe) => (
+      {recipes.map((recipe) => (
         <div
           key={recipe.slug}
           className="bg-white rounded-2xl overflow-hidden border border-sage-pale hover:shadow-lg transition-shadow group"
         >
           <div className="relative aspect-[4/3] bg-sage-pale overflow-hidden">
-            <Image
-              src={recipe.imageUrl}
-              alt={recipe.title}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              sizes="(max-width: 768px) 100vw, 33vw"
-
-            />
-            <div className="absolute top-2 left-2 flex gap-1">
-              {recipe.tags.map((t) => (
+            {recipe.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={heroImg(recipe.imageUrl)}
+                alt={recipe.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <ChefHat className="w-10 h-10 text-forest/20" />
+              </div>
+            )}
+            <div className="absolute top-2 left-2 flex gap-1 flex-wrap">
+              {recipe.dietTags.slice(0, 3).map((t) => (
                 <span
                   key={t}
                   className="text-[10px] bg-forest/80 text-white px-1.5 py-0.5 rounded-full font-medium"
                 >
-                  {t}
+                  {t.split(" ").map(w => w[0]).join("")}
                 </span>
               ))}
             </div>
           </div>
           <div className="p-4">
-            <h3 className="font-semibold text-forest text-sm leading-snug mb-2">
+            <h3 className="font-semibold text-forest text-sm leading-snug mb-2 line-clamp-2">
               {recipe.title}
             </h3>
             <div className="flex items-center gap-3 text-xs text-forest/50 mb-3">
