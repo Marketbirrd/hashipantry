@@ -29,7 +29,7 @@ export default function CartDrawer({ open, onClose }: Props) {
     setLoading(true);
 
     // Open popup immediately on click — browsers block popups opened after await
-    const w = 480, h = 700;
+    const w = 860, h = 820;
     const left = Math.round((screen.width - w) / 2);
     const top = Math.round((screen.height - h) / 2);
     const popup = window.open("about:blank", "amazon-cart", `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes`);
