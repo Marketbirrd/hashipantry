@@ -36,13 +36,12 @@ export default function CartDrawer({ open, onClose }: Props) {
       const data = await res.json();
 
       if (data.cartUrl) {
-        window.open(data.cartUrl, "_blank");
+        window.location.href = data.cartUrl;
+      } else if (data.fallbackUrls?.length > 0) {
+        window.location.href = data.fallbackUrls[0];
       }
-      // Open fallback search URLs for products without ASINs yet
-      data.fallbackUrls?.forEach((url: string) => window.open(url, "_blank"));
     } catch {
-      // Fallback: open each affiliate link individually
-      items.forEach((item) => window.open(item.affiliateUrl, "_blank"));
+      if (items[0]) window.location.href = items[0].affiliateUrl;
     } finally {
       setLoading(false);
     }
