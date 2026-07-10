@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ShoppingBag, Search, Menu, X, User } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import CartDrawer from "@/components/CartDrawer";
+import SignInModal from "@/components/SignInModal";
 import { useSession } from "next-auth/react";
 
 const navLinks = [
@@ -23,6 +24,7 @@ export default function Header() {
   const { data: session } = useSession();
   const [cartOpen, setCartOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [signInOpen, setSignInOpen] = useState(false);
 
   return (
     <>
@@ -77,13 +79,23 @@ export default function Header() {
                 )}
               </button>
 
-              <Link
-                href={session ? "/account" : "/login"}
-                className="p-2 text-forest/70 hover:text-forest hover:bg-sage-pale rounded-md transition-colors"
-                aria-label="Account"
-              >
-                <User className="w-5 h-5" />
-              </Link>
+              {session ? (
+                <Link
+                  href="/account"
+                  className="p-2 text-forest/70 hover:text-forest hover:bg-sage-pale rounded-md transition-colors"
+                  aria-label="Account"
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+              ) : (
+                <button
+                  onClick={() => setSignInOpen(true)}
+                  className="p-2 text-forest/70 hover:text-forest hover:bg-sage-pale rounded-md transition-colors"
+                  aria-label="Sign In"
+                >
+                  <User className="w-5 h-5" />
+                </button>
+              )}
 
               {/* Mobile menu button */}
               <button
@@ -113,19 +125,29 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href={session ? "/account" : "/login"}
-                onClick={() => setMobileOpen(false)}
-                className="block px-3 py-2.5 text-sm text-forest/80 hover:text-forest hover:bg-sage-pale rounded-md transition-colors font-medium"
-              >
-                {session ? "My Account" : "Sign In"}
-              </Link>
+              {session ? (
+                <Link
+                  href="/account"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-2.5 text-sm text-forest/80 hover:text-forest hover:bg-sage-pale rounded-md transition-colors font-medium"
+                >
+                  My Account
+                </Link>
+              ) : (
+                <button
+                  onClick={() => { setMobileOpen(false); setSignInOpen(true); }}
+                  className="block w-full text-left px-3 py-2.5 text-sm text-forest/80 hover:text-forest hover:bg-sage-pale rounded-md transition-colors font-medium"
+                >
+                  Sign In
+                </button>
+              )}
             </div>
           )}
         </div>
       </header>
 
       <CartDrawer open={cartOpen} onClose={() => setCartOpen(false)} />
+      <SignInModal open={signInOpen} onClose={() => setSignInOpen(false)} />
     </>
   );
 }
