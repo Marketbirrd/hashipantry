@@ -8,8 +8,8 @@ import IngredientItem from "@/components/IngredientItem";
 
 type Ingredient = { name: string; amount: number; unit: string; original: string };
 type Step = { step: number; instruction: string };
-type ProductData = { id: string; name: string; imageUrl: string; affiliateUrl: string; asin?: string };
-type MatchedProduct = { id: string; name: string; imageUrl: string; affiliateUrl: string; asin?: string | null };
+type ProductData = { id: string; name: string; description?: string; imageUrl: string; affiliateUrl: string; asin?: string; dietTags?: string[] };
+type MatchedProduct = { id: string; name: string; description?: string; imageUrl: string; affiliateUrl: string; asin?: string | null; dietTags?: string[] };
 
 // Module-level cache so Railway only reads the file once per cold start
 let cachedProducts: ProductData[] | null = null;
@@ -92,9 +92,11 @@ function findMatchingProducts(ingredientName: string, products: ProductData[]): 
       .map((x) => ({
         id: x.product.id,
         name: x.product.name,
+        description: x.product.description,
         imageUrl: x.product.imageUrl,
         affiliateUrl: x.product.affiliateUrl,
         asin: x.product.asin ?? null,
+        dietTags: x.product.dietTags,
       }));
   } else {
     // Single word: simple contains match (e.g. "walnuts", "cauliflower")
@@ -104,9 +106,11 @@ function findMatchingProducts(ingredientName: string, products: ProductData[]): 
       .map((p) => ({
         id: p.id,
         name: p.name,
+        description: p.description,
         imageUrl: p.imageUrl,
         affiliateUrl: p.affiliateUrl,
         asin: p.asin ?? null,
+        dietTags: p.dietTags,
       }));
   }
 }
