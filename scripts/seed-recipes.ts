@@ -29,16 +29,24 @@ function slugify(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
-function getCategory(title: string, dishTypes: string[]): string {
-  const t = (title + " " + dishTypes.join(" ")).toLowerCase();
-  if (t.includes("breakfast") || t.includes("pancake") || t.includes("waffle") || t.includes("oatmeal") || t.includes("granola")) return "Breakfast";
-  if (t.includes("smoothie") || t.includes("drink") || t.includes("juice") || t.includes("shake") || t.includes("latte")) return "Smoothies & Drinks";
-  if (t.includes("soup") || t.includes("stew") || t.includes("broth") || t.includes("chili") || t.includes("chowder")) return "Soups & Stews";
-  if (t.includes("sauce") || t.includes("dressing") || t.includes("dip") || t.includes("condiment") || t.includes("aioli") || t.includes("marinade")) return "Sauces & Condiments";
-  if (t.includes("snack") || t.includes("cookie") || t.includes("bar") || t.includes("bite") || t.includes("muffin") || t.includes("cracker")) return "Snacks";
-  if (t.includes("salad") || t.includes("wrap") || t.includes("sandwich")) return "Lunch";
-  // Spoonacular labels main meals as "main course" or "main dish"
-  if (dishTypes.some(d => ["main course","main dish","dinner","lunch"].includes(d.toLowerCase()))) return "Dinner";
+const DINNER_NOUNS = [
+  "chicken", "beef", "pork", "salmon", "shrimp", "fish", "steak", "lamb",
+  "turkey", "tuna", "cod", "tilapia", "halibut", "duck", "bison", "venison",
+  "noodles", "pasta", "spaghetti", "linguine", "fettuccine", "zoodles",
+  "bowl", "stir fry", "stir-fry", "casserole", "roast", "bake", "baked",
+  "grilled", "curry", "stuffed", "meatball", "meatloaf", "burger",
+  "skillet", "sheet pan", "one pot",
+];
+
+function getCategory(title: string, _dishTypes: string[]): string {
+  const t = title.toLowerCase();
+  if (["breakfast", "pancake", "waffle", "oatmeal", "granola", "french toast"].some(k => t.includes(k))) return "Breakfast";
+  if (["smoothie", "shake", "juice", "latte", "elixir"].some(k => t.includes(k))) return "Smoothies & Drinks";
+  if (["soup", "stew", "broth", "chili", "chowder", "bisque", "ramen", "pho"].some(k => t.includes(k))) return "Soups & Stews";
+  if (DINNER_NOUNS.some(k => t.includes(k))) return "Dinner";
+  if (["sauce", "dressing", "dip", "aioli", "marinade", "gravy", "salsa", "pesto", "hummus"].some(k => t.includes(k))) return "Sauces & Condiments";
+  if (["snack", "cookie", "bar ", "energy bite", "muffin", "cracker", "chip "].some(k => t.includes(k))) return "Snacks";
+  if (["salad", "sandwich", "wrap", "hoagie"].some(k => t.includes(k))) return "Lunch";
   return "Dinner";
 }
 

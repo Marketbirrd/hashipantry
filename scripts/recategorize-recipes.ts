@@ -11,31 +11,41 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Title-only keywords → these override dishTypes
-const TITLE_RULES: [string[], string][] = [
-  [["breakfast", "pancake", "waffle", "oatmeal", "granola", "french toast", "frittata"], "Breakfast"],
-  [["smoothie", "shake", "juice", "latte", "coffee", "tea drink", "elixir"], "Smoothies & Drinks"],
-  [["soup", "stew", "broth", "chili", "chowder", "bisque", "ramen", "pho"], "Soups & Stews"],
-  [["sauce", "dressing", "dip", "aioli", "marinade", "condiment", "gravy", "salsa"], "Sauces & Condiments"],
-  [["snack", "cookie", "bar ", "energy bite", "muffin", "cracker", "chip ", "granola bar"], "Snacks"],
-  // Salad/sandwich/wrap are genuinely lunch
-  [["salad", "sandwich", "wrap", "sub ", "hoagie"], "Lunch"],
+// If any of these appear in the title it's a main dish — checked BEFORE sauce/condiment
+const DINNER_NOUNS = [
+  "chicken", "beef", "pork", "salmon", "shrimp", "fish", "steak", "lamb",
+  "turkey", "tuna", "cod", "tilapia", "halibut", "duck", "bison", "venison",
+  "noodles", "pasta", "spaghetti", "linguine", "fettuccine", "zoodles",
+  "bowl", "stir fry", "stir-fry", "casserole", "roast", "bake", "baked",
+  "grilled", "curry", "stuffed", "meatball", "meatloaf", "burger",
+  "skillet", "sheet pan", "one pot", "frittata",
 ];
 
-function getCategory(title: string, dishTypes: string[]): string {
+function getCategory(title: string, _dishTypes: string[]): string {
   const t = title.toLowerCase();
 
-  for (const [keywords, cat] of TITLE_RULES) {
-    if (keywords.some(k => t.includes(k))) return cat;
-  }
+  // Breakfast
+  if (["breakfast", "pancake", "waffle", "oatmeal", "granola", "french toast"].some(k => t.includes(k))) return "Breakfast";
 
-  // If Spoonacular explicitly calls it a side dish or appetizer, keep as Snacks
-  const dLower = dishTypes.map(d => d.toLowerCase());
-  if (dLower.some(d => ["side dish", "appetizer", "antipasti", "starter", "fingerfood"].includes(d))) return "Snacks";
-  if (dLower.some(d => ["breakfast", "morning meal", "brunch"].includes(d))) return "Breakfast";
-  if (dLower.some(d => ["soup"].includes(d))) return "Soups & Stews";
+  // Drinks
+  if (["smoothie", "shake", "juice", "latte", "elixir"].some(k => t.includes(k))) return "Smoothies & Drinks";
 
-  // Everything else is Dinner (main course, dinner, lunch-labeled mains, etc.)
+  // Soups (before dinner check so "chicken soup" → Soups & Stews, not Dinner)
+  if (["soup", "stew", "broth", "chili", "chowder", "bisque", "ramen", "pho"].some(k => t.includes(k))) return "Soups & Stews";
+
+  // Main dish proteins/formats → Dinner, before sauce check catches "noodles with sauce"
+  if (DINNER_NOUNS.some(k => t.includes(k))) return "Dinner";
+
+  // Sauces & condiments — only if no main dish noun was found above
+  if (["sauce", "dressing", "dip", "aioli", "marinade", "gravy", "salsa", "pesto", "hummus"].some(k => t.includes(k))) return "Sauces & Condiments";
+
+  // Snacks
+  if (["snack", "cookie", "bar ", "energy bite", "muffin", "cracker", "chip "].some(k => t.includes(k))) return "Snacks";
+
+  // Genuinely lunch-specific (not just "lunch" from dishTypes)
+  if (["salad", "sandwich", "wrap", "hoagie"].some(k => t.includes(k))) return "Lunch";
+
+  // Default — covers veggie mains, grain dishes, etc.
   return "Dinner";
 }
 
