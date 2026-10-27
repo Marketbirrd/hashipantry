@@ -331,30 +331,11 @@
         "featured":  false
     },
     {
-        "id":  "25",
-        "name":  "Bragg Live Food Products Smoky Bbq Nutritional Yeast",
-        "description":  "Smoked dried yeast.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64e6505cc865007f9be30a63_0074305066023-glamor-front-2023-08-22t13-32-37-iphone-x-quality-90-1-34-1-user-63a5c39553683c45e1082a47-t1h2-701236.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Bragg+Live+Food+Products+Smoky+Bbq+Nutritional+Yeast\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "AIP",
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "26",
         "name":  "Sante Dark Chocolate Baking Chips",
         "description":  "Cacao beansâ€¡.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/605214c78af8d578ae173d37_07818020702-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Sante+Dark+Chocolate+Baking+Chips\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0DX1TXBI?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -373,7 +354,7 @@
         "name":  "Celestial Seasonings Organic Teawell Turmeric Spice",
         "description":  "Organic cinnamon\norganic tumeric\norganic cardamom\norganic black pepper\norganic moringa\norganic anise seed.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/601c125a97e3c63f5a860d9f_00856429008192-glamor-frontpackageglamor-2021-01-13t18-55-31-iphone-x-quality-90-1-21-8-user-5984ad42a967f880524de2c4-zvws-614887.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Celestial+Seasonings+Organic+Teawell+Turmeric+Spice\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0IL8ZGVG?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
@@ -392,7 +373,7 @@
         "name":  "Oat Bars Original",
         "description":  "Organic whole grain rolled oats.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5ff7bc773dfd0a75a21066ef_829262000012-c1c1en.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Oat+Bars+Original\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0IL8ZGVG?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Snacks",
         "dietTags":  [
@@ -409,7 +390,7 @@
         "name":  "Organic Caper Berries",
         "description":  "Organic caper berries.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64e0c7a153e47e60de01e2a9_0099482461089-glamor-front-2023-08-18t13-09-47-iphone-x-quality-90-1-34-1-user-62007be7ec32e60fa58d2f55-zofk-725052.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Caper+Berries\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0J9PBQ1K?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -428,7 +409,7 @@
         "name":  "Organic Mushroom Broth",
         "description":  "Water\nmushrooms*\nsea salt\ngarlic*..",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/613904fbdb1c1f36522c112d_dld-0052603041003-glamor-front-2021-08-03t14-51-21-iphone-x-quality-90-1-25-4-user-5984ad42a967f880524de2c4-cugu-624959-1631126779028.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Mushroom+Broth\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B03VFBPSY?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -448,7 +429,7 @@
         "name":  "Natureâ€™S Path Organic Fruit Juice Corn Flakes",
         "description":  "Corn meal* and/or yellow corn flour*.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/602c0a3c33182716be37effe_058449600565-c1ca.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Nature%E2%80%99S+Path+Organic+Fruit+Juice+Corn+Flakes\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B07LTSYYD?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
@@ -467,7 +448,7 @@
         "name":  "Garlic Peri Peri Sauce",
         "description":  "Water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6185c66a3d70c76c6767ff12_0655273001256-glamor-front-2021-10-15t14-52-55-iphone-x-quality-90-1-25-4-user-5d7652c1db2c4b51d4c666ca-lug9-420634.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Garlic+Peri+Peri+Sauce\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0EBSMVDQ?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Condiments",
         "dietTags":  [
@@ -478,27 +459,11 @@
         "featured":  false
     },
     {
-        "id":  "33",
-        "name":  "Salted Peanut Butter Milk Chocolate Bar",
-        "description":  "Milk chocolate (cocoa butter**.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/633f6e855920155040f0bdb7_0716270015001-glamor-front-2022-08-15t21-52-44-iphone-x-quality-90-1-29-0-user-5984ad42a967f880524de2c4-3ybp-708883.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Salted+Peanut+Butter+Milk+Chocolate+Bar\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Oils \u0026 Fats",
-        "dietTags":  [
-                         "Egg Free",
-                         "Soy Free",
-                         "No Seed Oils",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "34",
         "name":  "Total 2% Plain Greek Yogurt",
         "description":  "Grade a pasteurized skimmed milk and cream.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5e9f5515d6d2a7f0b2bcd81d_00689544083405-glamor-frontpackageglamor-2020-03-12t16-20-41-iphone-x-quality-90-1-21-1-user-5dc17de060e00edd1f03737a-otnl-427937.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Total+2%25+Plain+Greek+Yogurt\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0AUFAEEG?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -514,7 +479,7 @@
         "name":  "Bonterra Chardonnay",
         "description":  "Chardonnay.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/602135d86e866419f23b7482_00082896780419-glamor-frontpackageglamor-2021-01-27t15-36-50-iphone-x-quality-90-1-21-8-user-5d7652c1db2c4b51d4c666ca-k8b7-658455.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Bonterra+Chardonnay\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0ILMVDSV?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -531,7 +496,7 @@
         "name":  "365 By Whole Foods Market Korintje Ground Cinnamon",
         "description":  "Cinnamon..",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6509e50925b2845da19f9026_2023-cen-ecommerce-directship-groundcinnamon.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Korintje+Ground+Cinnamon\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HNTSROA?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -551,7 +516,7 @@
         "name":  "Five Cheese Ravioli Almond Flour Pasta",
         "description":  "Ricotta cheese (whey.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/608315e4e0c7a5607453dded_859553004108-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Five+Cheese+Ravioli+Almond+Flour+Pasta\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0CJE6LZ4?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -566,7 +531,7 @@
         "name":  "365 By Whole Foods Market  Farm-Raised Seafood Value Pack, Atlantic Salmon Fillets",
         "description":  "Atlantic salmon.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/667f29deffa50355bd9e2be6_2024-07-03_19-57-25_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market++Farm-Raised+Seafood+Value+Pack%2C+Atlantic+Salmon+Fillets\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0FJCJMDD?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -581,24 +546,11 @@
         "featured":  false
     },
     {
-        "id":  "39",
-        "name":  "Lemonade",
-        "description":  "Pure filtered water\nlemon juice\ncane sugar\nnatural flavors..",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/61390c6b33ec27498b3fed0b_02502108-glamor-front-2021-08-19t15-14-11-iphone-x-quality-90-1-25-4-user-5984ad42a967f880524de2c4-pas5-380566.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Lemonade\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "40",
         "name":  "Mama O\u0027S Vegan Kimchi Paste",
         "description":  "Red pepper flakes\ngarlic\nginger\nlime juice\nwater\nsugar\nsalt.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6361621eca82c84c645cc787_0610079983274-glamor-front-2022-10-20t13-55-54-iphone-7-quality-90-1-32-2-user-5d7652c1db2c4b51d4c666ca-wtc8-893118.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Mama+O%27S+Vegan+Kimchi+Paste\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B023YUKYI?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -607,36 +559,6 @@
                          "No Seed Oils",
                          "Dairy Free",
                          "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "41",
-        "name":  "Eatgud Chipotle Jackfruit Tamales",
-        "description":  "Tamale masa (yellow corn flour organic.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/657f6c2c92581c62a47f06aa_2024-01-05_22-13-17_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Eatgud+Chipotle+Jackfruit+Tamales\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "Soy Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "42",
-        "name":  "Nuts \u0027N More Toffee Crunch Peanut Spread",
-        "description":  "Peanuts.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/81Ffzv6QSkL._SL1500_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Nuts+%27N+More+Toffee+Crunch+Peanut+Spread\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Egg Free",
-                         "No Seed Oils",
                          "Gluten Free"
                      ],
         "featured":  false
@@ -665,7 +587,7 @@
         "name":  "Clover Sonoma Organic Cream Cheese",
         "description":  "Organic pasteurized milk and cream.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5cdd5ee687d6d71c5c6e4c20_upc-00070852992952-glamor-frontpackageglamor-2019-04-02t17-22-12-85919deb-0345-49fb-b690-1694162a60a0.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Clover+Sonoma+Organic+Cream+Cheese\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HVY2GEY?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -677,32 +599,11 @@
         "featured":  false
     },
     {
-        "id":  "45",
-        "name":  "Organic Unrefined Medium Heat Virgin Coconut Oil",
-        "description":  "Cold pressed unrefined organic virgin coconut oil**..",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/61037a173275ca7f8a1dee7f_00022506105614-glamor-frontpackageglamor-2021-02-02t16-32-59-iphone-7-quality-90-1-21-8-user-5d7652c1db2c4b51d4c666ca-g8a4-029915.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Unrefined+Medium+Heat+Virgin+Coconut+Oil\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Oils \u0026 Fats",
-        "dietTags":  [
-                         "AIP",
-                         "Paleo",
-                         "Vegan",
-                         "Low Histamine",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "46",
         "name":  "Whole Foods Market Fresh Mozzarella Medallions",
         "description":  "Pasteurized milk.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/633e277770e8507d5ca5d97e_0099482439798-glamor-front-2022-08-23t17-51-17-iphone-x-quality-90-1-31-0-user-5984ad42a967f880524de2c4-cpan-199763.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Whole+Foods+Market+Fresh+Mozzarella+Medallions\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B05WKNBWO?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -718,7 +619,7 @@
         "name":  "Fresh Vintage California Walnut Oil",
         "description":  "California walnut oil cold pressed.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64c3f3b4617051c357c75be7.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Fresh+Vintage+California+Walnut+Oil\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02VN86EL?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Oils \u0026 Fats",
         "dietTags":  [
@@ -728,70 +629,6 @@
                          "No Seed Oils",
                          "Dairy Free",
                          "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "48",
-        "name":  "Whole Foods Market Organic Berry Blend Italian Soda",
-        "description":  "Carbonated water.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64e3fdf7cf893060fbbc82a2_2023-11-10_17-22-03_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Whole+Foods+Market+Organic+Berry+Blend+Italian+Soda\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Beverages",
-        "dietTags":  [
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "49",
-        "name":  "Organic Kale Chips",
-        "description":  "Organic kale.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/601c1bf197e3c63f5a861bc7_00829739000637-glamor-frontpackageglamor-2021-01-06t15-52-54-iphone-7-quality-90-1-21-8-user-5c4f16e4fc9c91accd101ce4-6d6v-913241.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Kale+Chips\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "50",
-        "name":  "Good Planet Dairy-Free Smoke Provolone Cheese Slices",
-        "description":  "Filtered water.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/717OnwnPJXL._SL1350_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Good+Planet+Dairy-Free+Smoke+Provolone+Cheese+Slices\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "51",
-        "name":  "Organic Valley Organic Yellow American Cheese",
-        "description":  "Organic cultured milk.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/62ed5fd3a1dbf64c03b1edd7_0093966008449-glamor-front-2022-07-11t16-37-44-iphone-7-quality-90-1-29-0-user-5d7652c1db2c4b51d4c666ca-16i6-198938.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Valley+Organic+Yellow+American+Cheese\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Egg Free",
-                         "Soy Free",
-                         "No Seed Oils",
                          "Gluten Free"
                      ],
         "featured":  false
@@ -105094,7 +104931,7 @@
         "name":  "Steak Sauce And Marinade",
         "description":  "Water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f625613d2c39fbc8ff36d04_00855232007415-glamor-frontpackageglamor-2020-09-14t17-29-15-iphone-x-quality-90-1-21-1-user-5984ad42a967f880524de2c4-2nov-416378.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Steak+Sauce+And+Marinade\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02ZLDWH7?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Condiments",
         "dietTags":  [
