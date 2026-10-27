@@ -1694,23 +1694,6 @@
         "featured":  false
     },
     {
-        "id":  "149",
-        "name":  "Trader Joe\u0027S Organic Pastilles Gingermints",
-        "description":  "Trader Joe\u0027S Organic Pastilles Gingermints. Organic cane sugar.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/712k5FJrYBL._SL1500_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Trader+Joe%27S+Organic+Pastilles+Gingermints\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "150",
         "name":  "Hawaiian Springs Water",
         "description":  "Hawaiian Springs Water. Spring water.",
@@ -3205,23 +3188,6 @@
                          "Egg Free",
                          "No Seed Oils",
                          "Dairy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "238",
-        "name":  "Trader Joe\u0027S Clarified Butter (Ghee",
-        "description":  "Trader Joe\u0027S Clarified Butter (Ghee. Unsalted butter..",
-        "imageUrl":  "https://m.media-amazon.com/images/W/MEDIAX_792452-T2/images/I/81yZrpZ63lL.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Trader+Joe%27S+Clarified+Butter+%28Ghee\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Oils \u0026 Fats",
-        "dietTags":  [
-                         "Low Histamine",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Soy Free",
                          "Gluten Free"
                      ],
         "featured":  false
@@ -38442,25 +38408,6 @@
         "category":  "Pantry Staples",
         "dietTags":  [
                          "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "2291",
-        "name":  "Trader Joe\u0027S Rolled Oats",
-        "description":  "Trader Joe\u0027S Rolled Oats. 100% whole grain rolled oats..",
-        "imageUrl":  "https://m.media-amazon.com/images/I/81T9nLT5XCL._SL1500_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Trader+Joe%27S+Rolled+Oats\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Vegan",
-                         "Low Histamine",
                          "Egg Free",
                          "No Seed Oils",
                          "Dairy Free",
