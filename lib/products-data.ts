@@ -15,25 +15,6 @@ export type Product = {
 
 export const FEATURED_PRODUCTS: Product[] = [
   {
-    "id": "1",
-    "name": "Orange Blossom Honey",
-    "description": "Raw orange blossom honey.",
-    "imageUrl": "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f6a4466d9f14895e26ca62d_00825325166442-glamor-frontpackageglamor-2020-09-17t19-28-50-iphone-x-quality-90-1-21-1-user-5984ad42a967f880524de2c4-zkro-326115.jpg",
-    "affiliateUrl": "https://www.amazon.com/s?k=Orange+Blossom+Honey&tag=hashipantry07-20",
-    "source": "AMAZON",
-    "category": "Pantry Staples",
-    "dietTags": [
-      "Paleo",
-      "Low Histamine",
-      "Egg Free",
-      "No Seed Oils",
-      "Dairy Free",
-      "Soy Free",
-      "Gluten Free"
-    ],
-    "featured": false
-  },
-  {
     "id": "2",
     "name": "Sliced Sweet Pimentos",
     "description": "Peeled pimientos.",
@@ -63,25 +44,6 @@ export const FEATURED_PRODUCTS: Product[] = [
     "dietTags": [
       "Dairy Free",
       "No Seed Oils"
-    ],
-    "featured": false
-  },
-  {
-    "id": "4",
-    "name": "365 Whole Foods Market Garlic Sea Salt",
-    "description": "Garlic granules.",
-    "imageUrl": "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/62eb30fc79c0186618a1a2cb_0099482497828-glamor-front-2022-03-21t12-53-55-iphone-7-quality-90-1-29-0-user-5c4f16e4fc9c91accd101ce4-83xf-298687.jpg",
-    "affiliateUrl": "https://amzn.to/4eYzGle",
-    "source": "AMAZON",
-    "category": "Pantry Staples",
-    "dietTags": [
-      "Paleo",
-      "Vegan",
-      "Egg Free",
-      "No Seed Oils",
-      "Dairy Free",
-      "Soy Free",
-      "Gluten Free"
     ],
     "featured": false
   },
