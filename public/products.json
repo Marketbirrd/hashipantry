@@ -978,28 +978,11 @@
         "featured":  false
     },
     {
-        "id":  "85",
-        "name":  "Bud Light",
-        "description":  "Bud Light. Water\nbarley\nrice\nhops.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6116a069324d5a0e2f83f76d_dld-0018200530470-glamor-front-2021-06-26t01-32-37-iphone-7-quality-90-1-25-4-user-5c4f16e4fc9c91accd101ce4-wj1n-530305-1628872801635.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Bud+Light\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "86",
         "name":  "Gt\u0027S Classic Kombucha Classic Gingerade Kombucha",
         "description":  "Gt\u0027s kombucha* (kombucha culture*.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/642cbabebd4080ce2a2a8437_2023-04-05_00-03-16_marketing-front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Gt%27S+Classic+Kombucha+Classic+Gingerade+Kombucha\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HMQZCDB/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
@@ -1016,7 +999,7 @@
         "name":  "Garcia De La Cruz Garlic Stuffed Olives",
         "description":  "Garcia De La Cruz Garlic Stuffed Olives. Queen olives.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/646bacbf27f0cb5a6d3f4a46_0830712002845-glamor-front-2023-05-19t16-27-47-iphone-x-quality-90-1-33-0-user-63a5c39553683c45e1082a47-01od-260577.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Garcia+De+La+Cruz+Garlic+Stuffed+Olives\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HK52Z59/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1033,7 +1016,7 @@
         "name":  "Left Coast Performance Grass Fed Beef Bone Broth Powder",
         "description":  "Left Coast Performance Grass Fed Beef Bone Broth Powder. Grass-fed beef bone broth protein powder.",
         "imageUrl":  "https://m.media-amazon.com/images/I/51ZdiE98XeL._AC_SL1000_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Left+Coast+Performance+Grass+Fed+Beef+Bone+Broth+Powder\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B01HKKUPW/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -1046,30 +1029,11 @@
         "featured":  false
     },
     {
-        "id":  "89",
-        "name":  "Smoked Salmon",
-        "description":  "Smoked Salmon. Farm raised atlantic salmon.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/62f59f3328b1c014e85433e6_0898024002007-glamor-front-2022-08-03t19-54-35-iphone-x-quality-90-1-31-0-user-5984ad42a967f880524de2c4-g23g-575564.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Smoked+Salmon\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "AIP",
-                         "Paleo",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "90",
         "name":  "365 By Whole Foods Market Organic Mango Fruit Strip",
         "description":  "365 By Whole Foods Market Organic Mango Fruit Strip. Organic dried apples (organic apple flakes.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6549bd971d44a6965dba09f6_2023-11-07_04-31-25_other.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Organic+Mango+Fruit+Strip\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0BUSFV4J/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1083,7 +1047,7 @@
         "name":  "Nancy\u0027S Probiotic Foods Organic Lowfat Yogurt - Plain",
         "description":  "Nancy\u0027S Probiotic Foods Organic Lowfat Yogurt - Plain. Organic pasteurized whole milk.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/65d7d8ee756c2f89f263b2f0_2024-02-22_23-29-51_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Nancy%27S+Probiotic+Foods+Organic+Lowfat+Yogurt+-+Plain\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0IDOR4PV/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Oils \u0026 Fats",
         "dietTags":  [
@@ -1099,7 +1063,7 @@
         "name":  "Sweetpotato Awesome Organic Sweet Potato Slices Dill Garlic",
         "description":  "Organic sweetpotato.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/63976cce84e1e5059c7c91d6_00653341235442-c1n1.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Sweetpotato+Awesome+Organic+Sweet+Potato+Slices+Dill+Garlic\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0GMBMI2H/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1118,7 +1082,7 @@
         "name":  "Kos Electric Blue Spirulina",
         "description":  "Kos Electric Blue Spirulina. Other ingredients: organic vitafiber (isomaltooligosaccharide).",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6669d273be7983c690f8039d_2024-06-12_16-53-09_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Kos+Electric+Blue+Spirulina\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B06RSINHR/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1136,7 +1100,7 @@
         "name":  "Organic Turkey Burgers",
         "description":  "Organic turkey.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f49bb92e7edeebabbd18881_00707330353430-glamor-frontpackageglamor-2020-08-27t15-19-55-iphone-x-quality-90-1-21-1-user-5984ad42a967f880524de2c4-rz5v-227795.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Turkey+Burgers\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0FQKQMB1/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1155,7 +1119,7 @@
         "name":  "Cashews, Roasted \u0026 Salted",
         "description":  "Cashews, Roasted \u0026 Salted. Cashews\nexpeller pressed sunflower seed oil\nsea salt.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5ff34161c32f531c3f362da0_00099482482138-c1n1.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Cashews%2C+Roasted+%26+Salted\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02YGJJW9/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1172,7 +1136,7 @@
         "name":  "Gluten Free All Purpose Baking Flour",
         "description":  "Gluten Free All Purpose Baking Flour. Garbanzo bean flour.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f49b4e4c663f1bae10013e2_00039978024527-glamor-frontpackageglamor-2020-08-26t14-34-13-iphone-x-quality-90-1-21-1-user-5984ad42a967f880524de2c4-o0kl-440927.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Gluten+Free+All+Purpose+Baking+Flour\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0AEZ0Q0T/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -1190,7 +1154,7 @@
         "name":  "Aurora Natural Raw Whole Brazil Nuts",
         "description":  "Aurora Natural Raw Whole Brazil Nuts. Brazil nuts..",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6025d42861b57a7c37dc153d_00655852001783-glamor-frontpackageglamor-2021-01-20t18-44-17-iphone-x-quality-90-1-21-8-user-5984ad42a967f880524de2c4-nzpc-950217.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Aurora+Natural+Raw+Whole+Brazil+Nuts\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B03WQTJTV/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1206,26 +1170,11 @@
         "featured":  false
     },
     {
-        "id":  "98",
-        "name":  "Oat Milk, Coconut \u0026 Almonds Dark Chocolate Bar",
-        "description":  "Oat Milk, Coconut \u0026 Almonds Dark Chocolate Bar. Chocolate (chocolate liquor.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/615e3c103a26747583582801_0037014321050-glamor-front-2021-09-27t01-11-39-iphone-7-quality-90-1-25-4-user-5c4f16e4fc9c91accd101ce4-mszb-369081.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Oat+Milk%2C+Coconut+%26+Almonds+Dark+Chocolate+Bar\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "99",
         "name":  "365 By Whole Foods Market Popcorn Kernels, Heirloom",
         "description":  "365 By Whole Foods Market Popcorn Kernels, Heirloom. Popcorn.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64a6bdc15424907037dcd832_2023-cen-ecommerce-directship-heirloompopcornkernels.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Popcorn+Kernels%2C+Heirloom\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0GFVJSJ3/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Snacks",
         "dietTags":  [
@@ -1244,7 +1193,7 @@
         "name":  "Lemon Lime Sparkling Water",
         "description":  "Lemon Lime Sparkling Water. Purified carbonated water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6089b23714f82666aa278b0b_819215020280-c1ca.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Lemon+Lime+Sparkling+Water\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B09LR81KP/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
@@ -1257,7 +1206,7 @@
         "name":  "Organic Gluten Free Millet Flour",
         "description":  "Organic whole grain millet flour.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f52875e3f52c79be8807281_00074333684343-glamor-frontpackageglamor-2020-09-03t13-24-36-iphone-7-quality-90-1-21-1-user-5d7652c1db2c4b51d4c666ca-6pbm-636525.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Gluten+Free+Millet+Flour\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0285P8KL/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -1272,24 +1221,11 @@
         "featured":  false
     },
     {
-        "id":  "102",
-        "name":  "Chobani Cookie Dough Flavor Coffee Creamer With Real Cream",
-        "description":  "Chobani Cookie Dough Flavor Coffee Creamer With Real Cream. Milk.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/71n4tnztWbL._SX679_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Chobani+Cookie+Dough+Flavor+Coffee+Creamer+With+Real+Cream\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "103",
         "name":  "Vodka Sauce With Avocado Oil",
         "description":  "Vodka Sauce With Avocado Oil. Organic tomato puree (water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f49b1efe7edeebabbd18492_00850004639085-glamor-frontpackageglamor-2020-08-25t15-30-02-pixel-3a-quality-90-1-21-1-user-5d7652c1db2c4b51d4c666ca-zccd-512165.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Vodka+Sauce+With+Avocado+Oil\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B06CQ43R6/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Oils \u0026 Fats",
         "dietTags":  [
@@ -1306,7 +1242,7 @@
         "name":  "Follow Your Heart Soy-Free Vegenaise",
         "description":  "Follow Your Heart Soy-Free Vegenaise. Expeller-pressed high-oleic safflower oil.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/609c13d8511c1612c87fc966_049568060323-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Follow+Your+Heart+Soy-Free+Vegenaise\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B03BGDQUM/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1322,7 +1258,7 @@
         "name":  "Assam Black Tea",
         "description":  "Assam Black Tea. Black tea (100%)..",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5cdd27433f077b1c2c9f307c_upc-00615357115156-glamor-frontpackageglamor-2019-03-27t17-46-03-7fc3e16f-dddb-46a6-8d2c-1a761fc5138b.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Assam+Black+Tea\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B09R5ABB1/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
