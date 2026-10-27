@@ -1274,28 +1274,11 @@
         "featured":  false
     },
     {
-        "id":  "106",
-        "name":  "Strawberry Cream Marshmallows",
-        "description":  "Strawberry Cream Marshmallows. Organic cane sugar.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5fd80ad318896703f9440520_00857944006021-glamor-frontpackageglamor-2020-12-01t16-16-27-iphone-7-quality-90-1-21-8-user-5c4f16e4fc9c91accd101ce4-den5-556746.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Strawberry+Cream+Marshmallows\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "107",
         "name":  "Rob Keller Md Ogf Original Glutathione Formula 180 Capsules",
         "description":  "Rob Keller Md Ogf Original Glutathione Formula 180 Capsules. Gelatin capsules.",
         "imageUrl":  "https://m.media-amazon.com/images/I/711bfdMKHSL._AC_UF1000,1000_QL80_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Rob+Keller+Md+Ogf+Original+Glutathione+Formula+180+Capsules\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B094H78RV/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1313,7 +1296,7 @@
         "name":  "Nutricost Cranberry With Vitamins C\u0026E Dietary Supplement, 120 Capsules",
         "description":  "Nutricost Cranberry With Vitamins C\u0026E Dietary Supplement, 120 Capsules. Hypromellose (cellulose) capsule.",
         "imageUrl":  "https://m.media-amazon.com/images/I/61VB4Da91pL._AC_SY879_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Nutricost+Cranberry+With+Vitamins+C%26E+Dietary+Supplement%2C+120+Capsules\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0ACNMMDI/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Supplements",
         "dietTags":  [
@@ -1331,7 +1314,7 @@
         "name":  "Avocado Oil Garlic Aioli",
         "description":  "Avocado oil.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f64beaf71e264e809a52b6a_00856769006582-glamor-frontpackageglamor-2020-09-17t13-07-48-iphone-7-quality-90-1-21-1-user-5c4f16e4fc9c91accd101ce4-4xfk-248986.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Avocado+Oil+Garlic+Aioli\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0828UAFU/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Oils \u0026 Fats",
         "dietTags":  [
@@ -1344,47 +1327,11 @@
         "featured":  false
     },
     {
-        "id":  "110",
-        "name":  "Whole Foods Market Honey Roasted Salmon, Chef\u0027S Counter",
-        "description":  "Whole Foods Market Honey Roasted Salmon, Chef\u0027S Counter. Salmon.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f49049cc1bd7df9870ea4fb_280733000007.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Whole+Foods+Market+Honey+Roasted+Salmon%2C+Chef%27S+Counter\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Paleo",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "111",
-        "name":  "Whole Foods Market Herb Crusted Roast Beef",
-        "description":  "Whole Foods Market Herb Crusted Roast Beef. Roast beef.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6102ee32b215b3570750fdf7_roastbeef.jpeg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Whole+Foods+Market+Herb+Crusted+Roast+Beef\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Paleo",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "112",
         "name":  "Mixed Berry Overnight Oats",
         "description":  "Mixed Berry Overnight Oats. Coconut milk (water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/61e613b235dba52e5b2e2cbc_0850003994437-glamor-front-2022-01-06t19-07-08-iphone-x-quality-90-1-26-2-user-5d7652c1db2c4b51d4c666ca-ejiz-881799.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Mixed+Berry+Overnight+Oats\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0A12ODGF/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Flours \u0026 Baking",
         "dietTags":  [
@@ -1401,7 +1348,7 @@
         "name":  "365 By Whole Foods Market Seasonings, Sea Salt - Fine",
         "description":  "365 By Whole Foods Market Seasonings, Sea Salt - Fine. Sea salt..",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64e656d5982dd77edda5d4f4_2023-11-10_17-24-11_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Seasonings%2C+Sea+Salt+-+Fine\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02Q5IOGS/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1418,25 +1365,11 @@
         "featured":  false
     },
     {
-        "id":  "114",
-        "name":  "Organic Wild Berry Smoothie",
-        "description":  "Our recipe: cultured pasteurized organic low fat milk.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/613f8947e11bfde36015ef31_dld-0052159013325-glamor-front-2021-08-19t16-38-05-iphone-x-quality-90-1-25-4-user-5984ad42a967f880524de2c4-mlu8-084962-1631553860487.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Wild+Berry+Smoothie\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Egg Free",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "115",
         "name":  "Organic Go Go - Brown Rice",
         "description":  "Organic Go Go - Brown Rice. Water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f7b421b5194299d381087e0_00858354001453-glamor-frontpackageglamor-2020-09-24t13-01-44-iphone-7-quality-90-1-21-5-user-5c4f16e4fc9c91accd101ce4-zoi6-233798.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Go+Go+-+Brown+Rice\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HQNLXW7/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1451,42 +1384,11 @@
         "featured":  false
     },
     {
-        "id":  "116",
-        "name":  "Classic Dry Rubbed Fully Cooked Sliced Uncured Bacon",
-        "description":  "Classic Dry Rubbed Fully Cooked Sliced Uncured Bacon. Pork.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5e13b9887a0080be3851d6bb_upc-00616973011259-glamor-frontpackageglamor-2019-04-01t13-36-29-5ec51b85-883b-4ebd-8d71-eb494ebdae5b.r90.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Classic+Dry+Rubbed+Fully+Cooked+Sliced+Uncured+Bacon\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "Soy Free",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "117",
-        "name":  "Salted Caramel Dark Chocolate Bar",
-        "description":  "Salted Caramel Dark Chocolate Bar. Dark chocolate (cocoa liquor**.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6185c69f3d70c76c6768004d_0716270015049-glamor-front-2021-10-14t01-46-53-iphone-7-quality-90-1-25-4-user-5c4f16e4fc9c91accd101ce4-h20u-663484.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Salted+Caramel+Dark+Chocolate+Bar\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "118",
         "name":  "Whole Foods Market Plant-Based Tomato Pesto",
         "description":  "Whole Foods Market Plant-Based Tomato Pesto. Tomato purÃ©e (tomato paste.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6542512368bc3a168eec58b8_2023-11-16_19-31-33_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Whole+Foods+Market+Plant-Based+Tomato+Pesto\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0GYLLFX/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1499,7 +1401,7 @@
         "name":  "365 By Whole Foods Market Organic Cinnamon Apple Sauce Unsweetened",
         "description":  "365 By Whole Foods Market Organic Cinnamon Apple Sauce Unsweetened. Organic apples.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64a6c2ac5424907037dcdebc_2023-cen-ecommerce-directship-organiccinnamonapplesauce.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Organic+Cinnamon+Apple+Sauce+Unsweetened\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0GYLLFX/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Condiments",
         "dietTags":  [
@@ -1510,23 +1412,6 @@
                          "No Seed Oils",
                          "Dairy Free",
                          "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "120",
-        "name":  "Nordic Naturals Ultimate Omega 2X Mini",
-        "description":  "Nordic Naturals Ultimate Omega 2X Mini. Purified deep sea fish oil (from anchovies and sardines).",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/620465f8512fef47d2b5e66c_0768990061059-glamor-front-2022-01-24t18-11-56-iphone-x-quality-90-1-26-2-user-5984ad42a967f880524de2c4-mwm3-717115.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Nordic+Naturals+Ultimate+Omega+2X+Mini\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Paleo",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
                          "Gluten Free"
                      ],
         "featured":  false
@@ -1536,7 +1421,7 @@
         "name":  "365 By Whole Foods Market Organic Produce, Garlic",
         "description":  "365 By Whole Foods Market Organic Produce, Garlic. Organic garlic.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f959b4cfb01c6a660ff627e_099482481322-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Organic+Produce%2C+Garlic\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B022FPYFA/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1547,22 +1432,6 @@
                          "No Seed Oils",
                          "Dairy Free",
                          "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "122",
-        "name":  "Kind Savory Rosemary Nut \u0026 Sea Salt",
-        "description":  "Kind Savory Rosemary Nut \u0026 Sea Salt. Cashews.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/51TLiHUtWPL._AC_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Kind+Savory+Rosemary+Nut+%26+Sea+Salt\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "No Seed Oils",
                          "Gluten Free"
                      ],
         "featured":  false
@@ -1572,30 +1441,10 @@
         "name":  "Mustard Bbq Cooking \u0026 Dipping Sauce",
         "description":  "Mustard Bbq Cooking \u0026 Dipping Sauce. Water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6185c8973d70c76c67680ca4_0852675006944-glamor-front-2021-10-15t15-06-37-iphone-x-quality-90-1-25-4-user-5d7652c1db2c4b51d4c666ca-9aif-689266.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Mustard+Bbq+Cooking+%26+Dipping+Sauce\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B03XVOJD6/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Condiments",
         "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "124",
-        "name":  "Organic Peeled Garlic",
-        "description":  "Organic garlic.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5da67e71f88fd08481b74ac3_dld-upc-00291978000004-glamor-glamor1-2019-09-09t16-02-45-6e9a5dd2-25e4-41c6-9e66-6ebb43838c94-1571192432581.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Peeled+Garlic\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "AIP",
-                         "Paleo",
                          "Vegan",
                          "Egg Free",
                          "No Seed Oils",
@@ -1610,7 +1459,7 @@
         "name":  "Ethan\u0027S Organic Pomegranate Blueberry Energy Shot",
         "description":  "Ethan\u0027S Organic Pomegranate Blueberry Energy Shot. Other ingredients: blueberry juice*.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/63d1b56a45b10d5eb13ea69a_0854124007489-glamor-front-2023-01-24t17-11-58-iphone-11-pro-quality-90-1-33-0-user-639cb05438867b18914c26c1-fu9b-606116.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Ethan%27S+Organic+Pomegranate+Blueberry+Energy+Shot\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B01MLVBBB/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1619,45 +1468,11 @@
         "featured":  false
     },
     {
-        "id":  "126",
-        "name":  "Badia Organic Quinoa",
-        "description":  "Badia Organic Quinoa. Organic quinoa..",
-        "imageUrl":  "https://m.media-amazon.com/images/I/71GjzKXM45L._SL1500_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Badia+Organic+Quinoa\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Vegan",
-                         "Low Histamine",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "127",
-        "name":  "Lactose Free Vanilla Ice Cream",
-        "description":  "Lactose Free Vanilla Ice Cream. Cream.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5e907a62bb5e57f4913048db_edited-samantha-mcnulty-856002007000-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Lactose+Free+Vanilla+Ice+Cream\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "No Seed Oils",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "128",
         "name":  "Peet\u0027S Coffee Cafe Domingo Medium Roast K Cup",
         "description":  "Peet\u0027S Coffee Cafe Domingo Medium Roast K Cup. 100% arabica coffee.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64667c7b18cb1a232a67517a_00785357024687-c1n1.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Peet%27S+Coffee+Cafe+Domingo+Medium+Roast+K+Cup\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0DGTE7FU/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
@@ -1676,7 +1491,7 @@
         "name":  "Organic Coconutmilk Unsweetened Original",
         "description":  "Organic coconutmilk (filtered water.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f7a60fe88e734cfbb1337d6_744473912056-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Coconutmilk+Unsweetened+Original\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0FCW5NTZ/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1690,29 +1505,11 @@
         "featured":  false
     },
     {
-        "id":  "130",
-        "name":  "Deux Enhanced Cookie Dough Chocolate Chip",
-        "description":  "Deux Enhanced Cookie Dough Chocolate Chip. Organic oat flour.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64b1ddc03b4ea751f9476642_0860004499220-glamor-front-2023-07-14t14-23-31-iphone-x-quality-90-1-34-1-user-63bc0c4702baa81682b5974d-lahs-155438.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Deux+Enhanced+Cookie+Dough+Chocolate+Chip\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Snacks",
-        "dietTags":  [
-                         "Vegan",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "131",
         "name":  "Jay Robb  Egg White Protein   Chocolate",
         "description":  "Jay Robb  Egg White Protein   Chocolate. Egg albumen.",
         "imageUrl":  "https://m.media-amazon.com/images/I/71aiRmfHzfL._AC_SL1500_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Jay+Robb++Egg+White+Protein+++Chocolate\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B07SSXBOL/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1727,7 +1524,7 @@
         "name":  "Lucini Savory Fig Balsamic Vinegar",
         "description":  "Lucini Savory Fig Balsamic Vinegar. Cooked grape must.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/62b0f665d7fba6c2ae2a9577_2022-06-20_22-36-29_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Lucini+Savory+Fig+Balsamic+Vinegar\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B08SWJ5CM/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Condiments",
         "dietTags":  [
@@ -1747,25 +1544,10 @@
         "name":  "Organic Just Lemon Water",
         "description":  "Triple-filtered water\norganic cold-pressed lemon juice\norganic erythritol\norganic flavors\nvitamin c (ascorbic acid)\norganic stevia leaf extract.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5dfa4d4f477f111ec52d5f8f_upc-00860465001505-glamor-frontpackageglamor-2019-11-06t19-27-36-b426d974-08c4-40a7-8bf5-90b08677aec2.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Organic+Just+Lemon+Water\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B03MB9J6R/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Beverages",
         "dietTags":  [
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "134",
-        "name":  "Long Clawson Mango Ginger Stilton",
-        "description":  "Long Clawson Mango Ginger Stilton. White stilton cheese (pasteurized cow\u0027s milk.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5da68042f88fd08481b754f9_dld-upc-00257040000006-glamor-glamor2-2019-09-16t13-22-04-6b9fa33c-1729-4831-b7b8-44f0a844ac33-1571192897907.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Long+Clawson+Mango+Ginger+Stilton\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Egg Free",
-                         "Soy Free",
                          "No Seed Oils"
                      ],
         "featured":  false
@@ -1775,74 +1557,10 @@
         "name":  "Olympia Provisions Loukanika Salami",
         "description":  "Olympia Provisions Loukanika Salami. Pork.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6422125378eb8c780af517ad_0852701004005-glamor-front-2023-03-23t13-58-28-iphone-x-quality-90-1-33-0-user-62007be7ec32e60fa58d2f55-mfys-453507.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Olympia+Provisions+Loukanika+Salami\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HKQBLPY/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
-                         "Egg Free",
-                         "Soy Free",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "136",
-        "name":  "Eden Foods Organic Extra Vanilla Soy Milk",
-        "description":  "Eden Foods Organic Extra Vanilla Soy Milk. Ingredients purified water.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/60ee29b5616dae591193a145_0024182025453-glamor-front-2021-06-13t00-01-21-iphone-7-quality-90-1-25-4-user-5c4f16e4fc9c91accd101ce4-w7xr-980167.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Eden+Foods+Organic+Extra+Vanilla+Soy+Milk\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "Vegan",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "137",
-        "name":  "Koia Organic Birthday Cake Beverage",
-        "description":  "Koia Organic Birthday Cake Beverage. Coconut milk (filtered water.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6569148b3c2cc16e3789f806_2023-11-30_23-02-36_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Koia+Organic+Birthday+Cake+Beverage\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Beverages",
-        "dietTags":  [
-                         "Dairy Free",
-                         "Egg Free",
-                         "No Seed Oils"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "138",
-        "name":  "Eating Evolved Hazelnut Butter Keto Cups",
-        "description":  "Eating Evolved Hazelnut Butter Keto Cups. Organic hazelnuts organic cacao organic jerusalem artichoke fiber organic cacao butter organic monk fruit extract himalayan sea salt organic mct oil.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/605e593b1eba9d2a96f32b88_850006293179-front.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Eating+Evolved+Hazelnut+Butter+Keto+Cups\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Oils \u0026 Fats",
-        "dietTags":  [
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
-        "id":  "139",
-        "name":  "Monstruo De Gila Bird Pepper \u0026 Agave Bbq Salsa Sonoran Style Sauce",
-        "description":  "Monstruo De Gila Bird Pepper \u0026 Agave Bbq Salsa Sonoran Style Sauce. Water.",
-        "imageUrl":  "https://m.media-amazon.com/images/I/61jT3ggPrqL._SX679_.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Monstruo+De+Gila+Bird+Pepper+%26+Agave+Bbq+Salsa+Sonoran+Style+Sauce\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Condiments",
-        "dietTags":  [
-                         "Dairy Free",
                          "Egg Free",
                          "Soy Free",
                          "No Seed Oils"
@@ -1854,7 +1572,7 @@
         "name":  "Food For Life Gluten Free Multi Seed English Muffins",
         "description":  "Food For Life Gluten Free Multi Seed English Muffins. Organic brown rice flour.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6143dc265d1de3130f20b95c_0073472001868-glamor-front-2021-08-23t19-07-51-iphone-x-quality-90-1-25-4-user-5984ad42a967f880524de2c4-yck1-867421.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Food+For+Life+Gluten+Free+Multi+Seed+English+Muffins\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02CYLIQQ/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1867,7 +1585,7 @@
         "name":  "Country Life Chelated Zinc",
         "description":  "Country Life Chelated Zinc. Cellulose\nstearic acid\ncellulose \u0026 glycerin coating\nsilica\nmagnesium stearate\nvegetable glaze.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/583ca4a71d9f4564bc0f9550_0015794029519-countryl-1.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Country+Life+Chelated+Zinc\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B02CTGILM/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Supplements",
         "dietTags":  [
@@ -1880,30 +1598,11 @@
         "featured":  false
     },
     {
-        "id":  "142",
-        "name":  "Store Ham And Chs Hoagie",
-        "description":  "Store Ham And Chs Hoagie. Branzino fish.",
-        "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/5f498642144b13f9b96ca4fb_2020-cen-ecommerce-seafood-branziniwholefish.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Store+Ham+And+Chs+Hoagie\u0026tag=hashipantry07-20",
-        "source":  "AMAZON",
-        "category":  "Pantry Staples",
-        "dietTags":  [
-                         "AIP",
-                         "Paleo",
-                         "Egg Free",
-                         "No Seed Oils",
-                         "Dairy Free",
-                         "Soy Free",
-                         "Gluten Free"
-                     ],
-        "featured":  false
-    },
-    {
         "id":  "143",
         "name":  "365 By Whole Foods Market Organic Beef Broth",
         "description":  "365 By Whole Foods Market Organic Beef Broth. Organic beef stock.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/64231fb1b883927ec4cecf4f_2023-03-28_17-11-42_front.main.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=365+By+Whole+Foods+Market+Organic+Beef+Broth\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B06IDNCGQ/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1917,7 +1616,7 @@
         "name":  "Original Flatbread",
         "description":  "Original Flatbread. Tapioca starch.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/619455584838ff6e3ce323c7_0073490180019-glamor-front-2021-10-23t01-29-05-iphone-7-quality-90-1-25-4-user-5c4f16e4fc9c91accd101ce4-0qoq-790014.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Original+Flatbread\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0FFDBWJF/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
@@ -1933,7 +1632,7 @@
         "name":  "Golden Turmeric Cereal",
         "description":  "Golden Turmeric Cereal. Corn meal* and/or yellow corn flour*.",
         "imageUrl":  "https://m.media-amazon.com/images/S/assets.wholefoodsmarket.com/PIE/product/6185c6c73d70c76c67680157_0058449189084-glamor-front-2021-10-14t16-38-44-iphone-x-quality-90-1-25-4-user-5d7652c1db2c4b51d4c666ca-g660-620498.jpg",
-        "affiliateUrl":  "https://www.amazon.com/s?k=Golden+Turmeric+Cereal\u0026tag=hashipantry07-20",
+        "affiliateUrl":  "https://www.amazon.com/dp/B0HSMSJGW/ref=nosim?tag=hashipantry07-20",
         "source":  "AMAZON",
         "category":  "Pantry Staples",
         "dietTags":  [
