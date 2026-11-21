@@ -24,7 +24,13 @@ export default function ShopPage() {
   const { data: session } = useSession();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [activeDiet, setActiveDiet] = useState<string[]>([]);
+  const [activeDiet, setActiveDiet] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem("hashi-diet-prefs");
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  });
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeSource, setActiveSource] = useState("All");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -32,7 +38,7 @@ export default function ShopPage() {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Auto-load saved diet prefs when logged in
+  // If logged in, prefer saved prefs from the database (overrides localStorage)
   useEffect(() => {
     if (session) {
       fetch("/api/account/prefs")

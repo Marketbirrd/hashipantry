@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 const MUST_EXCLUDE = ["Gluten Free", "Dairy Free", "Soy Free", "Egg Free", "Nut Free"];
-const STRICT_PROTOCOLS = ["AIP Compliant (Autoimmune Protocol)", "Paleo", "Vegan / Plant Based"];
-const SPECIFIC_LIMITS = ["Grain Free", "Sugar Free / Low Sugar", "Low FODMAP", "No Seed Oils", "Low Histamine"];
+const STRICT_PROTOCOLS = ["AIP", "Paleo", "Vegan"];
+const SPECIFIC_LIMITS = ["Grain Free", "No Seed Oils", "Low Histamine"];
 
 const STORAGE_KEY = "hashi-diet-prefs";
 

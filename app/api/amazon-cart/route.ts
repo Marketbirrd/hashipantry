@@ -14,6 +14,12 @@ async function getProducts() {
   return cachedProducts!;
 }
 
+function extractAsin(product: { asin?: string; affiliateUrl: string }): string | null {
+  if (product.asin) return product.asin.toUpperCase();
+  const match = product.affiliateUrl.match(/\/dp\/([A-Z0-9]{10})/i);
+  return match ? match[1].toUpperCase() : null;
+}
+
 export async function POST(req: NextRequest) {
   const { items } = await req.json() as { items: { id: string; quantity: number }[] };
 
@@ -23,18 +29,19 @@ export async function POST(req: NextRequest) {
   cartParams.set("AssociateTag", ASSOCIATE_TAG);
 
   let asinIndex = 1;
-  const fallbackUrls: string[] = [];
+  const skipped: string[] = [];
 
   for (const item of items) {
     const product = products.find((p) => p.id === item.id);
     if (!product) continue;
 
-    if (product.asin) {
-      cartParams.set(`ASIN.${asinIndex}`, product.asin);
+    const asin = extractAsin(product);
+    if (asin) {
+      cartParams.set(`ASIN.${asinIndex}`, asin);
       cartParams.set(`Quantity.${asinIndex}`, String(item.quantity));
       asinIndex++;
     } else {
-      fallbackUrls.push(product.affiliateUrl);
+      skipped.push(item.id);
     }
   }
 
@@ -42,5 +49,5 @@ export async function POST(req: NextRequest) {
     ? `https://www.amazon.com/gp/aws/cart/add.html?${cartParams.toString()}`
     : null;
 
-  return NextResponse.json({ cartUrl, fallbackUrls });
+  return NextResponse.json({ cartUrl, skipped });
 }

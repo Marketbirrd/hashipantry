@@ -25,7 +25,7 @@ function CartImage({ src, alt }: { src: string; alt: string }) {
 export default function CartDrawer({ open, onClose }: Props) {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
   const { data: session } = useSession();
-  const [step, setStep] = useState<"cart" | "confirm">("cart");
+  const [step, setStep] = useState<"cart" | "confirm" | "sent">("cart");
   const [loading, setLoading] = useState(false);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
@@ -66,20 +66,26 @@ export default function CartDrawer({ open, onClose }: Props) {
         body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
       });
       const data = await res.json();
-      const url = data.cartUrl ?? data.fallbackUrls?.[0];
-      if (url && popup) popup.location.href = url;
+      if (data.cartUrl && popup) {
+        popup.location.href = data.cartUrl;
+        setStep("sent");
+      } else if (popup) {
+        popup.close();
+      }
     } catch {
-      if (popup && items[0]) popup.location.href = items[0].affiliateUrl;
+      if (popup) popup.close();
     } finally {
-      // Clear cart and reset state
-      clearCart();
-      setStep("cart");
       setLoading(false);
-      onClose();
     }
   };
 
   const handleClose = () => {
+    setStep("cart");
+    onClose();
+  };
+
+  const handleClearAndClose = () => {
+    clearCart();
     setStep("cart");
     onClose();
   };
@@ -110,7 +116,31 @@ export default function CartDrawer({ open, onClose }: Props) {
           </button>
         </div>
 
-        {step === "cart" ? (
+        {step === "sent" ? (
+          <>
+            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+              <div className="w-16 h-16 rounded-full bg-green/10 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-green" />
+              </div>
+              <h3 className="font-serif text-lg font-bold text-forest mb-2">Amazon is open!</h3>
+              <p className="text-sm text-forest/55 leading-snug mb-6">
+                Your cart was sent to Amazon. Finish your purchase there.<br />
+                Your HashiPantry cart is still saved here.
+              </p>
+            </div>
+            <div className="shrink-0 p-4 border-t border-sage-light/30 space-y-2 bg-white">
+              <button
+                onClick={handleClearAndClose}
+                className="w-full bg-forest text-white py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors"
+              >
+                Clear cart &amp; close
+              </button>
+              <button onClick={handleClose} className="w-full text-forest/50 text-xs py-1.5 hover:text-forest/80 transition-colors">
+                Keep cart &amp; close
+              </button>
+            </div>
+          </>
+        ) : step === "cart" ? (
           <>
             {/* Cart items */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
