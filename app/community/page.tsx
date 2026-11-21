@@ -21,12 +21,12 @@ export default function CommunityPage() {
             Connect with our growing community of Hashimoto&apos;s warriors. Share recipes,
             product finds, and lifestyle tips that are making a difference.
           </p>
-          <a
-            href="#"
+          <Link
+            href="/contact"
             className="inline-flex items-center gap-2 bg-white text-forest text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-cream transition-colors"
           >
-            <MessageCircle className="w-4 h-4" /> Join Community
-          </a>
+            <MessageCircle className="w-4 h-4" /> Get in Touch
+          </Link>
         </div>
 
         <div className="bg-white border border-sage-pale rounded-2xl p-7">
@@ -50,7 +50,7 @@ export default function CommunityPage() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
         {[
           { icon: BookOpen, title: "Beginner's Guide", desc: "New to Hashimoto's? Start here. Everything you need to know in one place.", href: "/blog/hashimotos-beginners-guide" },
-          { icon: MessageCircle, title: "FAQ", desc: "Answers to the most common questions about diet, products, and managing symptoms.", href: "/blog#faq" },
+          { icon: MessageCircle, title: "FAQ", desc: "Answers to the most common questions about diet, products, and managing symptoms.", href: "/blog/hashimotos-beginners-guide" },
           { icon: Users, title: "Refer a Product", desc: "Found something that works for you? Share it with the community via our referral form.", href: "/contact" },
         ].map(({ icon: Icon, title, desc, href }) => (
           <Link

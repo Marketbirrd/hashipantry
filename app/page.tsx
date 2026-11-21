@@ -176,7 +176,7 @@ export default function HomePage() {
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <Link
-              href="/blog#faq"
+              href="/community"
               className="bg-white border border-sage-pale rounded-xl p-5 hover:shadow-md transition-shadow group"
             >
               <p className="text-xs text-green font-medium mb-1">FAQ</p>

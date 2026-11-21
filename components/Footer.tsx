@@ -89,9 +89,10 @@ export default function Footer() {
 
         <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-white/40 text-xs">
           <p>© {new Date().getFullYear()} The Hashi Pantry. All rights reserved.</p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-4">
             <Link href="/medical-disclaimer" className="hover:text-white/70 transition-colors">Medical Disclaimer</Link>
             <Link href="/commission-disclosure" className="hover:text-white/70 transition-colors">Commission Disclosure</Link>
+            <Link href="/privacy-policy" className="hover:text-white/70 transition-colors">Privacy Policy</Link>
             <Link href="/shipping" className="hover:text-white/70 transition-colors">Shipping Notice</Link>
           </div>
         </div>
