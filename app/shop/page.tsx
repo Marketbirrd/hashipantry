@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import type { Product } from "@/lib/products-data";
@@ -20,31 +21,42 @@ const SOURCES = ["All", "Amazon"];
 
 type ApiResponse = { items: Product[]; total: number; page: number; pages: number };
 
-export default function ShopPage() {
+function ShopInner() {
   const { data: session } = useSession();
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const urlDiet = searchParams.getAll("diet");
+  const urlSearch = searchParams.get("search") ?? "";
+  const urlCategory = searchParams.get("category") ?? "All";
+  const urlSource = searchParams.get("source") ?? "All";
+  const urlPage = Number(searchParams.get("page") ?? "1");
+
+  const [search, setSearch] = useState(urlSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(urlSearch);
   const [activeDiet, setActiveDiet] = useState<string[]>(() => {
+    if (urlDiet.length > 0) return urlDiet;
     if (typeof window === "undefined") return [];
     try {
       const stored = localStorage.getItem("hashi-diet-prefs");
       return stored ? JSON.parse(stored) : [];
     } catch { return []; }
   });
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [activeSource, setActiveSource] = useState("All");
+  const [activeCategory, setActiveCategory] = useState(urlCategory);
+  const [activeSource, setActiveSource] = useState(urlSource);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(urlPage);
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // If logged in, prefer saved prefs from the database (overrides localStorage)
+  // If logged in and no URL diet params, load saved prefs from DB
   useEffect(() => {
-    if (session) {
+    if (session && urlDiet.length === 0) {
       fetch("/api/account/prefs")
         .then((r) => r.json())
         .then((d) => { if (d.dietPrefs?.length) setActiveDiet(d.dietPrefs); });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   // Debounce search input
@@ -55,6 +67,18 @@ export default function ShopPage() {
 
   // Reset to page 1 whenever filters change
   useEffect(() => { setPage(1); }, [debouncedSearch, activeDiet, activeCategory, activeSource]);
+
+  // Sync filters → URL (replace so back button returns to product page, not each filter change)
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (debouncedSearch) params.set("search", debouncedSearch);
+    if (activeCategory !== "All") params.set("category", activeCategory);
+    if (activeSource !== "All") params.set("source", activeSource);
+    activeDiet.forEach((tag) => params.append("diet", tag));
+    if (page > 1) params.set("page", String(page));
+    const qs = params.toString();
+    router.replace(`/shop${qs ? `?${qs}` : ""}`, { scroll: false });
+  }, [debouncedSearch, activeDiet, activeCategory, activeSource, page, router]);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
@@ -182,6 +206,11 @@ export default function ShopPage() {
               className="flex items-center gap-2 text-sm font-medium text-forest border border-sage-pale px-3 py-1.5 rounded-lg"
             >
               <SlidersHorizontal className="w-4 h-4" /> Filters
+              {activeDiet.length > 0 && (
+                <span className="bg-forest text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  {activeDiet.length}
+                </span>
+              )}
             </button>
           </div>
 
@@ -322,5 +351,13 @@ export default function ShopPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense>
+      <ShopInner />
+    </Suspense>
   );
 }
