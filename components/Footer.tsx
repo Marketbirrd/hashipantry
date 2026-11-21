@@ -63,7 +63,6 @@ export default function Footer() {
               <ul className="space-y-2 text-white/50">
                 <li><Link href="/shop" className="hover:text-white transition-colors">All Products</Link></li>
                 <li><Link href="/shop?source=AMAZON" className="hover:text-white transition-colors">Amazon Picks</Link></li>
-                <li><Link href="/shop?source=THRIVE" className="hover:text-white transition-colors">Thrive Market</Link></li>
                 <li><Link href="/resources" className="hover:text-white transition-colors">Downloads</Link></li>
               </ul>
             </div>
