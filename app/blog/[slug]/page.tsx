@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, Tag, ShoppingBag, ExternalLink } from "lucide-react";
 import { sanityClient, urlFor } from "@/lib/sanity";
 import { PortableText, type PortableTextComponents } from "next-sanity";
+import { readFile } from "fs/promises";
+import path from "path";
 
 type Post = {
   _id: string;
@@ -13,15 +15,43 @@ type Post = {
   publishedAt?: string;
   coverImage?: object;
   body?: object[];
+  shopCta?: { label?: string; url?: string } | null;
+  shopSearchTerms?: string[] | null;
 };
+
+type Product = { id: string; name: string; imageUrl: string; affiliateUrl: string; category: string };
 
 async function getPost(slug: string): Promise<Post | null> {
   return sanityClient.fetch(
     `*[_type == "post" && slug.current == $slug][0] {
-      _id, title, slug, excerpt, category, publishedAt, coverImage, body
+      _id, title, slug, excerpt, category, publishedAt, coverImage, body,
+      shopCta, shopSearchTerms
     }`,
     { slug }
   );
+}
+
+let _productCache: Product[] | null = null;
+async function getProducts(): Promise<Product[]> {
+  if (_productCache) return _productCache;
+  const raw = await readFile(path.join(process.cwd(), "public", "products.json"), "utf-8");
+  _productCache = JSON.parse(raw);
+  return _productCache!;
+}
+
+function findRelatedProducts(terms: string[], products: Product[], limit = 4): Product[] {
+  const clean = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, " ");
+  const results: Product[] = [];
+  for (const term of terms) {
+    const t = clean(term);
+    for (const p of products) {
+      if (results.length >= limit) break;
+      if (results.some(r => r.id === p.id)) continue;
+      if (clean(p.name).includes(t)) results.push(p);
+    }
+    if (results.length >= limit) break;
+  }
+  return results;
 }
 
 function formatDate(dateString: string) {
@@ -80,8 +110,12 @@ const portableTextComponents: PortableTextComponents = {
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = await getPost(slug);
+  const [post, allProducts] = await Promise.all([getPost(slug), getProducts()]);
   if (!post) notFound();
+
+  const relatedProducts = post.shopSearchTerms?.length
+    ? findRelatedProducts(post.shopSearchTerms, allProducts, 4)
+    : [];
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -132,14 +166,76 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </article>
       )}
 
-      <div className="mt-14 pt-8 border-t border-sage-pale text-center">
-        <p className="text-forest/50 text-sm mb-3">Want more Hashimoto&apos;s tips and resources?</p>
-        <Link
-          href="/blog"
-          className="inline-flex items-center gap-2 bg-forest text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors"
-        >
-          Browse All Posts
-        </Link>
+      {/* Shop swaps section */}
+      <div className="mt-14 pt-8 border-t border-sage-pale">
+        {(post.shopCta?.url || relatedProducts.length > 0) ? (
+          <div className="bg-cream rounded-2xl p-6 mb-8">
+            <p className="text-xs font-bold text-forest/40 uppercase tracking-widest mb-1">
+              <ShoppingBag className="w-3.5 h-3.5 inline mr-1 -mt-0.5"/>HashiPantry Shop
+            </p>
+            <h2 className="font-serif text-xl font-bold text-forest mb-2">
+              {post.shopCta?.label ?? "Shop these swaps"}
+            </h2>
+            {relatedProducts.length > 0 ? (
+              <>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                  {relatedProducts.map(p => (
+                    <Link key={p.id} href={`/shop/${p.id}`} className="bg-white rounded-xl border border-sage-pale overflow-hidden hover:shadow-md transition-shadow group">
+                      <div className="aspect-square bg-gray-50 overflow-hidden">
+                        {p.imageUrl
+                          // eslint-disable-next-line @next/next/no-img-element
+                          ? <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+                          : <ShoppingBag className="w-6 h-6 text-forest/10 m-auto mt-6"/>
+                        }
+                      </div>
+                      <p className="text-xs font-medium text-forest p-2 line-clamp-2">{p.name}</p>
+                    </Link>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {post.shopCta?.url && (
+                    <a href={post.shopCta.url} target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-forest text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors">
+                      <ExternalLink className="w-4 h-4"/> {post.shopCta.label ?? "Shop these swaps"}
+                    </a>
+                  )}
+                  <Link href="/shop" className="inline-flex items-center gap-2 border border-forest/20 text-forest px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-forest/5 transition-colors">
+                    Browse all swaps
+                  </Link>
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-wrap gap-3 mt-3">
+                {post.shopCta?.url && (
+                  <a href={post.shopCta.url} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-forest text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors">
+                    <ExternalLink className="w-4 h-4"/> {post.shopCta.label ?? "Shop these swaps"}
+                  </a>
+                )}
+                <Link href="/shop" className="inline-flex items-center gap-2 border border-forest/20 text-forest px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-forest/5 transition-colors">
+                  Browse all swaps
+                </Link>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="bg-cream rounded-2xl p-6 mb-8 flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex-1">
+              <p className="font-serif text-lg font-bold text-forest mb-1">Find Hashimoto&apos;s-friendly swaps</p>
+              <p className="text-sm text-forest/60">Browse our curated shop of AIP, gluten-free, and clean-living products.</p>
+            </div>
+            <Link href="/shop" className="shrink-0 inline-flex items-center gap-2 bg-forest text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors">
+              <ShoppingBag className="w-4 h-4"/> Browse Shop
+            </Link>
+          </div>
+        )}
+
+        <div className="text-center">
+          <p className="text-forest/50 text-sm mb-3">Want more Hashimoto&apos;s tips and resources?</p>
+          <Link href="/blog" className="inline-flex items-center gap-2 bg-forest text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-forest-light transition-colors">
+            Browse All Posts
+          </Link>
+        </div>
       </div>
     </div>
   );
