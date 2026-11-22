@@ -18,9 +18,12 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "HashiPantry — A Pantry You Can Trust",
+  title: {
+    template: "%s | HashiPantry",
+    default: "HashiPantry — A Pantry You Can Trust",
+  },
   description:
-    "Thyroid-friendly, Hashimoto's-approved pantry staples, recipes, and resources. Every product is vetted so you don't have to.",
+    "Thyroid-friendly, Hashimoto's-approved pantry staples, recipes, and resources. Every product screened for Hashimoto's-friendly ingredients.",
   openGraph: {
     title: "HashiPantry — A Pantry You Can Trust",
     description:

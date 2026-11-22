@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Privacy Policy | HashiPantry" };
+export const metadata = { title: "Privacy Policy" };
 
 export default function PrivacyPolicyPage() {
   return (

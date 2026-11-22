@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+export const metadata = { title: "Blog" };
 
 import Link from "next/link";
 import { sanityClient, urlFor } from "@/lib/sanity";

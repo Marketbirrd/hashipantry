@@ -11,7 +11,7 @@ const features = [
     icon: ShieldCheck,
     title: "Shop Hundreds of Products",
     description:
-      "Every single item is 100% vetted and guaranteed Hashimoto's-friendly.",
+      "Every product screened for Hashimoto's-friendly ingredients.",
   },
   {
     icon: Users,

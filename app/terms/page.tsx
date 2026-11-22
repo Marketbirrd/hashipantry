@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export const metadata = { title: "Terms of Use | HashiPantry" };
+export const metadata = { title: "Terms of Use" };
 
 export default function TermsPage() {
   return (

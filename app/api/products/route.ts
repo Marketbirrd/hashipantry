@@ -32,6 +32,10 @@ export async function GET(req: NextRequest) {
     return true;
   });
 
+  const sort = searchParams.get("sort") ?? "alpha";
+  if (sort === "alpha") filtered.sort((a, b) => a.name.localeCompare(b.name));
+  else if (sort === "alpha_desc") filtered.sort((a, b) => b.name.localeCompare(a.name));
+
   const total = filtered.length;
   const start = (page - 1) * limit;
   const items = filtered.slice(start, start + limit);

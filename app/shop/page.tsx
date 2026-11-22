@@ -17,8 +17,6 @@ const CATEGORIES = [
   "Pantry Staples", "Beverages", "Supplements",
 ];
 
-const SOURCES = ["All", "Amazon"];
-
 type ApiResponse = { items: Product[]; total: number; page: number; pages: number };
 
 function ShopInner() {
@@ -29,8 +27,8 @@ function ShopInner() {
   const urlDiet = searchParams.getAll("diet");
   const urlSearch = searchParams.get("search") ?? "";
   const urlCategory = searchParams.get("category") ?? "All";
-  const urlSource = searchParams.get("source") ?? "All";
   const urlPage = Number(searchParams.get("page") ?? "1");
+  const urlSort = searchParams.get("sort") ?? "alpha";
 
   const searchRef = useRef<HTMLInputElement>(null);
   const shouldFocus = searchParams.get("focus") === "search";
@@ -50,7 +48,7 @@ function ShopInner() {
     } catch { return []; }
   });
   const [activeCategory, setActiveCategory] = useState(urlCategory);
-  const [activeSource, setActiveSource] = useState(urlSource);
+  const [sort, setSort] = useState(urlSort);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [page, setPage] = useState(urlPage);
   const [data, setData] = useState<ApiResponse | null>(null);
@@ -73,33 +71,32 @@ function ShopInner() {
   }, [search]);
 
   // Reset to page 1 whenever filters change
-  useEffect(() => { setPage(1); }, [debouncedSearch, activeDiet, activeCategory, activeSource]);
+  useEffect(() => { setPage(1); }, [debouncedSearch, activeDiet, activeCategory, sort]);
 
   // Sync filters → URL (replace so back button returns to product page, not each filter change)
   useEffect(() => {
     const params = new URLSearchParams();
     if (debouncedSearch) params.set("search", debouncedSearch);
     if (activeCategory !== "All") params.set("category", activeCategory);
-    if (activeSource !== "All") params.set("source", activeSource);
+    if (sort !== "alpha") params.set("sort", sort);
     activeDiet.forEach((tag) => params.append("diet", tag));
     if (page > 1) params.set("page", String(page));
     const qs = params.toString();
     router.replace(`/shop${qs ? `?${qs}` : ""}`, { scroll: false });
-  }, [debouncedSearch, activeDiet, activeCategory, activeSource, page, router]);
+  }, [debouncedSearch, activeDiet, activeCategory, sort, page, router]);
 
   const fetchProducts = useCallback(async () => {
     setLoading(true);
-    const params = new URLSearchParams({ page: String(page), limit: "48" });
+    const params = new URLSearchParams({ page: String(page), limit: "48", sort });
     if (debouncedSearch) params.set("search", debouncedSearch);
     if (activeCategory !== "All") params.set("category", activeCategory);
-    if (activeSource !== "All") params.set("source", activeSource);
     activeDiet.forEach((tag) => params.append("diet", tag));
 
     const res = await fetch(`/api/products?${params}`);
     const json = await res.json();
     setData(json);
     setLoading(false);
-  }, [page, debouncedSearch, activeDiet, activeCategory, activeSource]);
+  }, [page, debouncedSearch, activeDiet, activeCategory, sort]);
 
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
 
@@ -111,7 +108,6 @@ function ShopInner() {
   const clearAll = () => {
     setActiveDiet([]);
     setActiveCategory("All");
-    setActiveSource("All");
     setSearch("");
   };
 
@@ -121,7 +117,7 @@ function ShopInner() {
       <div className="mb-8">
         <h1 className="font-serif text-4xl font-bold text-forest">Shop</h1>
         <p className="text-forest/60 text-sm mt-1">
-          Every product is 100% vetted and Hashimoto&apos;s-friendly.
+          Every product screened for Hashimoto&apos;s-friendly ingredients.
         </p>
       </div>
 
@@ -146,23 +142,6 @@ function ShopInner() {
       <div className="flex gap-6">
         {/* Filter sidebar — desktop */}
         <aside className="hidden lg:block w-56 shrink-0 space-y-6">
-          <div>
-            <h3 className="text-xs font-semibold text-forest/50 uppercase tracking-wide mb-3">Source</h3>
-            <div className="space-y-1.5">
-              {SOURCES.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setActiveSource(s)}
-                  className={`w-full text-left text-sm px-3 py-1.5 rounded-lg transition-colors ${
-                    activeSource === s ? "bg-forest text-white font-medium" : "text-forest/70 hover:bg-sage-pale"
-                  }`}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div>
             <h3 className="text-xs font-semibold text-forest/50 uppercase tracking-wide mb-3">Category</h3>
             <div className="space-y-1.5">
@@ -197,7 +176,7 @@ function ShopInner() {
             </div>
           </div>
 
-          {(activeDiet.length > 0 || activeCategory !== "All" || activeSource !== "All") && (
+          {(activeDiet.length > 0 || activeCategory !== "All") && (
             <button onClick={clearAll} className="text-xs text-green hover:underline">
               Clear all filters
             </button>
@@ -207,8 +186,17 @@ function ShopInner() {
         {/* Main content */}
         <div className="flex-1">
           {/* Mobile filter toggle */}
-          <div className="lg:hidden mb-4 flex items-center justify-between">
+          <div className="lg:hidden mb-4 flex items-center justify-between gap-2">
             <p className="text-sm text-forest/60">{data ? `${data.total.toLocaleString()} products` : "Loading…"}</p>
+            <div className="flex items-center gap-2">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="text-sm border border-sage-pale rounded-lg px-2 py-1 text-forest/70 bg-white"
+            >
+              <option value="alpha">A–Z</option>
+              <option value="alpha_desc">Z–A</option>
+            </select>
             <button
               onClick={() => setFiltersOpen(!filtersOpen)}
               className="flex items-center gap-2 text-sm font-medium text-forest border border-sage-pale px-3 py-1.5 rounded-lg"
@@ -220,27 +208,12 @@ function ShopInner() {
                 </span>
               )}
             </button>
+            </div>
           </div>
 
           {/* Mobile filters panel */}
           {filtersOpen && (
             <div className="lg:hidden mb-6 p-4 bg-white border border-sage-pale rounded-xl space-y-5">
-              <div>
-                <h3 className="text-xs font-semibold text-forest/50 uppercase tracking-wide mb-2">Source</h3>
-                <div className="flex flex-wrap gap-2">
-                  {SOURCES.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => setActiveSource(s)}
-                      className={`text-sm px-3 py-1 rounded-full border transition-colors ${
-                        activeSource === s ? "bg-forest text-white border-forest" : "text-forest/70 border-sage-pale"
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
               <div>
                 <h3 className="text-xs font-semibold text-forest/50 uppercase tracking-wide mb-2">Category</h3>
                 <div className="flex flex-wrap gap-2">
@@ -273,7 +246,7 @@ function ShopInner() {
                   ))}
                 </div>
               </div>
-              {(activeDiet.length > 0 || activeCategory !== "All" || activeSource !== "All") && (
+              {(activeDiet.length > 0 || activeCategory !== "All") && (
                 <button onClick={clearAll} className="text-xs text-green hover:underline">
                   Clear all filters
                 </button>
@@ -299,9 +272,19 @@ function ShopInner() {
             </div>
           )}
 
-          <p className="hidden lg:block text-sm text-forest/50 mb-4">
-            {loading ? "Loading…" : data ? `${data.total.toLocaleString()} products` : ""}
-          </p>
+          <div className="hidden lg:flex items-center justify-between mb-4">
+            <p className="text-sm text-forest/50">
+              {loading ? "Loading…" : data ? `${data.total.toLocaleString()} products` : ""}
+            </p>
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              className="text-sm border border-sage-pale rounded-lg px-3 py-1.5 text-forest/70 bg-white focus:outline-none focus:ring-2 focus:ring-green/30"
+            >
+              <option value="alpha">A – Z</option>
+              <option value="alpha_desc">Z – A</option>
+            </select>
+          </div>
 
           {/* Product grid */}
           {loading ? (
