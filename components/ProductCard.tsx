@@ -18,7 +18,7 @@ type Product = {
   dietTags: string[];
 };
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product, activeTags = [] }: { product: Product; activeTags?: string[] }) {
   const { addItem, items } = useCart();
   const { data: session } = useSession();
   const [added, setAdded] = useState(false);
@@ -86,9 +86,24 @@ export default function ProductCard({ product }: { product: Product }) {
 
       <div className="p-3 flex flex-col flex-1">
         <div className="flex flex-wrap gap-1 mb-2">
-          {product.dietTags.slice(0, 3).map((tag) => (
-            <span key={tag} className="text-[10px] bg-sage-pale text-forest/70 px-1.5 py-0.5 rounded-full">{tag}</span>
-          ))}
+          {(() => {
+            const MAX = 4;
+            const matching = product.dietTags.filter(t => activeTags.includes(t));
+            const others = product.dietTags.filter(t => !activeTags.includes(t));
+            const ordered = [...matching, ...others];
+            const visible = ordered.slice(0, MAX);
+            const extra = ordered.length - MAX;
+            return (
+              <>
+                {visible.map((tag) => (
+                  <span key={tag} className={`text-[10px] px-1.5 py-0.5 rounded-full ${activeTags.includes(tag) ? "bg-forest text-white" : "bg-sage-pale text-forest/70"}`}>{tag}</span>
+                ))}
+                {extra > 0 && (
+                  <span className="text-[10px] bg-sage-pale text-forest/50 px-1.5 py-0.5 rounded-full">+{extra}</span>
+                )}
+              </>
+            );
+          })()}
         </div>
         <p className="text-sm font-semibold text-forest leading-snug mb-1 line-clamp-2">{product.name}</p>
         <p className="text-xs text-forest/50 leading-relaxed line-clamp-2 flex-1 mb-3">{product.description}</p>

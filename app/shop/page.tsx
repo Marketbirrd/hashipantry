@@ -320,7 +320,7 @@ function ShopInner() {
             <>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                 {data.items.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard key={product.id} product={product} activeTags={activeDiet} />
                 ))}
               </div>
 
