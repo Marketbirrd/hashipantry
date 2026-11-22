@@ -4,7 +4,7 @@ import path from "path";
 
 const ASSOCIATE_TAG = "hashipantry07-20";
 
-let cachedProducts: { id: string; asin?: string; affiliateUrl: string }[] | null = null;
+let cachedProducts: { id: string; name: string; asin?: string; affiliateUrl: string }[] | null = null;
 
 async function getProducts() {
   if (cachedProducts) return cachedProducts;
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   cartParams.set("AssociateTag", ASSOCIATE_TAG);
 
   let asinIndex = 1;
-  const skipped: string[] = [];
+  const skipped: { id: string; name: string; affiliateUrl: string }[] = [];
 
   for (const item of items) {
     const product = products.find((p) => p.id === item.id);
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       cartParams.set(`Quantity.${asinIndex}`, String(item.quantity));
       asinIndex++;
     } else {
-      skipped.push(item.id);
+      skipped.push({ id: product.id, name: product.name, affiliateUrl: product.affiliateUrl });
     }
   }
 

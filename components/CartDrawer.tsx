@@ -22,16 +22,22 @@ function CartImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+type SkippedItem = { id: string; name: string; affiliateUrl: string };
+
 export default function CartDrawer({ open, onClose }: Props) {
   const { items, removeItem, updateQuantity, clearCart } = useCart();
   const { data: session } = useSession();
   const [step, setStep] = useState<"cart" | "confirm" | "sent">("cart");
   const [loading, setLoading] = useState(false);
+  const [skippedItems, setSkippedItems] = useState<SkippedItem[]>([]);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const pricedItems = items.filter((i) => i.price != null);
   const subtotal = pricedItems.reduce((sum, i) => sum + (i.price! * i.quantity), 0);
   const hasAllPrices = items.length > 0 && pricedItems.length === items.length;
+  const noAsinItems = items.filter(
+    (i) => !i.asin && !i.affiliateUrl?.match(/\/dp\/[A-Z0-9]{10}/i)
+  );
 
   const handleConfirmCheckout = async () => {
     setLoading(true);
@@ -69,12 +75,13 @@ export default function CartDrawer({ open, onClose }: Props) {
         body: JSON.stringify({ items: items.map((i) => ({ id: i.id, quantity: i.quantity })) }),
       });
       const data = await res.json();
+      setSkippedItems(data.skipped ?? []);
       if (data.cartUrl && popup) {
         popup.location.href = data.cartUrl;
-        setStep("sent");
       } else if (popup) {
         popup.close();
       }
+      setStep("sent");
     } catch {
       if (popup) popup.close();
     } finally {
@@ -84,12 +91,14 @@ export default function CartDrawer({ open, onClose }: Props) {
 
   const handleClose = () => {
     setStep("cart");
+    setSkippedItems([]);
     onClose();
   };
 
   const handleClearAndClose = () => {
     clearCart();
     setStep("cart");
+    setSkippedItems([]);
     onClose();
   };
 
@@ -121,15 +130,58 @@ export default function CartDrawer({ open, onClose }: Props) {
 
         {step === "sent" ? (
           <>
-            <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
-              <div className="w-16 h-16 rounded-full bg-green/10 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-green" />
-              </div>
-              <h3 className="font-serif text-lg font-bold text-forest mb-2">Amazon is open!</h3>
-              <p className="text-sm text-forest/55 leading-snug mb-6">
-                Your cart was sent to Amazon. Finish your purchase there.<br />
-                Your HashiPantry cart is still saved here.
-              </p>
+            <div className="flex-1 overflow-y-auto p-5 min-h-0 space-y-5">
+              {skippedItems.length < items.length ? (
+                /* Some or all items went to Amazon cart */
+                <div className="text-center">
+                  <div className="w-14 h-14 rounded-full bg-green/10 flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle className="w-7 h-7 text-green" />
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-forest mb-1">Amazon is open!</h3>
+                  <p className="text-sm text-forest/55 leading-snug">
+                    Your cart was sent to Amazon. Finish your purchase there.
+                  </p>
+                </div>
+              ) : (
+                /* All items were skipped */
+                <div className="text-center">
+                  <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center mx-auto mb-3">
+                    <ShoppingBag className="w-7 h-7 text-amber-500" />
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-forest mb-1">Find on Amazon</h3>
+                  <p className="text-sm text-forest/55 leading-snug">
+                    These products don&apos;t have direct cart links yet. Click each one to search for it on Amazon.
+                  </p>
+                </div>
+              )}
+
+              {skippedItems.length > 0 && (
+                <div>
+                  {skippedItems.length < items.length && (
+                    <p className="text-xs font-semibold text-forest/40 uppercase tracking-wide mb-2">
+                      Also find these on Amazon
+                    </p>
+                  )}
+                  <div className="space-y-2">
+                    {skippedItems.map((item) => (
+                      <a
+                        key={item.id}
+                        href={item.affiliateUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 bg-cream rounded-lg hover:bg-sage-pale transition-colors group"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-forest line-clamp-2 leading-snug">{item.name}</p>
+                        </div>
+                        <span className="shrink-0 text-xs font-semibold text-green group-hover:underline flex items-center gap-1">
+                          Find on Amazon <ExternalLink className="w-3 h-3" />
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="shrink-0 p-4 border-t border-sage-light/30 space-y-2 bg-white">
               <button
@@ -267,6 +319,17 @@ export default function CartDrawer({ open, onClose }: Props) {
                   <span className="text-xs text-forest/40">See prices on Amazon</span>
                 )}
               </div>
+
+              {noAsinItems.length > 0 && (
+                <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 rounded-xl p-3 mt-2">
+                  <ExternalLink className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                  <span>
+                    {noAsinItems.length === items.length
+                      ? "These items will open as Amazon searches — no direct cart link available yet."
+                      : `${noAsinItems.length} item${noAsinItems.length > 1 ? "s" : ""} will open as Amazon searches instead of going straight to your cart.`}
+                  </span>
+                </div>
+              )}
 
               {session?.user && (
                 <div className="flex items-start gap-2 text-xs text-forest/50 bg-sage-pale rounded-xl p-3">
