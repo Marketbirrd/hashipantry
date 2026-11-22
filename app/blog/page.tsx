@@ -49,6 +49,21 @@ export default async function BlogPage() {
         </p>
       </div>
 
+      {/* Pinned: Beginner's Guide */}
+      <div className="mb-8">
+        <Link
+          href="/blog/hashimotos-beginners-guide"
+          className="flex flex-col sm:flex-row gap-6 bg-forest text-white rounded-2xl overflow-hidden hover:opacity-95 transition-opacity group p-6 sm:p-8"
+        >
+          <div className="flex-1">
+            <span className="inline-block text-[10px] font-bold bg-white/20 text-white px-2 py-0.5 rounded-full mb-3">Start Here</span>
+            <h2 className="font-serif text-2xl font-bold mb-2 group-hover:underline">The Hashimoto&apos;s Beginner&apos;s Guide</h2>
+            <p className="text-white/70 text-sm leading-relaxed mb-4">New to Hashimoto&apos;s? Everything you need to know in one place — what it is, what to eat, what to avoid, and how to start feeling better.</p>
+            <span className="inline-flex items-center gap-1 text-sm font-semibold text-white/90">Read the guide →</span>
+          </div>
+        </Link>
+      </div>
+
       {posts.length === 0 ? (
         <div className="text-center py-24">
           <p className="text-forest/40 text-lg mb-2">No posts yet.</p>

@@ -6,7 +6,7 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-14">
       <h1 className="font-serif text-4xl font-bold text-forest mb-2">Privacy Policy</h1>
-      <p className="text-forest/50 text-sm mb-10">Last updated: November 2026</p>
+      <p className="text-forest/50 text-sm mb-10">Effective date: November 22, 2026 · HashiPantry is operated by Wendy Cadwall, Nevada, USA · Privacy questions: <a href="mailto:privacy@hashipantry.com" className="underline text-green">privacy@hashipantry.com</a></p>
 
       <div className="space-y-6 text-forest/80 leading-relaxed text-sm">
         <p>
@@ -15,21 +15,40 @@ export default function PrivacyPolicyPage() {
 
         <section>
           <h2 className="font-serif text-xl font-bold text-forest mb-2">Information We Collect</h2>
+
           <h3 className="font-semibold text-forest mb-1">Account Information</h3>
           <p>
-            When you create an account, we collect your name and email address. This information is used to authenticate your account, save your diet preferences, and display your order history.
+            When you create an account, we collect your name and email address. This information is used to authenticate your account, save your preferences, and display your shopping history.
           </p>
+
+          <h3 className="font-semibold text-forest mt-4 mb-1">Health &amp; Symptom Data</h3>
+          <p>
+            If you use the Symptom Tracker, we store the values you log — energy, mood, brain fog, joint pain, weight, and any notes — linked to your account. This data is used only to show you your own trends. We do not share it with third parties, insurers, or employers. You can request deletion at any time.
+          </p>
+
+          <h3 className="font-semibold text-forest mt-4 mb-1">Weight</h3>
+          <p>
+            You may optionally enter your weight on your Profile and in each Symptom Tracker entry. This is stored in your account and used only to display your own weight trend. It is never shared or sold.
+          </p>
+
+          <h3 className="font-semibold text-forest mt-4 mb-1">Community Posts</h3>
+          <p>
+            If you post in the Community feed, your post is <strong>publicly visible</strong> to all visitors — no account is required to read it. Posts display your first name (or the name you provide). Do not post personal medical details you would not want visible to the public. You can delete your own posts at any time from the community page.
+          </p>
+
+          <h3 className="font-semibold text-forest mt-4 mb-1">Diet Preferences &amp; Favorites</h3>
+          <p>
+            Diet preferences and saved favorites are stored in your account and used solely to personalize your experience.
+          </p>
+
           <h3 className="font-semibold text-forest mt-4 mb-1">Newsletter Subscriptions</h3>
           <p>
-            If you subscribe to our newsletter, we collect your email address solely to send you product updates and health tips. You can unsubscribe at any time using the link in any email we send.
+            If you subscribe to our newsletter, we collect your email address to send product updates and health tips. You can unsubscribe at any time using the link in any email.
           </p>
+
           <h3 className="font-semibold text-forest mt-4 mb-1">Usage Data</h3>
           <p>
-            We may collect anonymous usage data such as pages visited and browser type to improve the site. We do not use advertising trackers or sell this data.
-          </p>
-          <h3 className="font-semibold text-forest mt-4 mb-1">Diet Preferences</h3>
-          <p>
-            If you save diet preferences (e.g., Gluten Free, Dairy Free), this data is stored in your browser&apos;s local storage and, if you are signed in, in your account profile. We use this solely to filter product recommendations for you.
+            We may collect anonymous usage data (pages visited, browser type) to improve the site. We do not use advertising trackers or sell this data.
           </p>
         </section>
 
@@ -37,6 +56,7 @@ export default function PrivacyPolicyPage() {
           <h2 className="font-serif text-xl font-bold text-forest mb-2">How We Use Your Information</h2>
           <ul className="list-disc pl-5 space-y-1">
             <li>To operate and maintain your account</li>
+            <li>To display your symptom trends and shopping history</li>
             <li>To personalize your product and recipe recommendations</li>
             <li>To send newsletters you have opted into</li>
             <li>To improve the site experience</li>
@@ -46,9 +66,9 @@ export default function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="font-serif text-xl font-bold text-forest mb-2">Amazon & Affiliate Links</h2>
+          <h2 className="font-serif text-xl font-bold text-forest mb-2">Amazon &amp; Affiliate Links</h2>
           <p>
-            HashiPantry participates in the Amazon Associates Program. When you click an Amazon link and visit Amazon.com, Amazon may set cookies or collect data according to their own <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" target="_blank" rel="noopener noreferrer" className="underline text-green">Privacy Notice</a>. We do not receive or store any of your Amazon account or payment data.
+            HashiPantry is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com. <strong>As an Amazon Associate I earn from qualifying purchases.</strong> When you click an Amazon link, Amazon may set cookies or collect data according to their own <a href="https://www.amazon.com/gp/help/customer/display.html?nodeId=468496" target="_blank" rel="noopener noreferrer" className="underline text-green">Privacy Notice</a>. We do not receive or store any of your Amazon account or payment data.
           </p>
         </section>
 
@@ -69,7 +89,7 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="font-serif text-xl font-bold text-forest mb-2">Your Rights</h2>
           <p>
-            You may request to access, correct, or delete your account data at any time by contacting us. If you are in the European Economic Area, you have additional rights under GDPR.
+            You may request to access, correct, or delete your account data at any time by emailing <a href="mailto:privacy@hashipantry.com" className="underline text-green">privacy@hashipantry.com</a>. Nevada residents have rights under the Nevada Privacy of Information Collected on the Internet from Consumers Act (NPICICA), including the right to opt out of the sale of personal information. We do not sell personal information. If you are in the European Economic Area, you have additional rights under GDPR.
           </p>
         </section>
 
@@ -83,14 +103,14 @@ export default function PrivacyPolicyPage() {
         <section>
           <h2 className="font-serif text-xl font-bold text-forest mb-2">Changes to This Policy</h2>
           <p>
-            We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date.
+            We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated effective date.
           </p>
         </section>
 
         <section>
           <h2 className="font-serif text-xl font-bold text-forest mb-2">Contact</h2>
           <p>
-            For privacy-related questions, please <Link href="/contact" className="underline text-green">contact us</Link>.
+            For privacy-related questions, email <a href="mailto:privacy@hashipantry.com" className="underline text-green">privacy@hashipantry.com</a> or <Link href="/contact" className="underline text-green">use our contact form</Link>.
           </p>
         </section>
       </div>

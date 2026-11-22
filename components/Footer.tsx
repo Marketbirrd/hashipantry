@@ -86,13 +86,17 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-white/40 text-xs">
-          <p>© {new Date().getFullYear()} The Hashi Pantry. All rights reserved.</p>
-          <div className="flex flex-wrap gap-4">
-            <Link href="/medical-disclaimer" className="hover:text-white/70 transition-colors">Medical Disclaimer</Link>
-            <Link href="/commission-disclosure" className="hover:text-white/70 transition-colors">Commission Disclosure</Link>
-            <Link href="/privacy-policy" className="hover:text-white/70 transition-colors">Privacy Policy</Link>
-            <Link href="/shipping" className="hover:text-white/70 transition-colors">Shipping Notice</Link>
+        <div className="mt-10 pt-6 border-t border-white/10 space-y-3 text-white/40 text-xs">
+          <p className="text-center sm:text-left">As an Amazon Associate I earn from qualifying purchases.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p>© {new Date().getFullYear()} The Hashi Pantry · Wendy Cadwall, Nevada. All rights reserved.</p>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link href="/medical-disclaimer" className="hover:text-white/70 transition-colors">Medical Disclaimer</Link>
+              <Link href="/commission-disclosure" className="hover:text-white/70 transition-colors">Commission Disclosure</Link>
+              <Link href="/privacy-policy" className="hover:text-white/70 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-white/70 transition-colors">Terms of Use</Link>
+              <Link href="/shipping" className="hover:text-white/70 transition-colors">Shipping Notice</Link>
+            </div>
           </div>
         </div>
       </div>
