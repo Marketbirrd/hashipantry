@@ -120,7 +120,7 @@ export default function CommunityFeed() {
             />
             <div className="flex flex-wrap items-center justify-between gap-3 mt-3">
               <p className="text-[11px] text-forest/40">
-                {body.length}/{MAX} · Posts show your first name. Please don&apos;t share medical advice as fact. See our{" "}
+                {body.length}/{MAX} · <strong className="text-forest/60">Posts are public</strong> and show your first name. Please don&apos;t share medical advice as fact. See our{" "}
                 <Link href="/medical-disclaimer" className="underline">medical disclaimer</Link>.
               </p>
               <div className="flex items-center gap-3">
