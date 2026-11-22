@@ -59,7 +59,7 @@ export default function Header() {
             {/* Right icons */}
             <div className="flex items-center gap-2">
               <Link
-                href="/shop?search=true"
+                href="/shop?focus=search"
                 className="p-2 text-forest/70 hover:text-forest hover:bg-sage-pale rounded-md transition-colors"
                 aria-label="Search"
               >

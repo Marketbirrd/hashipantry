@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
@@ -32,8 +32,15 @@ function ShopInner() {
   const urlSource = searchParams.get("source") ?? "All";
   const urlPage = Number(searchParams.get("page") ?? "1");
 
+  const searchRef = useRef<HTMLInputElement>(null);
+  const shouldFocus = searchParams.get("focus") === "search";
+
   const [search, setSearch] = useState(urlSearch);
   const [debouncedSearch, setDebouncedSearch] = useState(urlSearch);
+
+  useEffect(() => {
+    if (shouldFocus) searchRef.current?.focus();
+  }, [shouldFocus]);
   const [activeDiet, setActiveDiet] = useState<string[]>(() => {
     if (urlDiet.length > 0) return urlDiet;
     if (typeof window === "undefined") return [];
@@ -122,6 +129,7 @@ function ShopInner() {
       <div className="relative mb-6">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-forest/40" />
         <input
+          ref={searchRef}
           type="text"
           placeholder="Search products…"
           value={search}
