@@ -2,12 +2,12 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import {
   Heart, TrendingUp, LogOut, ShoppingBag, RotateCcw,
   Package, Users, Camera, Lock, CheckCircle, AlertCircle,
-  ChefHat, Menu, X, ChevronRight
+  ChefHat, Menu, X, ChevronRight, Check, Clock, Trash2
 } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import SymptomChart from "@/components/SymptomChart";
@@ -17,37 +17,110 @@ const DIET_TAGS = [
   "AIP","Paleo","Vegan","Grain Free","No Seed Oils","Low Histamine",
 ];
 
-type Section = "dashboard" | "orders" | "favorites" | "diet" | "symptoms" | "profile";
+type Section = "dashboard" | "lists" | "favorites" | "diet" | "symptoms" | "profile";
 
 const NAV: { id: Section; label: string }[] = [
   { id: "dashboard", label: "Dashboard" },
-  { id: "orders",    label: "Purchase History" },
+  { id: "lists",     label: "Past Shopping Lists" },
   { id: "favorites", label: "Favorites" },
   { id: "profile",   label: "Profile Info" },
   { id: "diet",      label: "Diet Preferences" },
   { id: "symptoms",  label: "Symptom Tracker" },
 ];
 
-type SymptomEntry = { id: string; date: string; energy: number; mood: number; brainFog: number; joint: number; notes?: string };
+type SymptomEntry = { id: string; date: string; energy: number; mood: number; brainFog: number; joint: number; weight?: number | null; notes?: string };
 type PurchaseItem  = { id: string; name: string; imageUrl: string; affiliateUrl: string; quantity: number };
 type Purchase      = { id: string; createdAt: string; items: PurchaseItem[] };
 type ProductFav    = { id: string; productId: string; productName: string; affiliateUrl: string; imageUrl?: string };
-type RecipeFav     = { id: string; recipeSlug: string; recipeTitle: string; imageUrl?: string };
+type RecipeFav     = { id: string; recipeSlug: string; recipeTitle: string; imageUrl?: string; prepTime?: number | null; servings?: number | null; difficulty?: string | null; category?: string | null; dietTags?: string[] };
+
+const SECTION_IDS: Section[] = ["dashboard","lists","favorites","diet","symptoms","profile"];
+const sectionFromUrl = (): Section => {
+  if (typeof window === "undefined") return "dashboard";
+  const t = new URLSearchParams(window.location.search).get("tab");
+  if (t === "orders") return "lists"; // old links
+  return SECTION_IDS.includes(t as Section) ? (t as Section) : "dashboard";
+};
+
+/* Each scale is 1–10 where 10 is always the GOOD end, so the chart reads the same way for every line. */
+const SYMPTOM_FIELDS = [
+  { key: "energy",   label: "Energy",     low: "exhausted",  high: "energized" },
+  { key: "mood",     label: "Mood",       low: "very low",   high: "great" },
+  { key: "brainFog", label: "Brain Fog",  low: "very foggy", high: "clear" },
+  { key: "joint",    label: "Joint Pain", low: "severe",     high: "none" },
+] as const;
+
+const fmtDate = (d: string) => {
+  const date = new Date(d);
+  const sameYear = date.getFullYear() === new Date().getFullYear();
+  return date.toLocaleDateString("en-US", sameYear ? { month: "short", day: "numeric" } : { month: "short", day: "numeric", year: "numeric" });
+};
+
+const fmtPrep = (m: number) => m >= 60 ? `${Math.floor(m/60)}h${m%60 ? ` ${m%60}m` : ""}` : `${m}m`;
+
+function useAddedFlash(ms = 2500): [boolean, () => void] {
+  const [on, setOn] = useState(false);
+  const t = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flash = useCallback(() => {
+    setOn(true);
+    if (t.current) clearTimeout(t.current);
+    t.current = setTimeout(() => setOn(false), ms);
+  }, [ms]);
+  useEffect(() => () => { if (t.current) clearTimeout(t.current); }, []);
+  return [on, flash];
+}
+
+const addedCls = "bg-green-50 text-green-700 border-green-300";
 
 function ReorderBtn({ item }: { item: PurchaseItem }) {
   const { addItem } = useCart();
-  const [added, setAdded] = useState(false);
+  const [added, flash] = useAddedFlash();
   return (
     <button
       onClick={() => {
         for (let i = 0; i < item.quantity; i++)
           addItem({ id: item.id, name: item.name, imageUrl: item.imageUrl, affiliateUrl: item.affiliateUrl, source: "AMAZON" });
-        setAdded(true);
-        setTimeout(() => setAdded(false), 2000);
+        flash();
       }}
-      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold border transition-colors ${added ? "bg-green-50 text-green-700 border-green-200" : "border-forest/20 text-forest hover:bg-forest hover:text-white"}`}
+      aria-live="polite"
+      className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold border transition-colors ${added ? addedCls : "border-forest/20 text-forest hover:bg-forest hover:text-white"}`}
     >
-      <RotateCcw className="w-3 h-3" />{added ? "Added!" : "Reorder"}
+      {added ? <><Check className="w-3 h-3"/>Added</> : <><RotateCcw className="w-3 h-3"/>Add to cart</>}
+    </button>
+  );
+}
+
+function BuyAgainBtn({ items, label = "Buy again", className = "" }: { items: PurchaseItem[]; label?: string; className?: string }) {
+  const { addItem } = useCart();
+  const [added, flash] = useAddedFlash();
+  const count = items.reduce((s, x) => s + x.quantity, 0);
+  return (
+    <button
+      onClick={() => {
+        items.forEach(item => {
+          for (let i = 0; i < item.quantity; i++)
+            addItem({ id: item.id, name: item.name, imageUrl: item.imageUrl, affiliateUrl: item.affiliateUrl, source: "AMAZON" });
+        });
+        flash();
+      }}
+      aria-live="polite"
+      className={`flex items-center gap-1.5 px-4 py-2 rounded text-xs font-bold uppercase tracking-wide border transition-colors ${added ? addedCls : "bg-forest text-white border-forest hover:bg-forest-light"} ${className}`}
+    >
+      {added ? <><Check className="w-3.5 h-3.5"/>Added {count} to cart</> : <><RotateCcw className="w-3.5 h-3.5"/>{label}</>}
+    </button>
+  );
+}
+
+function FavAddToCartBtn({ fav }: { fav: ProductFav }) {
+  const { addItem } = useCart();
+  const [added, flash] = useAddedFlash();
+  return (
+    <button
+      onClick={() => { addItem({ id: fav.productId, name: fav.productName, imageUrl: fav.imageUrl ?? "", affiliateUrl: fav.affiliateUrl, source: "AMAZON" }); flash(); }}
+      aria-live="polite"
+      className={`w-full flex items-center justify-center gap-1.5 text-xs font-bold py-2 rounded border uppercase tracking-wide transition-colors ${added ? addedCls : "bg-forest text-white border-forest hover:bg-forest-light"}`}
+    >
+      {added ? <><Check className="w-3.5 h-3.5"/>Added</> : <><ShoppingBag className="w-3.5 h-3.5"/>Add to Cart</>}
     </button>
   );
 }
@@ -56,6 +129,13 @@ export default function AccountPage() {
   const { data: session, status, update: updateSession } = useSession();
   const router = useRouter();
   const [section, setSection] = useState<Section>("dashboard");
+  const [memberSince, setMemberSince] = useState<string>("");
+  const [weight,      setWeight]      = useState<string>("");
+  const [weightUnit,  setWeightUnit]  = useState<"lb"|"kg">("lb");
+  const [symptomMsg,  setSymptomMsg]  = useState<{type:"ok"|"err";text:string}|null>(null);
+  const [symptomSaving, setSymptomSaving] = useState(false);
+  const { addItem } = useCart();
+  const [favsAdded, flashFavsAdded] = useAddedFlash();
   const [favTab, setFavTab] = useState<"products"|"recipes">("products");
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -77,7 +157,7 @@ export default function AccountPage() {
   const [pwSaving,  setPwSaving]  = useState(false);
   const [pwMsg,     setPwMsg]     = useState<{type:"ok"|"err";text:string}|null>(null);
 
-  const [newSymptom, setNewSymptom] = useState({ energy:5, mood:5, brainFog:5, joint:5, notes:"" });
+  const [newSymptom, setNewSymptom] = useState({ energy:5, mood:5, brainFog:5, joint:5, weight:"", notes:"" });
   const [dietSaving, setDietSaving] = useState(false);
   const [dietSaved,  setDietSaved]  = useState(false);
 
@@ -108,6 +188,30 @@ export default function AccountPage() {
 
   useEffect(() => { if (status === "unauthenticated") router.push("/login"); }, [status, router]);
 
+  // Each tab gets its own address (/account?tab=favorites) so Back and bookmarks work.
+  useEffect(() => {
+    setSection(sectionFromUrl());
+    const onPop = () => setSection(sectionFromUrl());
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const loadPurchases = useCallback(() => {
+    fetch("/api/account/purchases").then(r=>r.json()).then(d=>setPurchases(d.purchases ?? [])).catch(()=>{});
+  }, []);
+
+  // Refresh shopping lists as soon as checkout saves one, and when the shopper comes back from Amazon.
+  useEffect(() => {
+    if (!session) return;
+    const onFocus = () => { if (document.visibilityState === "visible") loadPurchases(); };
+    window.addEventListener("hashi:shopping-lists-updated", loadPurchases);
+    document.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("hashi:shopping-lists-updated", loadPurchases);
+      document.removeEventListener("visibilitychange", onFocus);
+    };
+  }, [session, loadPurchases]);
+
   useEffect(() => {
     if (!session) return;
     setProfileName(session.user?.name ?? "");
@@ -118,26 +222,31 @@ export default function AccountPage() {
       fetch("/api/account/purchases").then(r=>r.json()),
       fetch("/api/account/favorites/products").then(r=>r.json()),
       fetch("/api/account/favorites/recipes").then(r=>r.json()),
-    ]).then(([prefs,sym,purch,pfavs,rfavs]) => {
+      fetch("/api/account/profile").then(r=>r.json()),
+    ]).then(([prefs,sym,purch,pfavs,rfavs,profile]) => {
+      if (profile?.createdAt) setMemberSince(new Date(profile.createdAt).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}));
+      if (profile?.weight != null) setWeight(String(profile.weight));
+      if (profile?.weightUnit === "kg" || profile?.weightUnit === "lb") setWeightUnit(profile.weightUnit);
       setDietPrefs(prefs.dietPrefs ?? []);
       setSymptoms(sym.symptoms ?? []);
       setPurchases(purch.purchases ?? []);
       setProductFavs(pfavs.favorites ?? []);
       setRecipeFavs(rfavs.favorites ?? []);
     });
-  }, [session]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.id]);
 
   const saveProfile = async () => {
     setProfileSaving(true); setProfileMsg(null);
     try {
       const res = await fetch("/api/account/profile", {
         method:"PATCH", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ name:profileName, image:profileImage }),
+        body: JSON.stringify({ name:profileName, image:profileImage, weight: weight.trim() === "" ? null : weight, weightUnit }),
       });
-      if (!res.ok) throw new Error();
+      if (!res.ok) { const d = await res.json().catch(()=>({})); throw new Error(d.error); }
       await updateSession({ name:profileName, image:profileImage });
-      setProfileMsg({ type:"ok", text:"Profile updated!" });
-    } catch { setProfileMsg({ type:"err", text:"Failed to save." }); }
+      setProfileMsg({ type:"ok", text:"Saved ✓" });
+    } catch (e) { setProfileMsg({ type:"err", text:(e as Error).message || "Failed to save." }); }
     finally  { setProfileSaving(false); }
   };
 
@@ -165,22 +274,42 @@ export default function AccountPage() {
   };
 
   const logSymptom = async () => {
-    const res = await fetch("/api/account/symptoms",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(newSymptom)});
-    const data = await res.json();
-    setSymptoms(prev=>[data,...prev]);
-    setNewSymptom({energy:5,mood:5,brainFog:5,joint:5,notes:""});
+    setSymptomSaving(true); setSymptomMsg(null);
+    try {
+      const res = await fetch("/api/account/symptoms",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+        ...newSymptom, weight: newSymptom.weight.trim() === "" ? null : newSymptom.weight,
+      })});
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setSymptoms(prev=>[data,...prev]);
+      if (data.weight != null) setWeight(String(data.weight));
+      setNewSymptom({energy:5,mood:5,brainFog:5,joint:5,weight:"",notes:""});
+      setSymptomMsg({type:"ok",text:`Saved ✓ — entry logged for ${fmtDate(data.date)}`});
+      setTimeout(()=>setSymptomMsg(null),4000);
+    } catch (e) {
+      setSymptomMsg({type:"err",text:(e as Error).message || "Couldn't save your entry. Please try again."});
+    } finally { setSymptomSaving(false); }
+  };
+
+  const addAllFavsToCart = () => {
+    productFavs.forEach(f => addItem({ id: f.productId, name: f.productName, imageUrl: f.imageUrl ?? "", affiliateUrl: f.affiliateUrl, source: "AMAZON" }));
+    flashFavsAdded();
   };
 
   const removeProductFav = async (productId:string) => {
     setProductFavs(prev=>prev.filter(f=>f.productId!==productId));
-    await fetch(`/api/account/favorites/products?productId=${productId}`,{method:"DELETE"});
+    await fetch(`/api/account/favorites/products?productId=${encodeURIComponent(productId)}`,{method:"DELETE"});
   };
   const removeRecipeFav = async (recipeSlug:string) => {
     setRecipeFavs(prev=>prev.filter(f=>f.recipeSlug!==recipeSlug));
-    await fetch(`/api/account/favorites/recipes?recipeSlug=${recipeSlug}`,{method:"DELETE"});
+    await fetch(`/api/account/favorites/recipes?recipeSlug=${encodeURIComponent(recipeSlug)}`,{method:"DELETE"});
   };
 
-  const go = (s:Section) => { setSection(s); setDrawerOpen(false); window.scrollTo(0,0); };
+  const go = (s:Section) => {
+    setSection(s); setDrawerOpen(false); window.scrollTo(0,0);
+    const url = s === "dashboard" ? "/account" : `/account?tab=${s}`;
+    if (window.location.pathname + window.location.search !== url) window.history.pushState(null, "", url);
+  };
 
   if (status==="loading") return <div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-forest border-t-transparent rounded-full animate-spin"/></div>;
   if (!session) return null;
@@ -188,7 +317,6 @@ export default function AccountPage() {
   const firstName  = session.user?.name?.split(" ")[0] ?? "there";
   const initials   = session.user?.name?.split(" ").map(n=>n[0]).join("").toUpperCase() ?? "U";
   const avatarSrc  = profileImage || session.user?.image;
-  const memberSince = new Date().toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"2-digit"});
 
   /* ── Sidebar ── */
   const Sidebar = () => (
@@ -196,12 +324,14 @@ export default function AccountPage() {
       <p className="text-2xl font-bold text-forest mb-5">Hi, {firstName}</p>
       <nav>
         {NAV.map(({id,label}) => (
-          <button key={id} onClick={()=>go(id)}
+          <a key={id} href={id==="dashboard" ? "/account" : `/account?tab=${id}`}
+            onClick={(e)=>{ if (e.metaKey||e.ctrlKey||e.shiftKey) return; e.preventDefault(); go(id); }}
+            aria-current={section===id ? "page" : undefined}
             className={`w-full text-left flex items-center justify-between px-3 py-2.5 text-sm rounded transition-colors mb-0.5 ${section===id ? "bg-gray-100 font-bold text-forest" : "text-forest/60 hover:text-forest hover:bg-gray-50 font-medium"}`}
           >
             {label}
             {section===id && <ChevronRight className="w-3.5 h-3.5 text-forest/40"/>}
-          </button>
+          </a>
         ))}
         <div className="my-3 border-t border-gray-200"/>
         <Link href="/community" className="flex items-center gap-2 px-3 py-2.5 text-sm font-medium text-forest/60 hover:text-forest hover:bg-gray-50 rounded transition-colors mb-0.5">
@@ -256,11 +386,11 @@ export default function AccountPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-serif font-bold text-forest text-lg">HashiPantry Member</p>
-                    <p className="text-xs text-forest/40 mt-0.5">Member since {memberSince}</p>
+                    {memberSince && <p className="text-xs text-forest/40 mt-0.5">Member since {memberSince}</p>}
                     <div className="flex gap-6 mt-3">
                       <div>
                         <p className="text-xl font-bold text-forest">{purchases.length}</p>
-                        <p className="text-[10px] text-forest/50 uppercase tracking-wide">Orders</p>
+                        <p className="text-[10px] text-forest/50 uppercase tracking-wide">Lists</p>
                       </div>
                       <div>
                         <p className="text-xl font-bold text-forest">{productFavs.length+recipeFavs.length}</p>
@@ -272,24 +402,24 @@ export default function AccountPage() {
                       </div>
                     </div>
                   </div>
-                  <button onClick={()=>go("orders")} className="shrink-0 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors tracking-wide uppercase">
-                    View Orders
+                  <button onClick={()=>go("lists")} className="shrink-0 bg-forest text-white text-xs font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors tracking-wide uppercase">
+                    Shopping Lists
                   </button>
                 </div>
 
-                {/* Purchase history section */}
+                {/* Latest shopping list */}
                 <div className="border border-gray-200 rounded mb-6">
                   <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Purchase History</p>
-                    <button onClick={()=>go("orders")} className="text-xs font-bold text-forest uppercase tracking-wide flex items-center gap-1 hover:underline">
-                      Purchase History <ChevronRight className="w-3.5 h-3.5"/>
+                    <p className="text-xs font-bold text-forest uppercase tracking-widest">Latest Shopping List</p>
+                    <button onClick={()=>go("lists")} className="text-xs font-bold text-forest uppercase tracking-wide flex items-center gap-1 hover:underline">
+                      All Lists <ChevronRight className="w-3.5 h-3.5"/>
                     </button>
                   </div>
                   <div className="p-5">
                     {purchases.length===0 ? (
                       <div>
-                        <p className="font-semibold text-forest/70 mb-1">No recent orders.</p>
-                        <p className="text-sm text-forest/40">When you confirm checkout through HashiPantry, your orders appear here.</p>
+                        <p className="font-semibold text-forest/70 mb-1">No shopping lists yet.</p>
+                        <p className="text-sm text-forest/40">When you send your cart to Amazon, we save the list here so you can buy it again in one click.</p>
                       </div>
                     ) : (
                       <div className="space-y-3">
@@ -302,6 +432,8 @@ export default function AccountPage() {
                             <ReorderBtn item={item}/>
                           </div>
                         ))}
+                        {purchases[0].items.length>3 && <p className="text-xs text-forest/40">+ {purchases[0].items.length-3} more item{purchases[0].items.length-3!==1?"s":""}</p>}
+                        <BuyAgainBtn items={purchases[0].items} label="Buy this list again" className="mt-2"/>
                       </div>
                     )}
                   </div>
@@ -372,31 +504,33 @@ export default function AccountPage() {
               </div>
             )}
 
-            {/* ══ PURCHASE HISTORY ══ */}
-            {section==="orders" && (
+            {/* ══ PAST SHOPPING LISTS ══ */}
+            {section==="lists" && (
               <div>
-                <h1 className="text-3xl font-bold text-forest mb-6">Purchase History</h1>
+                <h1 className="text-3xl font-bold text-forest mb-2">Past Shopping Lists</h1>
+                <p className="text-sm text-forest/50 mb-6">Every time you send your cart to Amazon, we save the list here. Tap <strong className="text-forest/70">Buy again</strong> to put the whole list back in your cart.</p>
                 {purchases.length===0 ? (
                   <div className="border border-gray-200 rounded p-10 text-center">
                     <Package className="w-10 h-10 text-forest/10 mx-auto mb-3"/>
-                    <p className="font-semibold text-forest/60 mb-1">No recent orders.</p>
-                    <p className="text-sm text-forest/40 mb-5">When you confirm checkout through HashiPantry, your orders appear here for easy reordering.</p>
+                    <p className="font-semibold text-forest/60 mb-1">No shopping lists yet.</p>
+                    <p className="text-sm text-forest/40 mb-5">When you send your cart to Amazon, your list appears here for easy reordering.</p>
                     <Link href="/shop" className="inline-flex items-center gap-2 bg-forest text-white text-sm font-bold px-5 py-2.5 rounded hover:bg-forest-light transition-colors uppercase tracking-wide">
                       <ShoppingBag className="w-4 h-4"/> Browse Shop
                     </Link>
                   </div>
-                ) : purchases.map((p,i)=>(
+                ) : purchases.map(p=>{
+                  const qty = p.items.reduce((s,x)=>s+x.quantity,0);
+                  return (
                   <div key={p.id} className="border border-gray-200 rounded mb-4 overflow-hidden">
-                    <div className="flex items-center justify-between px-5 py-3.5 bg-gray-50 border-b border-gray-100">
+                    <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 bg-gray-50 border-b border-gray-100">
                       <div>
-                        <p className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Order #{purchases.length-i}</p>
+                        <p className="text-[10px] font-bold text-forest/40 uppercase tracking-widest">Sent to Amazon</p>
                         <p className="text-sm font-semibold text-forest mt-0.5">
                           {new Date(p.createdAt).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})}
+                          <span className="text-forest/40 font-normal"> · {qty} item{qty!==1?"s":""}</span>
                         </p>
                       </div>
-                      <span className="text-xs bg-forest/10 text-forest px-2.5 py-1 rounded font-semibold">
-                        {p.items.reduce((s,x)=>s+x.quantity,0)} item{p.items.reduce((s,x)=>s+x.quantity,0)!==1?"s":""}
-                      </span>
+                      <BuyAgainBtn items={p.items}/>
                     </div>
                     <div className="px-5 py-4 space-y-3">
                       {p.items.map(item=>(
@@ -405,7 +539,7 @@ export default function AccountPage() {
                             {item.imageUrl ? <img src={item.imageUrl} alt={item.name} className="w-full h-full object-cover"/> : <ShoppingBag className="w-4 h-4 text-forest/20 m-auto mt-3"/>}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm text-forest font-medium line-clamp-1">{item.name}</p>
+                            <Link href={`/shop/${item.id}`} className="text-sm text-forest font-medium line-clamp-1 hover:underline">{item.name}</Link>
                             <p className="text-xs text-forest/40">Qty: {item.quantity}</p>
                           </div>
                           <ReorderBtn item={item}/>
@@ -413,7 +547,7 @@ export default function AccountPage() {
                       ))}
                     </div>
                   </div>
-                ))}
+                );})}
               </div>
             )}
 
@@ -421,13 +555,21 @@ export default function AccountPage() {
             {section==="favorites" && (
               <div>
                 <h1 className="text-3xl font-bold text-forest mb-6">Favorites</h1>
-                <div className="flex gap-1 mb-6 border-b border-gray-200">
-                  {(["products","recipes"] as const).map(t=>(
-                    <button key={t} onClick={()=>setFavTab(t)}
-                      className={`px-5 py-2.5 text-sm font-semibold capitalize border-b-2 -mb-px transition-colors ${favTab===t?"border-forest text-forest":"border-transparent text-forest/40 hover:text-forest"}`}>
-                      {t}
+                <div className="flex flex-wrap items-end justify-between gap-3 mb-6 border-b border-gray-200">
+                  <div className="flex gap-1">
+                    {(["products","recipes"] as const).map(t=>(
+                      <button key={t} onClick={()=>setFavTab(t)}
+                        className={`px-5 py-2.5 text-sm font-semibold capitalize border-b-2 -mb-px transition-colors ${favTab===t?"border-forest text-forest":"border-transparent text-forest/40 hover:text-forest"}`}>
+                        {t} ({t==="products"?productFavs.length:recipeFavs.length})
+                      </button>
+                    ))}
+                  </div>
+                  {favTab==="products" && productFavs.length>0 && (
+                    <button onClick={addAllFavsToCart} aria-live="polite"
+                      className={`mb-2 flex items-center gap-1.5 px-4 py-2 rounded text-xs font-bold uppercase tracking-wide border transition-colors ${favsAdded ? addedCls : "bg-forest text-white border-forest hover:bg-forest-light"}`}>
+                      {favsAdded ? <><Check className="w-3.5 h-3.5"/>Added {productFavs.length} to cart</> : <><ShoppingBag className="w-3.5 h-3.5"/>Add all favorites to cart</>}
                     </button>
-                  ))}
+                  )}
                 </div>
 
                 {favTab==="products" && (productFavs.length===0 ? (
@@ -440,18 +582,19 @@ export default function AccountPage() {
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                     {productFavs.map(fav=>(
-                      <div key={fav.id} className="border border-gray-200 rounded overflow-hidden group">
-                        <div className="relative aspect-square bg-gray-50">
+                      <div key={fav.id} className="border border-gray-200 rounded overflow-hidden flex flex-col">
+                        <Link href={`/shop/${fav.productId}`} className="relative aspect-square bg-gray-50 block">
                           {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.productName} className="w-full h-full object-cover"/> : <ShoppingBag className="w-6 h-6 text-forest/10 absolute inset-0 m-auto"/>}
-                          <button onClick={()=>removeProductFav(fav.productId)} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Heart className="w-3 h-3 fill-red-400"/>
-                          </button>
-                        </div>
-                        <div className="p-3">
-                          <p className="text-xs font-semibold text-forest line-clamp-2 mb-2">{fav.productName}</p>
-                          <a href={fav.affiliateUrl} target="_blank" rel="noopener noreferrer" className="block text-center border border-forest text-forest text-xs font-bold py-1.5 rounded hover:bg-forest hover:text-white transition-colors uppercase tracking-wide">
-                            View on Amazon
-                          </a>
+                        </Link>
+                        <div className="p-3 flex flex-col flex-1">
+                          <Link href={`/shop/${fav.productId}`} className="text-xs font-semibold text-forest line-clamp-2 mb-3 hover:underline flex-1">{fav.productName}</Link>
+                          <FavAddToCartBtn fav={fav}/>
+                          <div className="flex items-center justify-between mt-2">
+                            <a href={fav.affiliateUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] text-forest/50 hover:text-forest hover:underline">View on Amazon</a>
+                            <button onClick={()=>removeProductFav(fav.productId)} aria-label={`Remove ${fav.productName} from favorites`} className="flex items-center gap-1 text-[11px] text-forest/40 hover:text-red-500">
+                              <Trash2 className="w-3 h-3"/> Remove
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -462,21 +605,38 @@ export default function AccountPage() {
                   <div className="border border-gray-200 rounded p-10 text-center">
                     <ChefHat className="w-8 h-8 text-gray-200 mx-auto mb-3"/>
                     <p className="font-semibold text-forest/50 mb-1">No saved recipes</p>
-                    <p className="text-sm text-forest/40 mb-4">Tap ♡ on any recipe card to save it.</p>
+                    <p className="text-sm text-forest/40 mb-4">Tap ♡ on any recipe to save it.</p>
                     <Link href="/recipes" className="inline-flex gap-2 items-center bg-forest text-white text-sm font-bold px-5 py-2.5 rounded uppercase tracking-wide hover:bg-forest-light transition-colors">Browse Recipes</Link>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {recipeFavs.map(fav=>(
-                      <Link key={fav.id} href={`/recipes/${fav.recipeSlug}`} className="border border-gray-200 rounded overflow-hidden hover:shadow-md transition-shadow group">
-                        <div className="relative aspect-[4/3] bg-gray-50">
+                      <div key={fav.id} className="border border-gray-200 rounded overflow-hidden flex flex-col">
+                        <Link href={`/recipes/${fav.recipeSlug}`} className="relative aspect-[4/3] bg-gray-50 block group">
                           {fav.imageUrl ? <img src={fav.imageUrl} alt={fav.recipeTitle} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/> : <ChefHat className="w-6 h-6 text-forest/10 absolute inset-0 m-auto"/>}
-                          <button onClick={(e)=>{e.preventDefault();removeRecipeFav(fav.recipeSlug);}} className="absolute top-2 right-2 p-1.5 rounded-full bg-white shadow text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Heart className="w-3 h-3 fill-red-400"/>
-                          </button>
+                          {fav.category && <span className="absolute top-2 left-2 bg-white/90 text-forest/70 text-[10px] font-semibold px-2 py-0.5 rounded-full">{fav.category}</span>}
+                        </Link>
+                        <div className="p-3 flex flex-col flex-1">
+                          <Link href={`/recipes/${fav.recipeSlug}`} className="text-sm font-semibold text-forest line-clamp-2 hover:underline">{fav.recipeTitle}</Link>
+                          <div className="flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-forest/50 mt-1.5">
+                            {fav.prepTime ? <span className="flex items-center gap-1"><Clock className="w-3 h-3"/>{fmtPrep(fav.prepTime)}</span> : null}
+                            {fav.servings ? <span>Serves {fav.servings}</span> : null}
+                            {fav.difficulty ? <span>{fav.difficulty}</span> : null}
+                          </div>
+                          {fav.dietTags && fav.dietTags.length>0 && (
+                            <div className="flex flex-wrap gap-1 mt-2">
+                              {fav.dietTags.slice(0,4).map(t=><span key={t} className="text-[10px] bg-sage-pale text-forest/70 px-1.5 py-0.5 rounded-full">{t}</span>)}
+                              {fav.dietTags.length>4 && <span className="text-[10px] text-forest/40">+{fav.dietTags.length-4}</span>}
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between mt-auto pt-3">
+                            <Link href={`/recipes/${fav.recipeSlug}`} className="text-xs font-bold text-forest uppercase tracking-wide hover:underline">View Recipe &amp; Shop Ingredients</Link>
+                            <button onClick={()=>removeRecipeFav(fav.recipeSlug)} aria-label={`Remove ${fav.recipeTitle} from favorites`} className="flex items-center gap-1 text-[11px] text-forest/40 hover:text-red-500 shrink-0 ml-2">
+                              <Trash2 className="w-3 h-3"/> Remove
+                            </button>
+                          </div>
                         </div>
-                        <div className="p-3"><p className="text-xs font-semibold text-forest line-clamp-2">{fav.recipeTitle}</p></div>
-                      </Link>
+                      </div>
                     ))}
                   </div>
                 ))}
@@ -503,12 +663,23 @@ export default function AccountPage() {
                     <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange}/>
 
                     <div>
-                      <label className="text-xs text-forest/50 block mb-1">Display Name</label>
-                      <input type="text" value={profileName} onChange={e=>setProfileName(e.target.value)} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                       <label htmlFor="profile-name" className="text-xs text-forest/50 block mb-1">Display Name</label>
+                      <input id="profile-name" type="text" value={profileName} onChange={e=>setProfileName(e.target.value)} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
                     </div>
                     <div>
                       <label className="text-xs text-forest/40 block mb-1">Email (cannot change)</label>
                       <input type="email" value={session.user?.email??""} disabled className="w-full border border-gray-100 rounded px-3 py-2 text-sm text-forest/40 bg-gray-50 cursor-not-allowed"/>
+                    </div>
+                    <div>
+                      <label htmlFor="profile-weight" className="text-xs text-forest/50 block mb-1">Current Weight (optional, private)</label>
+                      <div className="flex gap-2">
+                        <input id="profile-weight" type="number" inputMode="decimal" min={1} step="0.1" value={weight} onChange={e=>setWeight(e.target.value)} placeholder="e.g. 150" className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                        <select aria-label="Weight unit" value={weightUnit} onChange={e=>setWeightUnit(e.target.value as "lb"|"kg")} className="border border-gray-200 rounded px-2 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20">
+                          <option value="lb">lb</option>
+                          <option value="kg">kg</option>
+                        </select>
+                      </div>
+                      <p className="text-[11px] text-forest/40 mt-1">You can also log weight with each Symptom Tracker entry to see it over time.</p>
                     </div>
                     {profileMsg && (
                       <div className={`flex items-center gap-2 text-xs p-2.5 rounded ${profileMsg.type==="ok"?"bg-green-50 text-green-700":"bg-red-50 text-red-600"}`}>
@@ -524,13 +695,13 @@ export default function AccountPage() {
                   <div className="border border-gray-200 rounded p-6 space-y-4">
                     <p className="text-xs font-bold text-forest uppercase tracking-widest">Change Password</p>
                     {[
-                      {label:"Current Password",val:pwCurrent,set:setPwCurrent,ph:"••••••••"},
-                      {label:"New Password",val:pwNew,set:setPwNew,ph:"Min. 8 characters"},
-                      {label:"Confirm New Password",val:pwConfirm,set:setPwConfirm,ph:"••••••••"},
-                    ].map(({label,val,set,ph})=>(
-                      <div key={label}>
-                        <label className="text-xs text-forest/50 block mb-1">{label}</label>
-                        <input type="password" value={val} onChange={e=>set(e.target.value)} placeholder={ph} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                      {id:"pw-current",label:"Current Password",val:pwCurrent,set:setPwCurrent,ph:"Enter your current password",ac:"current-password"},
+                      {id:"pw-new",label:"New Password",val:pwNew,set:setPwNew,ph:"At least 8 characters",ac:"new-password"},
+                      {id:"pw-confirm",label:"Confirm New Password",val:pwConfirm,set:setPwConfirm,ph:"Type the new password again",ac:"new-password"},
+                    ].map(({id,label,val,set,ph,ac})=>(
+                      <div key={id}>
+                        <label htmlFor={id} className="text-xs text-forest/50 block mb-1">{label}</label>
+                        <input id={id} type="password" autoComplete={ac} value={val} onChange={e=>set(e.target.value)} placeholder={ph} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
                       </div>
                     ))}
                     {pwMsg && (
@@ -573,21 +744,43 @@ export default function AccountPage() {
               <div>
                 <h1 className="text-3xl font-bold text-forest mb-6">Symptom Tracker</h1>
                 <div className="border border-gray-200 rounded p-6 mb-5">
-                  <p className="text-xs font-bold text-forest uppercase tracking-widest mb-4">Log Today</p>
-                  <p className="text-xs text-forest/50 mb-4">Rate 1 (bad) to 10 (great)</p>
-                  <div className="grid sm:grid-cols-2 gap-4 mb-4">
-                    {(["energy","mood","brainFog","joint"] as const).map(field=>(
-                      <div key={field}>
+                  <p className="text-xs font-bold text-forest uppercase tracking-widest mb-1">Log Today</p>
+                  <p className="text-xs text-forest/50 mb-5">Rate each from 1 to 10. <strong className="text-forest/70">Higher is always better</strong> — 10 means you feel your best.</p>
+                  <div className="grid sm:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+                    {SYMPTOM_FIELDS.map(({key,label,low,high})=>(
+                      <div key={key}>
                         <div className="flex justify-between mb-1">
-                          <label className="text-xs font-medium text-forest/70">{field==="brainFog"?"Brain Fog":field==="joint"?"Joint Pain":field.charAt(0).toUpperCase()+field.slice(1)}</label>
-                          <span className="text-xs font-bold text-forest">{newSymptom[field]}/10</span>
+                          <label htmlFor={`sym-${key}`} className="text-xs font-medium text-forest/70">{label}: <span className="text-forest/50 font-normal">10 = {high}</span></label>
+                          <span className="text-xs font-bold text-forest" aria-hidden="true">{newSymptom[key]}/10</span>
                         </div>
-                        <input type="range" min={1} max={10} value={newSymptom[field]} onChange={e=>setNewSymptom(prev=>({...prev,[field]:parseInt(e.target.value)}))} className="w-full accent-forest"/>
+                        <input id={`sym-${key}`} type="range" min={1} max={10} step={1} value={newSymptom[key]}
+                          aria-label={`${label}, 1 means ${low}, 10 means ${high}`}
+                          aria-valuetext={`${newSymptom[key]} out of 10`}
+                          onChange={e=>setNewSymptom(prev=>({...prev,[key]:parseInt(e.target.value)}))} className="w-full accent-forest"/>
+                        <div className="flex justify-between text-[10px] text-forest/40 mt-0.5" aria-hidden="true"><span>1 · {low}</span><span>10 · {high}</span></div>
                       </div>
                     ))}
                   </div>
-                  <textarea value={newSymptom.notes} onChange={e=>setNewSymptom(prev=>({...prev,notes:e.target.value}))} rows={2} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20 mb-3" placeholder="Notes (optional)"/>
-                  <button onClick={logSymptom} className="bg-forest text-white text-xs font-bold px-6 py-2.5 rounded hover:bg-forest-light transition-colors uppercase tracking-wide">Log Entry</button>
+                  <div className="grid sm:grid-cols-[180px_1fr] gap-3 mb-3">
+                    <div>
+                      <label htmlFor="sym-weight" className="text-xs font-medium text-forest/70 block mb-1">Weight ({weightUnit}, optional)</label>
+                      <input id="sym-weight" type="number" inputMode="decimal" min={1} step="0.1" value={newSymptom.weight} onChange={e=>setNewSymptom(prev=>({...prev,weight:e.target.value}))} placeholder={weight ? `Last: ${weight}` : "e.g. 150"} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20"/>
+                    </div>
+                    <div>
+                      <label htmlFor="sym-notes" className="text-xs font-medium text-forest/70 block mb-1">Notes (optional)</label>
+                      <textarea id="sym-notes" value={newSymptom.notes} onChange={e=>setNewSymptom(prev=>({...prev,notes:e.target.value}))} rows={2} className="w-full border border-gray-200 rounded px-3 py-2 text-sm text-forest focus:outline-none focus:ring-2 focus:ring-forest/20" placeholder="Sleep, meals, stress, meds…"/>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button onClick={logSymptom} disabled={symptomSaving} className="bg-forest text-white text-xs font-bold px-6 py-2.5 rounded hover:bg-forest-light transition-colors uppercase tracking-wide disabled:opacity-50">{symptomSaving ? "Saving…" : "Log Entry"}</button>
+                    <div aria-live="polite">
+                      {symptomMsg && (
+                        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded ${symptomMsg.type==="ok"?"bg-green-50 text-green-700":"bg-red-50 text-red-600"}`}>
+                          {symptomMsg.type==="ok"?<CheckCircle className="w-3.5 h-3.5"/>:<AlertCircle className="w-3.5 h-3.5"/>}{symptomMsg.text}
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 {symptoms.length>=2 && (
                   <div className="border border-gray-200 rounded p-6 mb-5">
@@ -603,10 +796,10 @@ export default function AccountPage() {
                     <div className="divide-y divide-gray-50">
                       {symptoms.slice(0,10).map(s=>(
                         <div key={s.id} className="flex items-center gap-6 px-5 py-3 text-xs">
-                          <span className="text-forest/40 shrink-0 w-14">{new Date(s.date).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</span>
+                          <span className="text-forest/40 shrink-0 w-20">{fmtDate(s.date)}</span>
                           <div className="flex gap-4 flex-wrap">
-                            {[["Energy",s.energy],["Mood",s.mood],["Brain Fog",s.brainFog],["Joints",s.joint]].map(([l,v])=>(
-                              <span key={l as string} className="text-forest/50">{l} <strong className="text-forest">{v}</strong></span>
+                            {([["Energy",s.energy],["Mood",s.mood],["Brain Fog",s.brainFog],["Joints",s.joint]] as [string,number][]).concat(s.weight!=null?[["Weight",s.weight]]:[]).map(([l,v])=>(
+                              <span key={l} className="text-forest/50">{l} <strong className="text-forest">{v}{l==="Weight"?` ${weightUnit}`:""}</strong></span>
                             ))}
                           </div>
                           {s.notes && <span className="text-forest/30 italic ml-auto hidden sm:block">{s.notes}</span>}

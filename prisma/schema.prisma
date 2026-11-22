@@ -88,6 +88,8 @@ model User {
   password      String?
   image         String?
   dietPrefs     String[]
+  weight        Float?
+  weightUnit    String          @default("lb")
   createdAt     DateTime        @default(now())
   accounts      Account[]
   sessions      Session[]
@@ -95,6 +97,17 @@ model User {
   favorites        UserFavorite[]
   recipeFavorites  RecipeFavorite[]
   purchases        Purchase[]
+  communityPosts   CommunityPost[]
+}
+
+model CommunityPost {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     String   @default("story")
+  body      String
+  createdAt DateTime @default(now())
+  @@index([createdAt])
 }
 
 model Purchase {
@@ -146,6 +159,7 @@ model SymptomEntry {
   mood      Int
   brainFog  Int
   joint     Int
+  weight    Float?
   notes     String?
   createdAt DateTime @default(now())
 }

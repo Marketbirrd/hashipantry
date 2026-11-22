@@ -14,8 +14,8 @@ type Props = { entries: Entry[] };
 const METRICS = [
   { key: "energy",   label: "Energy",     color: "#4a7c59" },
   { key: "mood",     label: "Mood",       color: "#6b8cba" },
-  { key: "brainFog", label: "Brain Fog",  color: "#e8954a" },
-  { key: "joint",    label: "Joint Pain", color: "#c0624a" },
+  { key: "brainFog", label: "Brain Fog (10 = clear)",  color: "#e8954a" },
+  { key: "joint",    label: "Joint Pain (10 = none)", color: "#c0624a" },
 ] as const;
 
 const W = 600, H = 180, PL = 28, PR = 12, PT = 12, PB = 32;
@@ -47,7 +47,7 @@ export default function SymptomChart({ entries }: Props) {
 
   return (
     <div className="w-full overflow-x-auto">
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ minWidth: 280 }}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ minWidth: 280 }} role="img" aria-label="Symptom trends chart. Scores from 1 to 10, higher is better.">
         {/* Grid lines */}
         {[2, 4, 6, 8, 10].map((v) => (
           <g key={v}>
@@ -82,14 +82,15 @@ export default function SymptomChart({ entries }: Props) {
 
         {/* X-axis date labels */}
         {labelIdxs.map((i) => (
-          <text key={i} x={xOf(i)} y={H - 6} textAnchor="middle" fontSize="9" fill="#a0a89a">
+          <text key={i} x={xOf(i)} y={H - 6} textAnchor={i === 0 ? "start" : i === n - 1 ? "end" : "middle"} fontSize="9" fill="#a0a89a">
             {new Date(sorted[i].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
           </text>
         ))}
       </svg>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-4 mt-2 px-1">
+      <p className="text-[11px] text-forest/40 mt-2 px-1">Higher is better on every line.</p>
+      <div className="flex flex-wrap gap-4 mt-1 px-1">
         {METRICS.map(({ key, label, color }) => (
           <span key={key} className="flex items-center gap-1.5 text-xs text-forest/60">
             <span className="w-4 h-0.5 rounded-full inline-block" style={{ backgroundColor: color }} />

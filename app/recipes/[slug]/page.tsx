@@ -5,6 +5,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { prisma } from "@/lib/prisma";
 import IngredientItem from "@/components/IngredientItem";
+import FavoriteButton from "@/components/FavoriteButton";
 
 type Ingredient = { name: string; amount: number; unit: string; original: string };
 type Step = { step: number; instruction: string };
@@ -189,7 +190,13 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
           ))}
         </div>
 
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-forest mb-3">{recipe.title}</h1>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
+          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-forest">{recipe.title}</h1>
+          <FavoriteButton
+            className="shrink-0"
+            target={{ kind: "recipe", recipeSlug: recipe.slug, recipeTitle: recipe.title, imageUrl: recipe.imageUrl }}
+          />
+        </div>
         {recipe.excerpt && !(/[^.!?]\s\S{1,3}[…\.]*$/.test(recipe.excerpt.trimEnd())) && (
           <p className="text-forest/60 text-base leading-relaxed mb-5">{recipe.excerpt}</p>
         )}

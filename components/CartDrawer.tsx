@@ -65,7 +65,9 @@ export default function CartDrawer({ open, onClose }: Props) {
               quantity: i.quantity,
             })),
           }),
-        }).catch(() => {});
+        })
+          .then((r) => { if (r.ok) window.dispatchEvent(new Event("hashi:shopping-lists-updated")); })
+          .catch(() => {});
       }
 
       // Build Amazon cart URL
@@ -120,7 +122,7 @@ export default function CartDrawer({ open, onClose }: Props) {
               <ShoppingBag className="w-5 h-5 text-forest" />
             )}
             <span className="font-semibold text-forest">
-              {step === "confirm" ? "Confirm Order" : `Your Cart (${totalItems})`}
+              {step === "confirm" ? "Review Your List" : `Your Cart (${totalItems})`}
             </span>
           </div>
           <button onClick={handleClose} className="p-1.5 rounded-md hover:bg-sage-pale transition-colors">
@@ -282,14 +284,14 @@ export default function CartDrawer({ open, onClose }: Props) {
                 <h3 className="font-serif text-lg font-bold text-forest mb-1">Ready to shop on Amazon?</h3>
                 <p className="text-sm text-forest/55 leading-snug">
                   {session?.user
-                    ? "Your order will be saved to your profile so you can easily reorder."
-                    : "Sign in to save your order history for easy reordering."}
+                    ? "This list will be saved to your account so you can buy it again in one click."
+                    : "Sign in to save your shopping lists for easy reordering."}
                 </p>
               </div>
 
               {/* Order summary */}
               <div className="space-y-2 mb-4">
-                <p className="text-xs font-semibold text-forest/40 uppercase tracking-wide">Your order</p>
+                <p className="text-xs font-semibold text-forest/40 uppercase tracking-wide">Your list</p>
                 {items.map((item) => (
                   <div key={item.id} className="flex items-center gap-3 py-2 border-b border-sage-pale/50 last:border-0">
                     <div className="w-10 h-10 rounded-md overflow-hidden shrink-0 bg-sage-pale">
@@ -334,7 +336,7 @@ export default function CartDrawer({ open, onClose }: Props) {
               {session?.user && (
                 <div className="flex items-start gap-2 text-xs text-forest/50 bg-sage-pale rounded-xl p-3">
                   <CheckCircle className="w-3.5 h-3.5 text-green mt-0.5 shrink-0" />
-                  <span>This order will be saved to your <strong className="text-forest">Order History</strong> for easy reordering.</span>
+                  <span>This list will be saved to <strong className="text-forest">Past Shopping Lists</strong> in your account.</span>
                 </div>
               )}
             </div>

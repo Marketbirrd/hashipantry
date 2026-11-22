@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Users, MessageCircle, Heart, BookOpen } from "lucide-react";
+import CommunityFeed from "@/components/CommunityFeed";
 
 export default function CommunityPage() {
   return (
@@ -7,10 +8,12 @@ export default function CommunityPage() {
       <div className="text-center mb-12">
         <h1 className="font-serif text-4xl font-bold text-forest">Our Community</h1>
         <p className="mt-3 text-forest/60 max-w-xl mx-auto text-sm leading-relaxed">
-          You&apos;re not alone on this journey. Connect with thousands of others managing
+          You&apos;re not alone on this journey. Connect with others managing
           Hashimoto&apos;s, share wins, ask questions, and find support.
         </p>
       </div>
+
+      <CommunityFeed />
 
       {/* Community cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
@@ -34,14 +37,14 @@ export default function CommunityPage() {
           <h2 className="font-serif text-xl font-bold text-forest mb-2">Share Your Story</h2>
           <p className="text-forest/60 text-sm leading-relaxed mb-5">
             Have a Hashimoto&apos;s success story, a product you love, or a recipe that changed
-            things for you? We&apos;d love to feature it in the community.
+            things for you? Post it in the feed above.
           </p>
-          <Link
-            href="/contact"
+          <a
+            href="#share"
             className="inline-flex items-center gap-2 bg-forest text-white text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-forest-light transition-colors"
           >
             Share your story →
-          </Link>
+          </a>
         </div>
       </div>
 

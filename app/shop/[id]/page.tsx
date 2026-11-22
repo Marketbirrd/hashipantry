@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ShoppingBag, ExternalLink, ArrowLeft, Plus, Minus, Check } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import FavoriteButton from "@/components/FavoriteButton";
 
 type Product = {
   id: string;
@@ -169,6 +170,12 @@ export default function ProductPage() {
                 Already in cart: {cartItem.quantity} item{cartItem.quantity > 1 ? "s" : ""}
               </p>
             )}
+
+            {/* Save to favorites */}
+            <FavoriteButton
+              className="mb-3 w-full"
+              target={{ kind: "product", productId: product.id, productName: product.name, affiliateUrl: product.affiliateUrl, imageUrl: product.imageUrl }}
+            />
 
             {/* View on Amazon */}
             <a
