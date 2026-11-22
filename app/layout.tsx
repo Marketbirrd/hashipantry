@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col antialiased overflow-x-hidden" suppressHydrationWarning>
         <SessionWrapper>
           <CartProvider>
             <Header />
