@@ -183,13 +183,20 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl font-bold text-forest mb-3">{recipe.title}</h1>
-        <p className="text-forest/60 text-base leading-relaxed mb-5">{recipe.excerpt}</p>
+        {recipe.excerpt && (
+          <p className="text-forest/60 text-base leading-relaxed mb-5">{recipe.excerpt}</p>
+        )}
 
         {/* Stats bar */}
         <div className="flex flex-wrap gap-6 py-5 border-y border-sage-pale">
           <div className="text-center">
             <p className="text-xs text-forest/40 uppercase tracking-wide font-medium mb-0.5">Time</p>
-            <p className="text-lg font-bold text-forest flex items-center gap-1"><Clock className="w-4 h-4" />{recipe.prepTime}m</p>
+            <p className="text-lg font-bold text-forest flex items-center gap-1">
+              <Clock className="w-4 h-4" />
+              {recipe.prepTime >= 60
+                ? `${Math.floor(recipe.prepTime / 60)}h${recipe.prepTime % 60 ? ` ${recipe.prepTime % 60}m` : ""}`
+                : `${recipe.prepTime}m`}
+            </p>
           </div>
           <div className="text-center">
             <p className="text-xs text-forest/40 uppercase tracking-wide font-medium mb-0.5">Servings</p>

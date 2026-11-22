@@ -213,9 +213,16 @@ export default function RecipesPage() {
                   ))}
                 </div>
                 <h3 className="font-semibold text-forest text-sm leading-snug mb-1 line-clamp-2">{recipe.title}</h3>
-                <p className="text-xs text-forest/50 line-clamp-2 flex-1 mb-3">{recipe.excerpt}</p>
+                {recipe.excerpt && (
+                  <p className="text-xs text-forest/50 line-clamp-2 flex-1 mb-3">{recipe.excerpt}</p>
+                )}
                 <div className="flex items-center gap-3 text-xs text-forest/40">
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{recipe.prepTime}m</span>
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3" />
+                    {recipe.prepTime >= 60
+                      ? `${Math.floor(recipe.prepTime / 60)}h${recipe.prepTime % 60 ? ` ${recipe.prepTime % 60}m` : ""}`
+                      : `${recipe.prepTime}m`}
+                  </span>
                   <span className="flex items-center gap-1"><Users className="w-3 h-3" />{recipe.servings}</span>
                 </div>
               </div>
