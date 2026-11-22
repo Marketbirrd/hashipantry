@@ -16,6 +16,7 @@ type Product = {
   asin?: string | null;
   category: string;
   dietTags: string[];
+  price?: number | null;
 };
 
 export default function ProductCard({ product, activeTags = [] }: { product: Product; activeTags?: string[] }) {
@@ -106,6 +107,19 @@ export default function ProductCard({ product, activeTags = [] }: { product: Pro
           })()}
         </div>
         <p className="text-sm font-semibold text-forest leading-snug mb-1 line-clamp-2">{product.name}</p>
+        {product.price != null ? (
+          <p className="text-sm font-bold text-forest mb-1">${product.price.toFixed(2)}</p>
+        ) : (
+          <a
+            href={product.affiliateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-xs text-green hover:underline mb-1 block"
+          >
+            See price on Amazon →
+          </a>
+        )}
         <p className="text-xs text-forest/50 leading-relaxed line-clamp-2 flex-1 mb-3">{product.description}</p>
         <button
           onClick={handleAdd}

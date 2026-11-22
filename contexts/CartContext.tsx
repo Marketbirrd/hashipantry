@@ -9,6 +9,7 @@ export type CartItem = {
   affiliateUrl: string;
   asin?: string | null;
   source: "AMAZON";
+  price?: number | null;
   quantity: number;
 };
 

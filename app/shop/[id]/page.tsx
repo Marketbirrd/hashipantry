@@ -17,6 +17,7 @@ type Product = {
   category: string;
   dietTags: string[];
   featured: boolean;
+  price?: number | null;
 };
 
 export default function ProductPage() {
@@ -120,6 +121,20 @@ export default function ProductPage() {
                 </span>
               ))}
             </div>
+
+            {/* Price */}
+            {product.price != null ? (
+              <p className="text-3xl font-bold text-forest mb-5">${product.price.toFixed(2)}</p>
+            ) : (
+              <a
+                href={product.affiliateUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm text-green font-medium hover:underline mb-5"
+              >
+                <ExternalLink className="w-3.5 h-3.5" /> See current price on Amazon
+              </a>
+            )}
 
             {/* Quantity + Add to Cart */}
             <div className="flex items-center gap-3 mb-4">

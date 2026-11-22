@@ -92,7 +92,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-2 text-forest/60 text-sm">
             Everyone&apos;s Hashimoto&apos;s journey is different. Select the
-            foods you can tolerate to personalize your product and recipe
+            foods you avoid to personalize your product and recipe
             recommendations.
           </p>
         </div>

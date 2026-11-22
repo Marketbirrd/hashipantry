@@ -29,6 +29,9 @@ export default function CartDrawer({ open, onClose }: Props) {
   const [loading, setLoading] = useState(false);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
+  const pricedItems = items.filter((i) => i.price != null);
+  const subtotal = pricedItems.reduce((sum, i) => sum + (i.price! * i.quantity), 0);
+  const hasAllPrices = items.length > 0 && pricedItems.length === items.length;
 
   const handleConfirmCheckout = async () => {
     setLoading(true);
@@ -157,7 +160,15 @@ export default function CartDrawer({ open, onClose }: Props) {
                       <CartImage src={item.imageUrl} alt={item.name} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-forest line-clamp-2 leading-snug mb-2">{item.name}</p>
+                      <p className="text-sm font-medium text-forest line-clamp-2 leading-snug mb-1">{item.name}</p>
+                      {item.price != null ? (
+                        <p className="text-xs font-semibold text-forest mb-1.5">
+                          ${(item.price * item.quantity).toFixed(2)}
+                          {item.quantity > 1 && <span className="text-forest/40 font-normal ml-1">(${item.price.toFixed(2)} ea)</span>}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-forest/40 mb-1.5">Price on Amazon</p>
+                      )}
                       <div className="flex items-center gap-2">
                         <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="w-6 h-6 rounded-full border border-sage-pale flex items-center justify-center text-forest/60 hover:text-forest hover:border-forest/40 transition-colors">
                           <Minus className="w-3 h-3" />
@@ -177,7 +188,22 @@ export default function CartDrawer({ open, onClose }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="shrink-0 p-4 border-t border-sage-light/30 space-y-2 bg-white">
+            <div className="shrink-0 p-4 border-t border-sage-light/30 space-y-3 bg-white">
+              {items.length > 0 && (
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-forest/60">
+                    {hasAllPrices ? "Subtotal" : pricedItems.length > 0 ? "Partial subtotal" : "Subtotal"}
+                  </span>
+                  {hasAllPrices || pricedItems.length > 0 ? (
+                    <span className="font-bold text-forest">
+                      ${subtotal.toFixed(2)}
+                      {!hasAllPrices && <span className="text-xs text-forest/40 font-normal ml-1">+others</span>}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-forest/40">See prices on Amazon</span>
+                  )}
+                </div>
+              )}
               <button
                 onClick={() => setStep("confirm")}
                 disabled={items.length === 0}
@@ -218,9 +244,28 @@ export default function CartDrawer({ open, onClose }: Props) {
                       <CartImage src={item.imageUrl} alt={item.name} />
                     </div>
                     <p className="flex-1 text-xs text-forest line-clamp-2">{item.name}</p>
-                    <span className="shrink-0 text-xs font-semibold text-forest/60">×{item.quantity}</span>
+                    <div className="shrink-0 text-right">
+                      {item.price != null ? (
+                        <span className="text-xs font-semibold text-forest">${(item.price * item.quantity).toFixed(2)}</span>
+                      ) : (
+                        <span className="text-xs text-forest/40">×{item.quantity}</span>
+                      )}
+                    </div>
                   </div>
                 ))}
+              </div>
+
+              {/* Subtotal row on confirm screen */}
+              <div className="flex items-center justify-between text-sm pt-2">
+                <span className="text-forest/60">{hasAllPrices ? "Subtotal" : "Estimated subtotal"}</span>
+                {pricedItems.length > 0 ? (
+                  <span className="font-bold text-forest">
+                    ${subtotal.toFixed(2)}
+                    {!hasAllPrices && <span className="text-xs text-forest/40 font-normal ml-1">+others</span>}
+                  </span>
+                ) : (
+                  <span className="text-xs text-forest/40">See prices on Amazon</span>
+                )}
               </div>
 
               {session?.user && (
