@@ -49,6 +49,14 @@ const QUALIFIERS = new Set([
 // Signal that the ingredient is a COMPONENT of the product, not the product itself
 const SECONDARY_PATTERN = /\b(with|using|made|contains|featuring|from)\b/;
 
+// Spelling variants: ingredient name → additional names to also try matching
+const SYNONYMS: Record<string, string[]> = {
+  "gelatin":  ["gelatine"],
+  "gelatine": ["gelatin"],
+  "cocoa":    ["cacao"],
+  "cacao":    ["cocoa"],
+};
+
 function cleanName(name: string): string {
   return name.toLowerCase().replace(/\s*\([^)]*\)/g, "").trim();
 }
@@ -65,35 +73,34 @@ function escapeRegex(s: string) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+function scoreProductForName(name: string, pClean: string): number {
+  const wordRe = new RegExp(`(?<![a-z])${escapeRegex(name)}(?![a-z])`);
+  const match = wordRe.exec(pClean);
+  if (!match) return 0;
+
+  const idx = match.index;
+  const before = pClean.slice(0, idx);
+  const after = pClean.slice(idx + name.length);
+
+  if (SECONDARY_PATTERN.test(before)) return 0;
+
+  const beforeOk = isQualifierOnly(before);
+  const afterOk = after.trim() === "" || isQualifierOnly(after);
+
+  return beforeOk && afterOk ? 10 : !beforeOk && afterOk ? 8 : 1;
+}
+
 function findMatchingProducts(ingredientName: string, products: ProductData[]): MatchedProduct[] {
   const name = ingredientName.toLowerCase().trim();
   if (name.length < 3) return [];
   if (SKIP_SINGLE.has(name)) return [];
 
-  // Match whole-word only — prevents "honey" matching "honeydew"
-  const wordRe = new RegExp(`(?<![a-z])${escapeRegex(name)}(?![a-z])`);
+  const namesToTry = [name, ...(SYNONYMS[name] ?? [])];
 
   return products
     .map((p) => {
       const pClean = cleanName(p.name);
-      const match = wordRe.exec(pClean);
-      if (!match) return { product: p, score: 0 };
-
-      const idx = match.index;
-      const before = pClean.slice(0, idx);
-      const after = pClean.slice(idx + name.length);
-
-      // "Vodka Sauce With Honey" → ingredient mentioned as an added component
-      if (SECONDARY_PATTERN.test(before)) return { product: p, score: 0 };
-
-      const beforeOk = isQualifierOnly(before);
-      const afterOk = after.trim() === "" || isQualifierOnly(after);
-
-      // beforeOk + afterOk  → "Pure Honey" / "Raw Wildflower Honey" → score 10
-      // !beforeOk + afterOk → "Bee's Knees Hot Honey" / "Primal Kitchen Avocado Oil" → score 8
-      // anything meaningful after → "Honey Roasted Chickpeas" / "Milk Kefir with Honey" → score 1
-      const score = beforeOk && afterOk ? 10 : !beforeOk && afterOk ? 8 : 1;
-
+      const score = Math.max(...namesToTry.map((n) => scoreProductForName(n, pClean)));
       return { product: p, score };
     })
     .filter((x) => x.score >= 5)
@@ -183,7 +190,7 @@ export default async function RecipePage({ params }: { params: Promise<{ slug: s
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl font-bold text-forest mb-3">{recipe.title}</h1>
-        {recipe.excerpt && (
+        {recipe.excerpt && !(/[^.!?]\s\S{1,3}[…\.]*$/.test(recipe.excerpt.trimEnd())) && (
           <p className="text-forest/60 text-base leading-relaxed mb-5">{recipe.excerpt}</p>
         )}
 

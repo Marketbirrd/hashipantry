@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { ShoppingBag, X, Plus, Check, Info } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ShoppingBag, X, Plus, Check } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 type MatchedProduct = {
@@ -23,49 +23,10 @@ type Props = {
 
 function ProductCard({ product }: { product: MatchedProduct }) {
   const { addItem, items } = useCart();
-  const [hovered, setHovered] = useState(false);
-  const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const inCart = items.some((i) => i.id === product.id);
 
-  const showTooltip = () => {
-    hoverTimeout.current = setTimeout(() => setHovered(true), 200);
-  };
-  const hideTooltip = () => {
-    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-    setHovered(false);
-  };
-
-  const hasDetails = product.description || (product.dietTags && product.dietTags.length > 0);
-
   return (
-    <div
-      className="relative flex items-center gap-3 p-3 bg-cream rounded-xl"
-      onMouseEnter={showTooltip}
-      onMouseLeave={hideTooltip}
-    >
-      {/* Hover card */}
-      {hovered && hasDetails && (
-        <div className="absolute bottom-full left-0 right-0 mb-2 z-10 pointer-events-none">
-          <div className="bg-forest text-white rounded-xl p-3 shadow-xl text-xs leading-relaxed">
-            {product.description && (
-              <p className="text-white/90 mb-2">{product.description}</p>
-            )}
-            {product.dietTags && product.dietTags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {product.dietTags.slice(0, 6).map((tag) => (
-                  <span key={tag} className="bg-white/20 text-white px-1.5 py-0.5 rounded-full text-[10px] font-medium">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-            {/* Arrow */}
-            <div className="absolute top-full left-6 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-forest" />
-          </div>
-        </div>
-      )}
-
-      {/* Product image */}
+    <div className="flex items-center gap-3 p-3 bg-cream rounded-xl">
       <div className="w-12 h-12 rounded-lg overflow-hidden bg-sage-pale shrink-0">
         {product.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -77,17 +38,19 @@ function ProductCard({ product }: { product: MatchedProduct }) {
         )}
       </div>
 
-      {/* Name + info hint */}
       <div className="flex-1 min-w-0">
         <p className="text-xs font-medium text-forest line-clamp-2 leading-snug">{product.name}</p>
-        {hasDetails && (
-          <p className="text-[10px] text-forest/40 mt-0.5 flex items-center gap-0.5">
-            <Info className="w-2.5 h-2.5" /> hover for details
-          </p>
+        {product.dietTags && product.dietTags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {product.dietTags.slice(0, 4).map((tag) => (
+              <span key={tag} className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-sage-pale text-forest/60">
+                {tag}
+              </span>
+            ))}
+          </div>
         )}
       </div>
 
-      {/* Add to cart */}
       <button
         onClick={() =>
           addItem({
@@ -102,6 +65,7 @@ function ProductCard({ product }: { product: MatchedProduct }) {
         className={`shrink-0 p-2 rounded-lg transition-colors ${
           inCart ? "bg-green-100 text-green-700" : "bg-forest text-white hover:bg-forest-light"
         }`}
+        aria-label={inCart ? "In cart" : "Add to cart"}
       >
         {inCart ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
       </button>
@@ -110,8 +74,33 @@ function ProductCard({ product }: { product: MatchedProduct }) {
 }
 
 export default function IngredientItem({ amount, name, original, matches }: Props) {
+  const { addItem, items } = useCart();
   const [open, setOpen] = useState(false);
   const hasMatches = matches.length > 0;
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, [open]);
+
+  const handleAddAll = () => {
+    for (const product of matches) {
+      if (!items.some((i) => i.id === product.id)) {
+        addItem({
+          id: product.id,
+          name: product.name,
+          imageUrl: product.imageUrl,
+          affiliateUrl: product.affiliateUrl,
+          asin: product.asin,
+          source: "AMAZON",
+        });
+      }
+    }
+  };
+
+  const allInCart = matches.length > 0 && matches.every((p) => items.some((i) => i.id === p.id));
 
   return (
     <li className="flex items-start gap-3 text-sm">
@@ -148,6 +137,7 @@ export default function IngredientItem({ amount, name, original, matches }: Prop
               <button
                 onClick={() => setOpen(false)}
                 className="p-1 rounded-lg hover:bg-sage-pale transition-colors"
+                aria-label="Close"
               >
                 <X className="w-4 h-4 text-forest/60" />
               </button>
@@ -159,7 +149,25 @@ export default function IngredientItem({ amount, name, original, matches }: Prop
               ))}
             </div>
 
-            <p className="text-xs text-forest/40 mt-4 text-center">
+            {matches.length > 1 && (
+              <button
+                onClick={handleAddAll}
+                disabled={allInCart}
+                className={`mt-4 w-full py-2.5 rounded-xl font-semibold text-sm transition-colors flex items-center justify-center gap-2 ${
+                  allInCart
+                    ? "bg-green-100 text-green-700"
+                    : "bg-forest text-white hover:bg-forest-light"
+                }`}
+              >
+                {allInCart ? (
+                  <><Check className="w-4 h-4" /> All in cart</>
+                ) : (
+                  <><Plus className="w-4 h-4" /> Add all to cart</>
+                )}
+              </button>
+            )}
+
+            <p className="text-xs text-forest/40 mt-3 text-center">
               Items added to your HashiPantry cart
             </p>
           </div>

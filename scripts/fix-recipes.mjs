@@ -35,7 +35,7 @@ const fillerPatterns = [
   /expand your recipe box/i,
   /costs \$\d/i,
   /\$\d+\.\d+ per serving/i,
-  /and pr\.{0,3}$/i,          // cut off mid-word
+  /[^.!?]\s\S{1,3}[…\.]*$/,  // cut off mid-word (e.g. "paleolithic, and pr…")
 ];
 
 let clearedCount = 0;
